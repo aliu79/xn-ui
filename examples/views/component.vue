@@ -5,20 +5,13 @@
         <li class="doc-nav-item__group-title">组件</li>
         <ul class="doc-nav-item__group-list">
           <router-link
-            to="/component/demo"
-            exact-active-class="active"
-            tag="li"
-            class="doc-nav-item__group-list-item"
-          >
-            <span>demo</span>
-          </router-link>
-          <router-link
             to="/component/table"
             exact-active-class="active"
             tag="li"
             class="doc-nav-item__group-list-item"
           >
             <span>table</span>
+            <span>表格</span>
           </router-link>
         </ul>
       </ol>
