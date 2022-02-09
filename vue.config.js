@@ -6,6 +6,7 @@ function resolve(dir) {
 
 const IS_PLAY= !!process.env.PLAY_ENV
 module.exports = {
+    publicPath: './',
     outputDir: 'dist',
     assetsDir:'static',
     indexPath: 'index.html',
