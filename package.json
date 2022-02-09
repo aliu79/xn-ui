@@ -10,7 +10,6 @@
     "style": "gulp --gulpfile ./packages/style/gulpfile.js",
     "play": "cross-env NODE_ENV=development PLAY_ENV=true vue-cli-service serve",
     "deploy": "bash deploy.sh",
-    "run:deploy":"npm run deploy",
     "lint": "vue-cli-service lint"
   },
   "license": "MIT",
