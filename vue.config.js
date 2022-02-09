@@ -6,6 +6,9 @@ function resolve(dir) {
 
 const IS_PLAY= !!process.env.PLAY_ENV
 module.exports = {
+    outputDir: 'dist',
+    assetsDir:'static',
+    indexPath: 'index.html',
     // 将 examples 目录添加为新的页面
     pages: {
         index: {
