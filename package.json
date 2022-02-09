@@ -5,7 +5,7 @@
   "main": "lib/xn.umd.min.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "cross-env NODE_ENV=production vue-cli-service build",
     "lib": "npm run style && vue-cli-service build --target lib --name xn --dest lib packages/index.js",
     "style": "gulp --gulpfile ./packages/style/gulpfile.js",
     "play": "cross-env NODE_ENV=development PLAY_ENV=true vue-cli-service serve",
