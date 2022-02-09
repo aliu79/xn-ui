@@ -6,7 +6,7 @@ function resolve(dir) {
 
 const IS_PLAY= !!process.env.PLAY_ENV
 module.exports = {
-    publicPath: process.env.NODE_ENV === "production" ? "/xn-ui" : "/",
+    publicPath: process.env.NODE_ENV === "production" ? "/xn-ui/" : "/",
     outputDir: 'dist',
     assetsDir:'static',
     indexPath: 'index.html',
