@@ -1,0 +1,44 @@
+
+import XnDialog from '../packages/dialog/index'
+import XnTable from '../packages/table/index'
+import XnPage from '../packages/page/index'
+
+import Utils from 'xn-ui/src/utils/index'
+const components = [
+    XnDialog,
+    XnTable,
+    XnPage
+]
+const version = require('../package.json').version
+
+const install = function (Vue) {
+    console.log(Vue.prototype);
+    if (install.installed) return
+    if (!Vue.prototype.$ELEMENT) throw new Error('缺失 element-ui，请进行安装')
+    install.installed = true
+    components.map(component => {
+        Vue.component(component.name, component)
+    })
+
+    Vue.prototype.$XN = {
+        uploadUrl: ''
+    }
+    Vue.prototype.$utils = Utils.$utils
+    Vue.prototype.$reg = Utils.$reg
+    Vue.prototype.$format = Utils.$format
+    Vue.prototype.$dayjs = Utils.$dayjs
+    Vue.prototype.$lodash = Utils.$lodash
+    Vue.prototype.$storage = Utils.$storage
+
+}
+if (typeof window !== 'undefined' && window.Vue) {
+    install(window.Vue)
+}
+
+export default {
+    version,
+    install,
+    XnDialog,
+    XnTable,
+    XnPage
+}

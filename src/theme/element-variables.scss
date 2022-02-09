@@ -1,0 +1,28 @@
+
+/* theme color */
+$--color-primary: #FF745C;
+$--color-success: #52C41A;
+$--color-warning: #FAAD14;
+$--color-danger: #FF4D4F;
+$--button-font-weight: 400;
+
+$--border-color-light: #dfe4ed;
+$--border-color-lighter: #e6ebf5;
+
+$--table-border: 1px solid #dfe6ec;
+
+$--box-shadow-light: none;
+$--fade-linear-transition:none;
+$--fade-transition:none;
+// $--table-border-color:#f00;
+$--table-border:1px solid #f0f0f0;
+// $--table-header-background-color: #fafafa;
+
+$--font-path: "~element-ui/lib/theme-chalk/fonts";
+
+@import "element-ui/packages/theme-chalk/src/index";
+
+
+:export {
+  theme: $--color-primary;
+}
