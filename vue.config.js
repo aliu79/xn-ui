@@ -1,15 +1,27 @@
 
+
 const path = require('path');//引入path模块
 function resolve(dir) {
-    return path.join(__dirname, dir)//path.join(__dirname)设置绝对路径
+    return path.resolve(__dirname, dir)//path.join(__dirname)设置绝对路径
 }
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const IS_PLAY= !!process.env.PLAY_ENV
+
+
+
+const IS_PLAY = !!process.env.PLAY_ENV
+
+
 module.exports = {
-    publicPath: process.env.NODE_ENV === "production" ? "/xn-ui/" : "/",
-    outputDir: 'dist',
-    assetsDir:'static',
-    indexPath: 'index.html',
+    // publicPath: process.env.NODE_ENV === "production" ? "/xn-ui/" : "/",
+    // outputDir: 'dist',
+    // assetsDir: 'static',
+    // indexPath: 'index.html',
+    // chunkFilename: '[id].js',
+    // libraryTarget: 'umd',
+    // libraryExport: 'default',
+    // library: 'ELEMENT',
+    // umdNamedDefine: true,
     // 将 examples 目录添加为新的页面
     pages: {
         index: {
@@ -21,19 +33,50 @@ module.exports = {
             filename: 'index.html'
         }
     },
-//     packages: path.resolve(__dirname, '../packages'),
-//   examples: path.resolve(__dirname, '../examples'),
-//   'element-ui': path.resolve(__dirname, '../')
+
+    productionSourceMap: false,
     chainWebpack: (config) => {
         config.resolve.alias
             .set('xn-ui', resolve('./'))
             .set('packages', resolve('./packages'))
             .set('examples', resolve('./examples'))
             .end()
-
+        config.module
+            .rule('eslint')
+            .exclude.add(path.resolve('lib'))
+            .end()
+            .exclude.add(path.resolve('examples/docs'))
+            .end();
+        config.module
+            .rule('js')
+            .include
+            .add(resolve('./packages'))
+            .end()
+            .use('babel')
+            .loader('babel-loader')
+            .tap(options => {
+                // 修改它的选项...
+                return options
+            })
+        config.optimization.delete('splitChunks')
+        config.plugins.delete('copy')
+        config.plugins.delete('html')
+        config.plugins.delete('preload')
+        config.plugins.delete('prefetch')
+        config.plugins.delete('hmr')
+        config.entryPoints.delete('app')
     },
-
     configureWebpack: config => {
+        console.log(config.output);
+        config.plugins.push(
+            new CopyWebpackPlugin([
+                {
+                    from: '/packages/style/lib',
+                    to: '/lib/style'
+                }
+            ])
+        )
+
         config.module.rules.push({
             test: /\.md$/,
             use: [
