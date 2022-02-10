@@ -5,7 +5,7 @@
     selection
     :columns="listHeader"
     :data="list"
-    :show-page="false"
+    show-page
     :pageConfig="pageConfig"
     @on-refresh="handleRefresh"
     @on-buttons="handleButtons"

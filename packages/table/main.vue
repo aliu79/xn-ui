@@ -43,7 +43,7 @@
       </slot>
     </el-table>
     <xn-page
-      :hidden="showPage"
+      :hidden="!showPage"
       :total="pageConfig.total"
       :page.sync="pageConfig.pageNum"
       :limit.sync="pageConfig.pageSize"

@@ -77,26 +77,26 @@ export default {
 ```
 :::
 
-### 参数
+### 属性
 
 :::warning 
 默认继承 `el-table` 的属性与事件，可直接使用
 :::
 
-| 参数        | 说明         | 类型    | 可选值             | 默认值                          |
-| ----------- | ------------ | ------- | ------------------ | ------------------------------- |
-| selection   | 是否显示勾选 | boolean | true/false         | false                           |
-| index       | 是否显示序号 | boolean | true/false         | false                           |
-| show-page   | 是否显示分页 | boolean | true/false         | false                           |
-| page-config | 分页的配置项 | oject   | {}                 | {pageSize:15,pageNum:1,total:0} |
+| 参数        | 说明         | 类型    | 可选值                               | 默认值                          |
+| ----------- | ------------ | ------- | ------------------------------------ | ------------------------------- |
+| selection   | 是否显示勾选 | boolean | true/false                           | false                           |
+| index       | 是否显示序号 | boolean | true/false                           | false                           |
+| show-page   | 是否显示分页 | boolean | true/false                           | false                           |
+| page-config | 分页的配置项 | oject   | {}                                   | {pageSize:15,pageNum:1,total:0} |
 | columns     | 表头         | array   | 详见[columns-参数](#columns-can-shu) | []                              |
 
 
-### columns-参数
-| 参数  | 说明     | 类型   | 可选值 | 默认值 |
-| ----- | -------- | ------ | ------ | ------ |
-| label | 字段名称 | string | -      | -      |
-| prop | 对应接口字段 | string | -      | -      |
-| sortable | 是否排序 | boolean | true/false      | false      |
-| labelMsg | 表头描述 | string | -      | -      |
+### columns-属性
+| 参数     | 说明         | 类型    | 可选值     | 默认值 |
+| -------- | ------------ | ------- | ---------- | ------ |
+| label    | 字段名称     | string  | -          | -      |
+| prop     | 对应接口字段 | string  | -          | -      |
+| sortable | 是否排序     | boolean | true/false | false  |
+| labelMsg | 表头描述     | string  | -          | -      |
 
