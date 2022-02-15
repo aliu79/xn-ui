@@ -36,6 +36,7 @@ module.exports = {
 
     productionSourceMap: false,
     chainWebpack: (config) => {
+        config.resolve.symlinks(false)
         config.resolve.alias
             .set('xn-ui', resolve('./'))
             .set('packages', resolve('./packages'))
@@ -67,7 +68,6 @@ module.exports = {
         config.entryPoints.delete('app')
     },
     configureWebpack: config => {
-        console.log(config.output);
         config.plugins.push(
             new CopyWebpackPlugin([
                 {
