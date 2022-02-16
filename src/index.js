@@ -4,6 +4,7 @@ import XnTable from '../packages/table/index'
 import XnPage from '../packages/page/index'
 import XnSearch from '../packages/search/index'
 import XnDate from '../packages/date/index'
+import XnUpload from '../packages/upload/index'
 
 import Utils from 'xn-ui/src/utils/index'
 const components = [
@@ -11,7 +12,8 @@ const components = [
     XnTable,
     XnPage,
     XnSearch,
-    XnDate
+    XnDate,
+    XnUpload
 ]
 const version = require('../package.json').version
 
