@@ -3,13 +3,15 @@ import XnDialog from '../packages/dialog/index'
 import XnTable from '../packages/table/index'
 import XnPage from '../packages/page/index'
 import XnSearch from '../packages/search/index'
+import XnDate from '../packages/date/index'
 
 import Utils from 'xn-ui/src/utils/index'
 const components = [
     XnDialog,
     XnTable,
     XnPage,
-    XnSearch
+    XnSearch,
+    XnDate
 ]
 const version = require('../package.json').version
 

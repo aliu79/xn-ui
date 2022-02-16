@@ -41,6 +41,7 @@
       >
         <xn-date
           v-model="form.value[idx].modelVal"
+          :mode="item.mode || 'range'"
           :type="item.type || 'daterange'"
           :is-shortcut="showShortcut(item)"
           :placeholder="item.placeholder"
@@ -139,7 +140,7 @@ export default {
           const index = i;
           const key = item.prop;
           const value = this.form.value[index].modelVal;
-          if (this.isRange(item.type)) {
+          if (this.isRange(item.type) || item.mode === 'group') {
             if (
               item.options &&
               item.options.start &&
