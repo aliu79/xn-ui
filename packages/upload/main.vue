@@ -1,15 +1,16 @@
 <template>
-  <div class="xn-upload-box">
+  <div class="xn-upload">
+    <span class="text-primary">123122</span>
     <el-upload
       ref="upload"
       :class="{
         'hide-upload': hiddenUpload || isHidden || preview,
         'el-upload-idcard': listType === 'idcard',
-        'xn-upload-disabled': disabled,
+        'is-disabled': disabled,
       }"
+      class="xn-upload-main"
       action="###"
       :auto-upload="autoUpload"
-      :on-progress="onProcess"
       :show-file-list="showFileList"
       :list-type="listType === 'idcard' ? 'picture-card' : listType"
       :multiple="multiple"
@@ -41,37 +42,10 @@
       <div
         slot="file"
         slot-scope="{ file }"
-        class="upload-slot"
+        class="xn-upload--slot"
         :class="{ 'upload-slot-idcard': listType === 'idcard' }"
       >
-        <el-popover width="300" trigger="hover">
-          <el-form label-width="80px" size="mini">
-            <el-form-item label="文件名">
-              <div :title="file.accessoryName" class="tip-filename">
-                {{ file.accessoryName }}
-              </div>
-            </el-form-item>
-            <el-form-item label="文件大小">
-              {{ this.$utils.bytesToSize(file.accessorySize) }}
-            </el-form-item>
-            <el-form-item label="文件格式">
-              {{ file.ext }}
-            </el-form-item>
-            <el-form-item label="文件类型">
-              {{ file.imgFlag ? "图片" : "文件" }}
-            </el-form-item>
-            <el-form-item label="操作">
-              <el-link
-                type="primary"
-                :underline="false"
-                @click="handleDownload(file)"
-                icon="el-icon-download"
-                >下载</el-link
-              >
-            </el-form-item>
-          </el-form>
-          <div v-if="file.ext" slot="reference" class="ext">{{ file.ext }}</div>
-        </el-popover>
+        <uploadPop :file="file" @on-download="handleDownload(file)"></uploadPop>
         <template v-if="isImage(file)">
           <el-image
             class="el-upload-list__item-thumbnail"
@@ -135,9 +109,11 @@
 import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import * as imageConversion from "image-conversion";
 import axios from "axios";
+import uploadPop from './upload-pop.vue'
 export default {
-  name: "XnUploadnew",
+  name: "XnUpload",
   components: {
+    uploadPop,
     ElImageViewer,
   },
   props: {
@@ -208,10 +184,10 @@ export default {
       imageView: "",
       isHidden: false,
       actionParams: {
-        action: `/upload/uploadFile`,
+        action: `https://gatewaydev.xianniu.cn/tp/upload/uploadFile`,
       },
       uploadHeaders: {
-        xnToken: this.$store.getters.token,
+        xnToken: "",
       },
       viewList: [],
       files: [],
@@ -278,7 +254,9 @@ export default {
     },
     onExceedSize(size, maxSize) {
       if (size > maxSize) {
-        this.$message.warning(`最大不能超过${this.$utils.bytesToSize(maxSize)}`);
+        this.$message.warning(
+          `最大不能超过${this.$utils.bytesToSize(maxSize)}`
+        );
         return false;
       }
       return true;
@@ -297,6 +275,7 @@ export default {
       }
       const _file = result ? newFile : file.file;
       formData.append("file", _file);
+
       axios({
         method: "post",
         url: this.actionParams.action,
@@ -311,25 +290,30 @@ export default {
           file.onProgress({ percent: _progress });
         },
       })
-        .then((res) => {
-          var obj = {};
-          obj.accessoryName = res.data.data.accessoryName;
-          obj.accessorySize = res.data.data.accessorySize;
-          obj.ext = res.data.data.ext;
-          obj.imgFlag = res.data.data.imgFlag;
-          obj.url = res.data.data.url;
-          this.successFiles.push(obj);
-          file.onSuccess();
-          this.$emit("update:fileList", this.successFiles);
-          this.$emit("on-success", this.successFiles);
-        })
-        .catch(() => {
+        .then(
+          (res) => {
+            const {accessoryName,accessorySize,ext,imgFlag,url} = res.data.data
+            var obj = {};
+            obj.accessoryName = accessoryName;
+            obj.accessorySize = accessorySize;
+            obj.ext = ext;
+            obj.imgFlag = imgFlag;
+            obj.url = url;
+            this.successFiles.push(obj);
+            file.onSuccess();
+            this.$emit("update:fileList", this.successFiles);
+            this.$emit("on-success", this.successFiles);
+          }
+        )
+        .catch((err) => {
+          console.log(err);
           this.$emit("update:fileList", this.successFiles);
           file.onError();
         });
     },
 
-    onError() {
+    onError(err) {
+      console.log(err);
       this.$message.error("上传失败，请重试");
     },
     onSubmitUpload() {
@@ -383,137 +367,137 @@ export default {
 <style lang="scss">
 </style>
 <style scoped lang="scss">
-.xn-upload-box {
-  .xn-upload-disabled {
-    ::v-deep .el-upload.el-upload--picture-card {
-      cursor: not-allowed;
-      background-color: #f4f4f5;
-      &:hover {
-        border-color: #c0ccda;
-        color: #c0ccda;
-      }
-      .upload-limit {
-        i,
-        span {
-          color: #bcbec2;
-        }
-      }
-    }
-  }
-}
-.process {
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: rgba($color: #000000, $alpha: 0.4);
-  width: 100%;
-  height: 100%;
-  .el-progress {
-    width: 40%;
-    height: auto;
-    ::v-deep .el-progress-circle {
-      width: 99% !important;
-      height: 99% !important;
-    }
-    ::v-deep .el-progress__text {
-      color: #fff;
-      font-size: 12px !important;
-    }
-  }
-}
-.el-upload-idcard {
-  .el-progress {
-    width: 52%;
-  }
-}
+// .xn-upload-box {
+//   .xn-upload-disabled {
+//     ::v-deep .el-upload.el-upload--picture-card {
+//       cursor: not-allowed;
+//       background-color: #f4f4f5;
+//       &:hover {
+//         border-color: #c0ccda;
+//         color: #c0ccda;
+//       }
+//       .upload-limit {
+//         i,
+//         span {
+//           color: #bcbec2;
+//         }
+//       }
+//     }
+//   }
+// }
+// .process {
+//   position: absolute;
+//   left: 0;
+//   top: 0;
+//   background: rgba($color: #000000, $alpha: 0.4);
+//   width: 100%;
+//   height: 100%;
+//   .el-progress {
+//     width: 40%;
+//     height: auto;
+//     ::v-deep .el-progress-circle {
+//       width: 99% !important;
+//       height: 99% !important;
+//     }
+//     ::v-deep .el-progress__text {
+//       color: #fff;
+//       font-size: 12px !important;
+//     }
+//   }
+// }
+// .el-upload-idcard {
+//   .el-progress {
+//     width: 52%;
+//   }
+// }
 
-.upload-limit {
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  span {
-    line-height: 20px;
-    position: absolute;
-    bottom: 8px;
-    color: #ccc;
-    em {
-      font-style: normal;
-      font-size: 12px;
-    }
-  }
-}
-.upload-slot {
-  height: 100%;
-  .ext {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 1000;
-    background: rgba($color: #000000, $alpha: 0.4);
-    height: 20px;
-    line-height: 20px;
-    color: #fff;
-    font-size: 12px;
-    padding: 0 5px;
-    border-radius: 0 0 0 0;
-  }
-  &-idcard {
-    width: 100%;
-    height: 100%;
-  }
-  img {
-    object-fit: cover;
-    height: 100%;
-    width: 100%;
-  }
-  .icon {
-    margin-left: 5px;
-  }
-}
-.tip-filename {
-  line-height: 20px;
-  font-size: 14px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-.xn-upload-list__item--file {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  box-sizing: border-box;
-  padding: 10px 0;
-  .annex {
-    color: #ccc;
-    display: flex;
-    align-items: center;
-    height: 20px;
-    line-height: 20px;
-    .el-icon {
-      font-size: 18px;
-    }
-    .label {
-      padding-left: 5px;
-    }
-  }
-  .file-name {
-    line-height: 20px;
-    font-size: 12px;
-    color: #ccc;
-    padding: 0 6px;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 1; //行数
-    -webkit-box-orient: vertical;
-  }
-}
+// .upload-limit {
+//   display: flex;
+//   height: 100%;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   position: relative;
+//   span {
+//     line-height: 20px;
+//     position: absolute;
+//     bottom: 8px;
+//     color: #ccc;
+//     em {
+//       font-style: normal;
+//       font-size: 12px;
+//     }
+//   }
+// }
+// .upload-slot {
+//   height: 100%;
+//   .ext {
+//     position: absolute;
+//     bottom: 0;
+//     right: 0;
+//     z-index: 1000;
+//     background: rgba($color: #000000, $alpha: 0.4);
+//     height: 20px;
+//     line-height: 20px;
+//     color: #fff;
+//     font-size: 12px;
+//     padding: 0 5px;
+//     border-radius: 0 0 0 0;
+//   }
+//   &-idcard {
+//     width: 100%;
+//     height: 100%;
+//   }
+//   img {
+//     object-fit: cover;
+//     height: 100%;
+//     width: 100%;
+//   }
+//   .icon {
+//     margin-left: 5px;
+//   }
+// }
+// .tip-filename {
+//   line-height: 20px;
+//   font-size: 14px;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   display: -webkit-box;
+//   -webkit-line-clamp: 2;
+//   -webkit-box-orient: vertical;
+// }
+// .xn-upload-list__item--file {
+//   height: 100%;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   flex-direction: column;
+//   box-sizing: border-box;
+//   padding: 10px 0;
+//   .annex {
+//     color: #ccc;
+//     display: flex;
+//     align-items: center;
+//     height: 20px;
+//     line-height: 20px;
+//     .el-icon {
+//       font-size: 18px;
+//     }
+//     .label {
+//       padding-left: 5px;
+//     }
+//   }
+//   .file-name {
+//     line-height: 20px;
+//     font-size: 12px;
+//     color: #ccc;
+//     padding: 0 6px;
+//     text-align: center;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//     display: -webkit-box;
+//     -webkit-line-clamp: 1; //行数
+//     -webkit-box-orient: vertical;
+//   }
+// }
 </style>

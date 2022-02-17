@@ -1,9 +1,7 @@
 
 /* theme color */
-$--color-primary: #FF745C;
-$--color-success: #52C41A;
-$--color-warning: #FAAD14;
-$--color-danger: #FF4D4F;
+@import './theme.scss';
+
 $--button-font-weight: 400;
 
 $--border-color-light: #dfe4ed;

@@ -1,0 +1,74 @@
+@import './mixin/mixin.scss';
+
+.flex {
+  @include flex();
+}
+
+.inline-flex {
+  @include flex(inline);
+}
+
+.flex-direction-row {
+  @include flex-direction(row);
+}
+
+.flex-direction-default {
+  @include flex-direction();
+}
+
+.flex-direction-col {
+  @include flex-direction(column);
+}
+
+.flex-direction-row-reverse {
+  @include flex-direction(row-reverse);
+}
+
+.flex-direction-col-reverse {
+  @include flex-direction(column-reverse);
+}
+
+.flex-wrap-no {
+  @include flex-wrap();
+}
+
+.flex-wrap-yes {
+  @include flex-wrap(wrap);
+}
+
+.flex-basis-1 {
+  @include flex-basis(1);
+}
+
+.flex-grow-1 {
+  @include flex-grow(1);
+}
+
+.flex-shrink-1 {
+  @include flex-shrink(1);
+}
+
+.flex-order-1 {
+  @include order(1);
+}
+
+.justify-content-center {
+  @include justify-content(center);
+}
+.justify-content-between {
+    @include justify-content(space-between);
+  }
+.justify-content-end {
+  @include justify-content(flex-end);
+}
+.align-items-center {
+  @include align-items(center);
+}
+
+.align-self-center {
+  @include align-self(center);
+}
+
+.align-content-center {
+  @include align-content(center);
+}

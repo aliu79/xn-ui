@@ -1,0 +1,64 @@
+@import '../../../src/theme/theme.scss';
+.text-primary{color: $--color-primary!important;}
+.text-success{color: $--color-success!important;}
+.text-danger{color: $--color-danger!important;}
+.text-warning{color: $--color-warning!important;}
+@for $i from 0 through 30 {
+    .m-#{$i} {
+        margin: ($i) + px;
+    }
+    .mt-#{$i} {
+        margin-top: ($i) + px;
+    }
+    .mb-#{$i} {
+        margin-bottom: ($i) + px;
+    }
+    .ml-#{$i} {
+        margin-left: ($i) + px;
+    }
+    .mr-#{$i} {
+        margin-right: ($i) + px;
+    }
+
+    .p-#{$i} {
+        padding: ($i) + px;
+    }
+    .pt-#{$i} {
+        padding-top: ($i) + px;
+    }
+    .pb-#{$i} {
+        padding-bottom: ($i) + px;
+    }
+    .pl-#{$i} {
+        padding-left: ($i) + px;
+    }
+    .pr-#{$i} {
+        padding-right: ($i) + px;
+    }
+    .fz-#{$i} {
+        font-size: $i + px;
+    }
+}
+.text-ell-1 {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.text-ell-2 {
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.text-right {
+    text-align: right;
+}
+.text-center {
+    text-align: center;
+}
+.text-left {
+    text-align: left;
+}

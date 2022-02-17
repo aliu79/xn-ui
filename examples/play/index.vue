@@ -1,6 +1,6 @@
 <template>
   <div>
-      <xn-upload></xn-upload>
+      <xn-upload disabled></xn-upload>
   </div>
 </template>
 
