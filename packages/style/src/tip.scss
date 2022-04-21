@@ -1,0 +1,22 @@
+@import "xn-ui/src/theme/element-variables.scss";
+$list: "primary", "danger", "warning", "info", "success";
+$colorList: $--color-primary, $--color-danger, $--color-warning, $--color-info,
+  $--color-success;
+.xn-tip {
+  padding: 12px;
+  font-weight: 700;
+  & {
+    margin-bottom: 10px;
+    &:last-child{
+        margin-bottom: 0;
+    }
+  }
+  @each $c in $list {
+    $i: index($list, $c);
+    &.xn-tip--#{nth($list,$i)} {
+      background: rgba(nth($colorList, $i), 0.1);
+    //   border-radius: 4px;
+      border-left: 5px solid nth($colorList, $i);
+    }
+  }
+}

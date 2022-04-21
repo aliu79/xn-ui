@@ -5,6 +5,8 @@ import XnPage from '../packages/page/index'
 import XnSearch from '../packages/search/index'
 import XnDate from '../packages/date/index'
 import XnUpload from '../packages/upload/index'
+import XnCity from '../packages/city/index'
+import XnTip from '../packages/tip/index'
 
 import Utils from 'xn-ui/src/utils/index'
 const components = [
@@ -13,7 +15,9 @@ const components = [
     XnPage,
     XnSearch,
     XnDate,
-    XnUpload
+    XnUpload,
+    XnCity,
+    XnTip
 ]
 const version = require('../package.json').version
 
@@ -47,5 +51,7 @@ export default {
     XnDialog,
     XnTable,
     XnPage,
-    XnSearch
+    XnSearch,
+    XnCity,
+    XnTip
 }

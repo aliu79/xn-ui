@@ -1,117 +1,109 @@
 <template>
-  <div class="xn-upload">
-    <span class="text-primary">123122</span>
-    <el-upload
-      ref="upload"
-      :class="{
-        'hide-upload': hiddenUpload || isHidden || preview,
-        'el-upload-idcard': listType === 'idcard',
-        'is-disabled': disabled,
-      }"
-      class="xn-upload-main"
-      action="###"
-      :auto-upload="autoUpload"
-      :show-file-list="showFileList"
-      :list-type="listType === 'idcard' ? 'picture-card' : listType"
-      :multiple="multiple"
-      :limit="limit"
-      :disabled="disabled"
-      :file-list.sync="fileList"
-      :http-request="onHttpUpload"
-      :on-error="onError"
-      :before-upload="onBeforeUpload"
-      :style="styles"
-      :headers="uploadHeaders"
-      :on-exceed="onExceed"
-      :on-change="onChange"
-    >
-      <template v-if="listType === 'picture-card'">
-        <div slot="trigger" class="upload-limit">
-          <i class="el-icon el-icon-plus" />
-          <span
-            ><em>{{ fileList.length }}</em
-            >/<em>{{ limit }}</em>
-          </span>
-        </div>
-      </template>
-      <template v-else>
-        <slot>
-          <el-button icon="el-icon-upload">编辑</el-button>
-        </slot>
-      </template>
-      <div
-        slot="file"
-        slot-scope="{ file }"
-        class="xn-upload--slot"
-        :class="{ 'upload-slot-idcard': listType === 'idcard' }"
-      >
-        <uploadPop :file="file" @on-download="handleDownload(file)"></uploadPop>
-        <template v-if="isImage(file)">
-          <el-image
-            class="el-upload-list__item-thumbnail"
-            :src="file.url"
-            fit="cover"
-            :lazy="true"
-          />
-        </template>
-        <template v-else>
-          <div class="xn-upload-list__item--file">
-            <div class="annex">
-              <i class="el-icon el-icon-folder" />
-              <span class="label">附件</span>
-            </div>
-            <div class="file-name">{{ file.accessoryName }}</div>
-          </div>
-        </template>
-        <div v-if="file.status === 'uploading'" class="process">
-          <el-progress
-            :status="file.percentage === 100 ? 'success' : null"
-            type="circle"
-            :percentage="process(file.percentage)"
-            :stroke-width="6"
-          />
-        </div>
-        <span class="el-upload-list__item-actions">
-          <span
-            v-if="isImage(file)"
-            class="el-upload-list__item-preview"
-            @click="handlePictureCardPreview(file)"
-          >
-            <i class="fz-16 el-icon-zoom-in" />
-          </span>
-          <span
-            class="el-upload-list__item-delete icon"
-            @click="handleDownload(file, fileList)"
-          >
-            <i class="fz-16 el-icon-download" />
-          </span>
-          <span
-            v-if="!disabled && !preview"
-            class="el-upload-list__item-delete icon"
-            @click="handleRemove(file, fileList)"
-          >
-            <i class="fz-16 el-icon-delete" />
-          </span>
+  <el-upload
+    ref="upload"
+    :class="{
+      'is-disabled': $attrs.disabled != undefined,
+    }"
+    class="xn-upload xn-upload-main"
+    action="###"
+    :list-type="listType"
+    v-bind="$attrs"
+    :file-list.sync="fileList"
+    :http-request="onHttpUpload"
+    :on-error="onError"
+    :before-upload="onBeforeUpload"
+    :style="styles"
+    :headers="uploadHeaders"
+    :on-exceed="onExceed"
+    :on-change="onChange"
+  >
+    <template v-if="listType === 'picture-card'">
+      <div slot="trigger" class="upload-limit">
+        <i class="el-icon el-icon-plus" />
+        <span
+          ><em>{{ fileList.length }}</em
+          >/<em>{{ limit }}</em>
         </span>
       </div>
-      <div v-if="tip !== ''" slot="tip" class="el-upload__tip">{{ tip }}</div>
-    </el-upload>
+    </template>
+    <template v-else>
+      <slot>
+        <el-button icon="el-icon-upload">编辑</el-button>
+      </slot>
+    </template>
+    <div
+      slot="file"
+      slot-scope="{ file }"
+      class="xn-upload--slot"
+      :class="{ 'upload-slot-idcard': listType === 'idcard' }"
+    >
+      <uploadPop :file="file" @on-download="handleDownload(file)"></uploadPop>
+      <template v-if="isImage(file)">
+        <el-image
+          class="el-upload-list__item-thumbnail"
+          :src="file.url"
+          fit="cover"
+          :lazy="true"
+        />
+      </template>
+      <template v-else>
+        <div class="xn-upload-list__item--file">
+          <div class="annex">
+            <i class="el-icon el-icon-folder" />
+            <span class="label">附件</span>
+          </div>
+          <div class="file-name">{{ file.accessoryName }}</div>
+        </div>
+      </template>
+      <div v-if="file.status === 'uploading'" class="process">
+        <el-progress
+          :status="file.percentage === 100 ? 'success' : null"
+          type="circle"
+          :percentage="process(file.percentage)"
+          :stroke-width="6"
+        />
+      </div>
+      <span class="el-upload-list__item-actions">
+        <span
+          v-if="isImage(file)"
+          class="el-upload-list__item-preview"
+          @click="handlePictureCardPreview(file)"
+        >
+          <i class="fz-16 el-icon-zoom-in" />
+        </span>
+        <span
+          class="el-upload-list__item-delete icon"
+          @click="handleDownload(file, fileList)"
+        >
+          <i class="fz-16 el-icon-download" />
+        </span>
+        <span
+          v-if="!disabled && !preview"
+          class="el-upload-list__item-delete icon"
+          @click="handleRemove(file, fileList)"
+        >
+          <i class="fz-16 el-icon-delete" />
+        </span>
+      </span>
+    </div>
+    <div v-if="tip !== ''" slot="tip" class="el-upload__tip">{{ tip }}</div>
     <el-image-viewer
       v-if="isShowImageView"
       :on-close="closeViewer"
       :z-index="999999"
       :url-list="[imageView]"
     />
-  </div>
+  </el-upload>
 </template>
 
 <script>
 import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import * as imageConversion from "image-conversion";
 import axios from "axios";
-import uploadPop from './upload-pop.vue'
+import uploadPop from "./upload-pop.vue";
 export default {
   name: "XnUpload",
+  inheritAttrs: true,
   components: {
     uploadPop,
     ElImageViewer,
@@ -120,10 +112,6 @@ export default {
     listType: {
       type: String,
       default: "picture-card",
-    },
-    showFileList: {
-      type: Boolean,
-      default: true,
     },
     hiddenUpload: {
       type: Boolean,
@@ -137,11 +125,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    disabled: Boolean,
-    autoUpload: {
-      type: Boolean,
-      default: true,
-    },
+
     limit: {
       type: Number,
       default: 1,
@@ -149,10 +133,6 @@ export default {
     tip: {
       type: String,
       default: "",
-    },
-    multiple: {
-      type: Boolean,
-      default: true,
     },
     accept: {
       type: Array,
@@ -219,7 +199,9 @@ export default {
       immediate: true,
     },
   },
-  created() {},
+  created() {
+    console.log(this.$attrs);
+  },
   beforeDestroy() {
     this.$emit("update:fileList", []);
   },
@@ -290,21 +272,20 @@ export default {
           file.onProgress({ percent: _progress });
         },
       })
-        .then(
-          (res) => {
-            const {accessoryName,accessorySize,ext,imgFlag,url} = res.data.data
-            var obj = {};
-            obj.accessoryName = accessoryName;
-            obj.accessorySize = accessorySize;
-            obj.ext = ext;
-            obj.imgFlag = imgFlag;
-            obj.url = url;
-            this.successFiles.push(obj);
-            file.onSuccess();
-            this.$emit("update:fileList", this.successFiles);
-            this.$emit("on-success", this.successFiles);
-          }
-        )
+        .then((res) => {
+          const { accessoryName, accessorySize, ext, imgFlag, url } =
+            res.data.data;
+          var obj = {};
+          obj.accessoryName = accessoryName;
+          obj.accessorySize = accessorySize;
+          obj.ext = ext;
+          obj.imgFlag = imgFlag;
+          obj.url = url;
+          this.successFiles.push(obj);
+          file.onSuccess();
+          this.$emit("update:fileList", this.successFiles);
+          this.$emit("on-success", this.successFiles);
+        })
         .catch((err) => {
           console.log(err);
           this.$emit("update:fileList", this.successFiles);

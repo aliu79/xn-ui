@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card shadow="always" :body-style="{ padding: '10px' }">
+    <el-card shadow="always" class="ml-20" :body-style="{ padding: '10px' }">
       <xn-search :form-data="formSearch" @on-search="onSearch"></xn-search>
     </el-card>
   </div>
@@ -12,9 +12,15 @@ export default {
     return {
       formSearch: [
         {
-          label: "订单号",
+          label: "报价单状态",
           type: "input",
           prop: "salesCode",
+          placeholder: "请输入订单号",
+        },
+        {
+          label: "订单号",
+          type: "city",
+          prop: "city",
           placeholder: "请输入订单号",
         },
         {

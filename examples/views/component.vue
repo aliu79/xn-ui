@@ -11,7 +11,16 @@
             class="doc-nav-item__group-list-item"
           >
             <span>table</span>
-            <span>表格</span>
+            <span class="pl-5">表格</span>
+          </router-link>
+          <router-link
+            to="/component/tip"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span>tip</span>
+            <span class="pl-5">提示</span>
           </router-link>
         </ul>
       </ol>

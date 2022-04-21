@@ -16,7 +16,8 @@ const routes = [
     redirect: '/component/table',
     component: () => import(/* webpackChunkName: "about" */ '../views/component.vue'),
     children: [
-      { path: '/component/table', name: 'Table', component: () => import('../docs/table.md') }
+      { path: '/component/table', name: 'Table', component: () => import('../docs/table.md') },
+      { path: '/component/tip', name: 'Tip', component: () => import('../docs/tip.md') }
     ]
   }
 ]

@@ -1,23 +1,23 @@
 .xn-upload {
-    &-main{
+    &.is-disabled {
         border: 1px solid red;
-        &.is-disabled {
-            border: 1px solid red;
-            .el-upload.el-upload--picture-card {
-                cursor: not-allowed;
-                background-color: #f4f4f5;
-                &:hover {
-                    border-color: #c0ccda;
-                    color: #c0ccda;
-                }
-                .upload-limit {
-                    i,
-                    span {
-                        color: #bcbec2;
-                    }
+        .el-upload.el-upload--picture-card {
+            cursor: not-allowed;
+            background-color: #f4f4f5;
+            &:hover {
+                border-color: #c0ccda;
+                color: #c0ccda;
+            }
+            .upload-limit {
+                i,
+                span {
+                    color: #bcbec2;
                 }
             }
         }
+    }
+    &-main{
+        border: 1px solid red;
     }
     &--slot{
         height: 100%;

@@ -1,70 +1,114 @@
 <template>
-  <el-form ref="form" inline :model="form" :label-width="labelWidth">
-    <template v-for="(item, idx) in formData">
-      <el-form-item
-        v-if="item.type === 'input'"
-        :key="idx"
-        :label="item.label"
-        :prop="item.prop"
-      >
-        <el-input
-          v-model="form.value[idx].modelVal"
-          :clearable="item.clearable || true"
-          :placeholder="item.placeholder"
-        />
-      </el-form-item>
-      <el-form-item
-        v-if="item.type === 'select'"
-        :key="idx"
-        :label="item.label"
-        :prop="item.prop"
-      >
-        <el-select
-          v-model="form.value[idx].modelVal"
-          :placeholder="item.placeholder"
-          :clearable="item.clearable || true"
-          filterable
+  <el-form
+    class="xn-search"
+    ref="form"
+    inline
+    :model="form"
+    :label-width="labelWidth"
+  >
+    <el-row :gutter="0" class="xn-search--row">
+      <template v-for="(item, idx) in formData">
+        <el-col
+          :xs="24"
+          :sm="12"
+          :md="8"
+          :lg="6"
+          :xl="6"
+          :offset="0"
+          :key="idx"
+          v-show="item.isShow || isColl"
         >
-          <el-option
-            v-for="(itemData, idxData) in item.data"
-            :key="idxData"
-            :label="itemData.label"
-            :value="itemData.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item
-        v-if="isDate(item.type)"
-        :key="idx"
-        :label="item.label"
-        :prop="item.prop"
-      >
-        <xn-date
-          v-model="form.value[idx].modelVal"
-          :mode="item.mode || 'range'"
-          :type="item.type || 'daterange'"
-          :is-shortcut="showShortcut(item)"
-          :placeholder="item.placeholder"
-          :startPlaceholder="item.options && item.options.startPlaceholder"
-          :endPlaceholder="item.options && item.options.endPlaceholder"
-          :clearable="item.clearable || true"
-          :default-time="
-            isRange(item.type) && item.defaultTime == undefined
-              ? ['00:00:00', '23:59:59']
-              : item.defaultTime
-          "
-          @on-change="onChangeDate"
-          @on-format="onChangeDateFormat"
-        />
-      </el-form-item>
-    </template>
-    <el-form-item>
-      <el-button type="primary" icon="el-icon-search" @click="onSearch"
-        >查询</el-button
-      >
-      <el-button @click="onReset">重置</el-button>
-    </el-form-item>
-    <div v-show="false" />
+          <el-form-item
+            v-if="item.type === 'city'"
+            :key="idx"
+            :label="item.label"
+            :prop="item.prop"
+            class="xn-search--row_col"
+          >
+            <xn-city
+              :data-level="(item.options && item.options.dataLevel) || 2"
+              v-model="form.value[idx].modelVal"
+              @on-city="handleChangeCity"
+            />
+          </el-form-item>
+          <el-form-item
+            v-if="item.type === 'input'"
+            :key="idx"
+            :label="item.label"
+            :prop="item.prop"
+            class="xn-search--row_col"
+          >
+            <el-input
+              style="width: 100%"
+              v-model="form.value[idx].modelVal"
+              :clearable="item.clearable || true"
+              :placeholder="item.placeholder"
+            />
+          </el-form-item>
+          <el-form-item
+            v-if="item.type === 'select'"
+            :key="idx"
+            :label="item.label"
+            :prop="item.prop"
+            class="xn-search--row_col"
+          >
+            <el-select
+              v-model="form.value[idx].modelVal"
+              :placeholder="item.placeholder"
+              :clearable="item.clearable || true"
+              filterable
+            >
+              <el-option
+                v-for="(itemData, idxData) in item.data"
+                :key="idxData"
+                :label="itemData.label"
+                :value="itemData.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            v-if="isDate(item.type)"
+            :key="idx"
+            :label="item.label"
+            :prop="item.prop"
+            class="xn-search--row_col"
+          >
+            <xn-date
+              v-model="form.value[idx].modelVal"
+              :mode="item.mode || 'range'"
+              :type="item.type || 'daterange'"
+              :is-shortcut="showShortcut(item)"
+              :placeholder="item.placeholder"
+              :startPlaceholder="item.options && item.options.startPlaceholder"
+              :endPlaceholder="item.options && item.options.endPlaceholder"
+              :clearable="item.clearable || true"
+              :default-time="
+                isRange(item.type) && item.defaultTime == undefined
+                  ? ['00:00:00', '23:59:59']
+                  : item.defaultTime
+              "
+              @on-change="onChangeDate"
+              @on-format="onChangeDateFormat"
+            />
+          </el-form-item>
+        </el-col>
+      </template>
+      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" :offset="0">
+        <el-form-item :style="{ 'padding-left': `${labelWidth}` }">
+          <el-button type="primary" icon="el-icon-search" @click="onSearch"
+            >查询</el-button
+          >
+          <el-button @click="onReset">重置</el-button>
+          <el-button
+            v-if="formData.length && formData.length > 4"
+            type="text"
+            @click="isColl = !isColl"
+            ><span>{{ isColl ? "收起" : "高级查询" }}</span
+            ><i class="ml-5" :class="toggle"></i
+          ></el-button>
+        </el-form-item>
+      </el-col>
+    </el-row>
   </el-form>
 </template>
 
@@ -78,10 +122,13 @@ export default {
     },
     labelWidth: {
       type: String,
-      default: "80px",
+      default: "110px",
     },
   },
   computed: {
+    toggle() {
+      return this.isColl ? "el-icon-arrow-up" : "el-icon-arrow-down";
+    },
     isDate() {
       return (type) => {
         return [
@@ -117,14 +164,17 @@ export default {
   },
   data() {
     return {
+      city: {},
       form: {
         value: [],
       },
+      isColl: false,
     };
   },
   created() {
     for (let i = 0, formData = this.formData; i < formData.length; i++) {
       const item = formData[i];
+      item.isShow = i > 3 ? false : true;
       this.form.value.push({
         key: item.prop,
         modelVal: "",
@@ -140,7 +190,7 @@ export default {
           const index = i;
           const key = item.prop;
           const value = this.form.value[index].modelVal;
-          if (this.isRange(item.type) || item.mode === 'group') {
+          if (this.isRange(item.type) || item.mode === "group") {
             if (
               item.options &&
               item.options.start &&
@@ -160,12 +210,12 @@ export default {
     onReset() {
       this.form.value = [];
       for (let i = 0, formData = this.formData; i < formData.length; i++) {
-      const item = formData[i];
-      this.form.value.push({
-        key: item.prop,
-        modelVal: "",
-      });
-    }
+        const item = formData[i];
+        this.form.value.push({
+          key: item.prop,
+          modelVal: "",
+        });
+      }
       this.$emit("on-reset");
       this.$emit("on-search", {});
     },
@@ -175,9 +225,28 @@ export default {
     onChangeDateFormat() {
       // console.log(val);
     },
+    handleChangeCity({ cityCodeLast: cityCode, cityNameLast: cityName }) {
+      this.city = { cityCode, cityName };
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.xn-search {
+  &--row {
+    &_col {
+      display: flex;
+      ::v-deep .el-form-item__content {
+        width: 100%;
+      }
+      ::v-deep .el-form-item__label {
+        flex: none;
+      }
+    }
+  }
+  &--submit {
+    // border: 1px solid red;
+  }
+}
 </style>
