@@ -17,9 +17,9 @@ module.exports = {
     outputDir: 'dist',
     assetsDir: 'static',
     indexPath: 'index.html',
-    chunkFilename: '[id].js',
-    libraryTarget: 'umd',
-    libraryExport: 'default',
+    // chunkFilename: '[id].js',
+    // libraryTarget: 'umd',
+    // libraryExport: 'default',
     // library: 'ELEMENT',
     // umdNamedDefine: true,
     // 将 examples 目录添加为新的页面
