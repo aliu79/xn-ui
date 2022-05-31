@@ -50,8 +50,36 @@ const deepClone = (source) => {
   })
   return targetObj
 }
+/**
+ * 
+ * @param {object} params 
+ * @param {string} name 文件名 
+ * @param {string} url 文件地址
+ */
+const download = (params = { name: '', url: '' }) => {
+  const defaultParams = {
+    url: '',
+    name: '下载模板'
+  }
+  const _params = Object.assign(defaultParams, params)
+  const { url, name } = _params
+  var x = new XMLHttpRequest()
+  x.open('GET', url, true)
+  x.responseType = 'blob'
+  x.onload = function (e) {
+    // 会创建一个 DOMString，其中包含一个表示参数中给出的对象的URL。这个 URL 的生命周期和创建它的窗口中的 document 绑定。这个新的URL 对象表示指定的 File 对象或 Blob 对象。
+    var url = window.URL.createObjectURL(x.response)
+    var a = document.createElement('a')
+    a.href = url
+    a.download = name
+    a.click()
+  }
+  x.send()
+}
+
 export default {
   isEmpty,
   isImg,
-  deepClone
+  deepClone,
+  download
 }

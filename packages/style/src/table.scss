@@ -5,5 +5,13 @@
         &.is-border{
             border-bottom: 1px solid #f0f0f0;
         }
+        &__pop{
+            min-width: 120px !important;
+            padding: 0 0 0 10px !important;
+        }
+        &__coll{
+            max-height: 200px;
+            overflow-y: auto;
+        }
     }
 }

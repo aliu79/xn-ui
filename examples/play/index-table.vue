@@ -42,9 +42,7 @@ export default {
         { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
       ],
       pageConfig: {
-        total: 100,
-        pageSize: 15,
-        pageNum: 1,
+
       },
     };
   },
