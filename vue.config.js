@@ -13,13 +13,13 @@ const IS_PLAY = !!process.env.PLAY_ENV
 
 
 module.exports = {
-    // publicPath: process.env.NODE_ENV === "production" ? "/xn-ui/" : "/",
-    // outputDir: 'dist',
-    // assetsDir: 'static',
-    // indexPath: 'index.html',
-    // chunkFilename: '[id].js',
-    // libraryTarget: 'umd',
-    // libraryExport: 'default',
+    publicPath: process.env.NODE_ENV === "production" ? "/xn-ui/" : "/",
+    outputDir: 'dist',
+    assetsDir: 'static',
+    indexPath: 'index.html',
+    chunkFilename: '[id].js',
+    libraryTarget: 'umd',
+    libraryExport: 'default',
     // library: 'ELEMENT',
     // umdNamedDefine: true,
     // 将 examples 目录添加为新的页面
