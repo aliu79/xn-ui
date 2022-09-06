@@ -1,5 +1,8 @@
 <template>
-  <el-table-column v-bind="$attrs" v-if="isShowColumn($attrs)">
+  <el-table-column
+    v-bind="$attrs"
+    v-if="isShowColumn($attrs)"
+  >
     <template v-if="$attrs.labelMsg">
       <template slot="header">
         <el-tooltip
@@ -15,7 +18,7 @@
     <template slot-scope="{ row, $index }">
       <expandDom
         v-if="$attrs.render"
-        :column="item"
+        :column="row"
         :row="row"
         :render="$attrs.render"
         :index="$index"
@@ -27,7 +30,7 @@
       <template v-if="$attrs.more && $attrs.more.options.length">
         <template v-for="(itemBtn, idxBtn) in $attrs.more.options">
           <expand-dom
-            v-if="itemBtn.render"
+            v-if="itemBtn.render && itemBtn.show && itemBtn.show(row)"
             :key="idxBtn"
             :column="itemBtn"
             :row="row"
@@ -35,21 +38,36 @@
             :index="idxBtn"
           />
           <template v-else>
-            <el-button
-              v-if="itemBtn.show ? itemBtn.show(row) : true"
+            <el-popconfirm
+              v-if="itemBtn.isPopConfirm"
+              :title="itemBtn.options.title || `确定${label(itemBtn, row)}吗？`"
               :key="idxBtn"
-              :disabled="itemBtn.disabled ? itemBtn.disabled(row) : false"
-              :type="itemBtn.type || 'text'"
-              :size="itemBtn.size || 'mini'"
-              :icon="itemBtn.icon"
-              :plain="itemBtn.plain"
-              @click="handleClick(itemBtn.method, row, $index)"
-              >{{
-                typeof itemBtn.label === "function"
-                  ? itemBtn.label(row)
-                  : itemBtn.label
-              }}</el-button
+              :confirm-button-text="itemBtn.options.confirmButtonText"
+              class="ml-10"
+              @confirm="handleClick(itemBtn.method, row, $index)"
             >
+              <el-button
+                :type="itemBtn.type || 'text'"
+                :size="itemBtn.size || 'mini'"
+                :icon="itemBtn.icon"
+                :plain="itemBtn.plain"
+                slot="reference"
+                >{{ label(itemBtn, row) }}</el-button
+              >
+            </el-popconfirm>
+            <template v-else>
+              <el-button
+                v-if="itemBtn.show ? itemBtn.show(row) : true"
+                :key="idxBtn"
+                :disabled="itemBtn.disabled ? itemBtn.disabled(row) : false"
+                :type="itemBtn.type || 'text'"
+                :size="itemBtn.size || 'mini'"
+                :icon="itemBtn.icon"
+                :plain="itemBtn.plain"
+                @click="handleClick(itemBtn.method, row, $index)"
+                >{{ label(itemBtn, row) }}</el-button
+              >
+            </template>
           </template>
         </template>
       </template>
@@ -82,6 +100,13 @@ export default {
     },
   },
   computed: {
+    label() {
+      return (itemBtn, row) => {
+        return typeof itemBtn.label === "function"
+          ? itemBtn.label(row)
+          : itemBtn.label;
+      };
+    },
     isShowColumn() {
       return (row) => {
         if (row.show !== undefined) {
@@ -99,7 +124,7 @@ export default {
   watch: {},
   methods: {
     handleClick(method, row, index) {
-      if(this.$parent){
+      if (this.$parent) {
         this.$parent.$emit("on-buttons", { method, row, index });
       }
     },

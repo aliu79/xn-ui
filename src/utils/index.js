@@ -3,7 +3,6 @@ import reg from './reg'
 import format from './format'
 import dayjs from './dayjs'
 import storage from './storage'
-import lodash from './lodash'
 import utils from './utils'
 
 const version = () => {
@@ -16,6 +15,5 @@ export default {
     $format: format,
     $dayjs: dayjs,
     $storage: storage,
-    $lodash: lodash,
     $utils: utils
 }
