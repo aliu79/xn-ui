@@ -1,8 +1,6 @@
 <template>
-  <el-table-column
-    v-bind="$attrs"
-    v-if="isShowColumn($attrs)"
-  >
+  <el-table-column v-bind="$attrs" v-on="$listeners" v-if="isShowColumn($attrs)">
+
     <template v-if="$attrs.labelMsg">
       <template slot="header">
         <el-tooltip
@@ -109,12 +107,8 @@ export default {
     },
     isShowColumn() {
       return (row) => {
-        if (row.show !== undefined) {
-          if (typeof row.show === "function") {
-            return row.show();
-          } else {
-            return row.show;
-          }
+        if (row.show != undefined) {
+         return typeof row.show === "function" ?  row.show() : row.show;
         }
         return true;
       };

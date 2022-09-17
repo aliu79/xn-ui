@@ -14,13 +14,12 @@
           :md="8"
           :lg="6"
           :xl="6"
-          :offset="0"
+          :offset="0" 
           :key="idx"
-          v-show="item.isShow || isColl"
+          v-if="item.isShow || isColl"
         >
           <el-form-item
             v-if="item.type === 'city'"
-            :key="idx"
             :label="item.label"
             :prop="item.prop"
             class="xn-search--row_col"
@@ -33,7 +32,6 @@
           </el-form-item>
           <el-form-item
             v-if="item.type === 'input'"
-            :key="idx"
             :label="item.label"
             :prop="item.prop"
             class="xn-search--row_col"
@@ -47,7 +45,6 @@
           </el-form-item>
           <el-form-item
             v-if="item.type === 'select'"
-            :key="idx"
             :label="item.label"
             :prop="item.prop"
             class="xn-search--row_col"
@@ -68,7 +65,6 @@
           </el-form-item>
           <el-form-item
             v-if="isDate(item.type)"
-            :key="idx"
             :label="item.label"
             :prop="item.prop"
             class="xn-search--row_col"
@@ -232,21 +228,3 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.xn-search {
-  &--row {
-    &_col {
-      display: flex;
-      ::v-deep .el-form-item__content {
-        width: 100%;
-      }
-      ::v-deep .el-form-item__label {
-        flex: none;
-      }
-    }
-  }
-  &--submit {
-    // border: 1px solid red;
-  }
-}
-</style>

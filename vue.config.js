@@ -13,10 +13,10 @@ const IS_PLAY = !!process.env.PLAY_ENV
 
 
 module.exports = {
-    // publicPath: process.env.NODE_ENV === "production" ? "/xn-ui/" : "/",
-    // outputDir: 'dist',
-    // assetsDir: 'static',
-    // indexPath: 'index.html',
+    publicPath: process.env.NODE_ENV === "production" ? "/xn-ui/" : "./",
+    outputDir: 'dist',
+    assetsDir: 'static',
+    indexPath: 'index.html',
     // chunkFilename: '[id].js',
     // libraryTarget: 'umd',
     // libraryExport: 'default',

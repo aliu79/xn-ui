@@ -4,9 +4,7 @@
 ```html
 <template>
     <xn-tip type="primary">标题</xn-tip>
-
     <xn-tip type="warning">标题</xn-tip>
-
     <xn-tip type="success">标题</xn-tip>
     <xn-tip type="danger">标题</xn-tip>
     <xn-tip type="info">标题</xn-tip>
