@@ -45,7 +45,6 @@ const install = function (Vue) {
     Vue.prototype.$reg = Utils.$reg
     Vue.prototype.$format = Utils.$format
     Vue.prototype.$dayjs = Utils.$dayjs
-    Vue.prototype.$lodash = Utils.$lodash
     Vue.prototype.$storage = Utils.$storage
 
 }
