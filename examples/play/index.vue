@@ -2,7 +2,7 @@
 <div>
     <el-button type="primary" size="default" @click="show = true">open</el-button>
     
-  <xn-import :show.sync="show"></xn-import>
+  <!-- <xn-import :show.sync="show"></xn-import> -->
 </div>
 </template>
 

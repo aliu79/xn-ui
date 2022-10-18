@@ -38,6 +38,7 @@ module.exports = {
     chainWebpack: (config) => {
         config.resolve.symlinks(false)
         config.resolve.alias
+            .set('@', resolve('./src'))
             .set('xn-ui', resolve('./'))
             .set('packages', resolve('./packages'))
             .set('examples', resolve('./examples'))
