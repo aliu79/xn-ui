@@ -2,7 +2,7 @@
   <div>
     <el-button type="primary" size="default" @click="show = true">open</el-button>
     
-    <xn-dialog  :show.sync="show"></xn-dialog>
+    <xn-dialog :show.sync="show"></xn-dialog>
   </div>
 </template>
 

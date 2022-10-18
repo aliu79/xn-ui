@@ -1,21 +1,22 @@
 <template>
-<div>
-    <el-button type="primary" size="default" @click="show = true">open</el-button>
-    
-  <!-- <xn-import :show.sync="show"></xn-import> -->
-</div>
+  <div>
+    <el-button type="primary" size="default" @click="show = true"
+      >open</el-button
+    >
+    <xn-export :show.sync="show"></xn-export>
+    <!-- <xn-import :show.sync="show" :before-close="()=>show = false"></xn-import> -->
+  </div>
 </template>
 
 <script>
 export default {
-data() {
+  data() {
     return {
-        show:false
-    }
-},
-}
+      show: false,
+    };
+  },
+};
 </script>
 
 <style>
-
 </style>

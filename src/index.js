@@ -10,6 +10,7 @@ import XnTip from '../packages/tip/index'
 import XnDrawer from '../packages/drawer/index'
 import XnTree from '../packages/tree/index'
 import XnImport from '../packages/import/index'
+import XnExport from '../packages/export/index'
 
 import Utils from 'xn-ui/src/utils/index'
 const components = [
@@ -23,7 +24,8 @@ const components = [
     XnTip,
     XnDrawer,
     XnTree,
-    XnImport
+    XnImport,
+    XnExport
 ]
 const version = require('../package.json').version
 
