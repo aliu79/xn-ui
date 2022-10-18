@@ -39,7 +39,7 @@ const install = function (Vue) {
     })
 
     Vue.prototype.$XN = {
-        uploadUrl: '123'
+        uploadUrl: ''
     }
     Vue.prototype.$utils = Utils.$utils
     Vue.prototype.$reg = Utils.$reg
