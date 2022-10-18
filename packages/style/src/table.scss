@@ -1,15 +1,19 @@
 .xn-table-box {
+    &.disabled-all-selection {
+        .el-table__header-wrapper .el-checkbox {
+            display: none;
+        }
+    }
     &-tools {
         text-align: right;
-        padding-bottom: 10px;
         &.is-border {
             border-bottom: 1px solid #f0f0f0;
         }
-        &__pop{
+        &__pop {
             min-width: 120px !important;
             padding: 0 0 0 10px !important;
         }
-        &__coll{
+        &__coll {
             height: 200px;
             overflow-y: auto;
         }

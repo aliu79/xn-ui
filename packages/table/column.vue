@@ -1,6 +1,9 @@
 <template>
-  <el-table-column v-bind="$attrs" v-on="$listeners" v-if="isShowColumn($attrs)">
-
+  <el-table-column
+    v-bind="$attrs"
+    v-on="$listeners"
+    v-if="isShowColumn($attrs)"
+  >
     <template v-if="$attrs.labelMsg">
       <template slot="header">
         <el-tooltip
@@ -108,7 +111,7 @@ export default {
     isShowColumn() {
       return (row) => {
         if (row.show != undefined) {
-         return typeof row.show === "function" ?  row.show() : row.show;
+          return typeof row.show === "function" ? row.show() : row.show;
         }
         return true;
       };
@@ -119,7 +122,11 @@ export default {
   methods: {
     handleClick(method, row, index) {
       if (this.$parent) {
-        this.$parent.$emit("on-buttons", { method, row, index });
+        this.$parent.$emit("handle-buttons", {
+          method,
+          row,
+          index,
+        });
       }
     },
   },

@@ -1,28 +1,57 @@
 <template>
   <div class="xn-table-box">
     <div class="xn-table-box-tools" :class="{ 'is-border': !border }">
-      <slot name="tools">
-        <el-button-group>
+      <div class="flex justify-content-between align-items-center">
+        <div class="fz-12">
+          <template v-if="selection">
+            <span>已选择 {{ selectedData.length }} 项</span>
+            <el-button
+              type="text"
+              v-show="selectedData.length"
+              class="ml-5"
+              size="mini"
+              @click="clearSelection"
+              >取消</el-button
+            >
+          </template>
+        </div>
+        <div :class="{'pb-10': $slots.tools || tools.length}" class=" flex justify-content-between align-items-center">
+          <slot name="tools">
+            <!-- <el-button-group> -->
+            <div>
+              <el-tooltip
+                v-for="(item, idx) in tools"
+                :key="idx"
+                :content="item.label"
+                placement="bottom"
+                effect="dark"
+              >
+                <el-button
+                  size="mini"
+                  type="primary"
+                  plain
+                  :icon="item.icon"
+                  @click="handleToolsItem(item, idx)"
+                >
+                  {{ item.label }}
+                </el-button>
+              </el-tooltip>
+            </div>
+            <!-- </el-button-group> -->
+          </slot>
           <el-tooltip
-            v-for="(item, idx) in tools"
-            :key="idx"
-            :content="item.label"
+            class="ml-10"
+            content="刷新"
             placement="bottom"
             effect="dark"
           >
             <el-button
+              v-if="showRefresh"
               size="mini"
-              :icon="item.icon"
-              @click="handleToolsItem(item, idx)"
-            >
-            {{item.label}}
-            </el-button>
-          </el-tooltip>
-          <el-tooltip content="刷新列表" placement="bottom" effect="dark">
-            <el-button
-              size="mini"
+              type="primary"
               @click="$emit('on-refresh')"
               icon="el-icon-refresh"
+              plain
             ></el-button>
           </el-tooltip>
           <el-popover
@@ -30,6 +59,7 @@
             popper-class="xn-table-box-tools__pop"
             class="ml-10"
             trigger="hover"
+            :hidden="!showColumn"
           >
             <el-scrollbar
               class="xn-table-box-tools__coll"
@@ -45,27 +75,16 @@
               </div>
             </el-scrollbar>
             <el-button
+              plain
               size="mini"
+              type="primary"
               icon="el-icon-setting"
               slot="reference"
             ></el-button>
           </el-popover>
-        </el-button-group>
-      </slot>
+        </div>
+      </div>
     </div>
-    <!-- <el-button
-      circle
-      size="mini"
-      @click="$emit('on-export')"
-      icon="el-icon-files"
-    ></el-button>
-    <el-button
-      circle
-      size="mini"
-      @click="$emit('on-refresh')"
-      icon="el-icon-refresh"
-    ></el-button> -->
-
     <el-table
       ref="table"
       :data="data"
@@ -74,6 +93,8 @@
       :border="border"
       :stripe="stripe"
       @row-click="singleElection"
+      @selection-change="selectionChange"
+      :class="{ 'disabled-all-selection': radio }"
     >
       <el-table-column
         v-if="selection && data.length"
@@ -82,7 +103,7 @@
         width="50px"
         align="center"
       ></el-table-column>
-      <el-table-column v-bind="$attrs" v-if="radio" width="50px" align="center">
+      <el-table-column v-bind="$attrs" v-if="radio" width="60px" align="center">
         <template slot-scope="{ row }">
           <el-radio v-model="radioSelected" :label="row.id">&nbsp;</el-radio>
         </template>
@@ -142,8 +163,8 @@ export default {
     stripe: Boolean,
     selection: Boolean,
     radio: Boolean,
-
     showPage: Boolean,
+    showRefresh: Boolean,
     pageLayout: {
       type: String,
       default: "total, prev, pager, next, jumper",
@@ -152,13 +173,15 @@ export default {
       type: Object,
       default: () => {},
     },
-    index: Boolean,
+    index: { type: Boolean, default: true },
+    showColumn: Boolean,
     expand: Boolean,
     isTools: Boolean,
   },
   data() {
     return {
       radioSelected: "",
+      selectedData: [],
     };
   },
   computed: {},
@@ -172,7 +195,6 @@ export default {
     getList(val) {
       this.$emit("on-page", val);
     },
-
     singleElection(val) {
       if (!this.radio) return;
       this.radioSelected = val.id;
@@ -185,7 +207,20 @@ export default {
     handleChangeToolshow(item) {
       item.checked = item.checked === true ? false : true;
       this.$refs.table.doLayout();
-      console.log(this.$root);
+    },
+    selectionChange(val) {
+      this.selectedData = val;
+      this.$emit("selection-change", val);
+      // this.$refs.table.get
+    },
+    toggleRowSelection(row, status) {
+      this.$refs.table.toggleRowSelection(row, status);
+    },
+    clearSelection() {
+      this.$refs.table.clearSelection();
+    },
+    doLayout() {
+      this.$refs.table.doLayout();
     },
   },
 };
