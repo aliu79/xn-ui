@@ -15,6 +15,7 @@
               :icon="item.icon"
               @click="handleToolsItem(item, idx)"
             >
+            {{item.label}}
             </el-button>
           </el-tooltip>
           <el-tooltip content="刷新列表" placement="bottom" effect="dark">
@@ -24,10 +25,35 @@
               icon="el-icon-refresh"
             ></el-button>
           </el-tooltip>
+          <el-popover
+            placement="bottom-end"
+            popper-class="xn-table-box-tools__pop"
+            class="ml-10"
+            trigger="hover"
+          >
+            <el-scrollbar
+              class="xn-table-box-tools__coll"
+              wrap-style="overflow-x:hidden;"
+            >
+              <div v-for="(item, idx) in columns" :key="idx" class="mb-5">
+                <el-checkbox
+                  :value="item.checked"
+                  :checked="item.checked"
+                  @change="handleChangeToolshow(item)"
+                  >{{ item.label }}</el-checkbox
+                >
+              </div>
+            </el-scrollbar>
+            <el-button
+              size="mini"
+              icon="el-icon-setting"
+              slot="reference"
+            ></el-button>
+          </el-popover>
         </el-button-group>
       </slot>
     </div>
-    <el-button
+    <!-- <el-button
       circle
       size="mini"
       @click="$emit('on-export')"
@@ -38,31 +64,8 @@
       size="mini"
       @click="$emit('on-refresh')"
       icon="el-icon-refresh"
-    ></el-button>
+    ></el-button> -->
 
-    <el-popover
-      placement="bottom-end"
-      popper-class="xn-table-box-tools__pop"
-      class="ml-10"
-      trigger="hover"
-    >
-      <div class="xn-table-box-tools__coll">
-        <div v-for="(item, idx) in columns" :key="idx" class="mb-5">
-          <el-checkbox
-            :value="item.checked"
-            :checked="item.checked"
-            @change="handleChangeToolshow(item)"
-            >{{ item.label }}</el-checkbox
-          >
-        </div>
-      </div>
-      <el-button
-        circle
-        size="mini"
-        icon="el-icon-setting"
-        slot="reference"
-      ></el-button>
-    </el-popover>
     <el-table
       ref="table"
       :data="data"

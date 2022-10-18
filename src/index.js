@@ -4,7 +4,7 @@ import XnTable from '../packages/table/index'
 import XnPage from '../packages/page/index'
 import XnSearch from '../packages/search/index'
 import XnDate from '../packages/date/index'
-import XnUpload from '../packages/upload/index'
+import XnUpload from '../packages/!upload/index'
 import XnCity from '../packages/city/index'
 import XnTip from '../packages/tip/index'
 
@@ -31,7 +31,7 @@ const install = function (Vue) {
     })
 
     Vue.prototype.$XN = {
-        uploadUrl: ''
+        uploadUrl: '123'
     }
     Vue.prototype.$utils = Utils.$utils
     Vue.prototype.$reg = Utils.$reg

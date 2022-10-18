@@ -33,21 +33,29 @@ export default {
     props: { config: Object, limit: Number, percentage: Function },
     render: function (h, ctx) {
         let { props, data: attrs, children = [] } = ctx,
-         { config, limit } = props, 
-         { accept } = config;
+            { config, limit } = props,
+            { accept } = config;
         if (!attrs.attrs.accept && accept) {
             attrs.attrs.accept = getAccepts(accept);
         }
-        console.log(ctx);
+        let slot = function ({file}) {
+            console.log(file);
+            return h('div',123)
+        }
         Object.assign(props, {
             action: attrs.action || 'https://gatewaydev.xianniu.cn/tp/upload/uploadFile',
             beforeUpload: file => beforeCheck(config, file),
             onExceed: () => Message.warning(`最多可以上传${limit}个文件`),
         })
-        return h('el-upload', { props, ...attrs }, [...children || [], h('span', {
-            class: 'el-icon-plus',
-            style: {
-            },
+        return h('el-upload', {
+            props, ...attrs,
+            ...{
+                scopedSlots: {
+                    file: slot
+                }
+            }
+        }, [...children || [], h('span', {
+            class: 'el-icon-plus'
         })])
     }
 }
