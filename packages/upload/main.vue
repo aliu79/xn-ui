@@ -258,7 +258,7 @@ export default {
 
       axios({
         method: "post",
-        url: this.$XN.uploadUrl||'',
+        url: this.$XN.uploadUrl || '',
         data: formData,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
