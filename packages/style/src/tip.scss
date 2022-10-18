@@ -1,5 +1,9 @@
-@import "./theme/element-variables.scss";
 $list: "primary", "danger", "warning", "info", "success";
+$--color-primary: #FF745C;
+$--color-success: #52C41A;
+$--color-warning: #FAAD14;
+$--color-danger: #FF4D4F;
+$--color-info: #909399;
 $colorList: $--color-primary, $--color-danger, $--color-warning, $--color-info,
   $--color-success;
 .xn-tip {

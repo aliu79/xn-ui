@@ -1,22 +1,19 @@
 <template>
   <div>
-    <el-button type="primary" size="default" @click="show = true"
-      >open</el-button
-    >
-    <xn-export :show.sync="show"></xn-export>
-    <!-- <xn-import :show.sync="show" :before-close="()=>show = false"></xn-import> -->
+    <xn-tip type="primary" class="mb-10">标题</xn-tip>
+    <xn-tip type="warning" class="mb-10">标题</xn-tip>
+    <xn-tip type="success" class="mb-10">标题</xn-tip>
+    <xn-tip type="danger" class="mb-10">标题</xn-tip>
+    <xn-tip type="info">标题</xn-tip>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      show: false,
-    };
-  },
-};
+
+}
 </script>
 
 <style>
+
 </style>
