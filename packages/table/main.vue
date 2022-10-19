@@ -2,7 +2,7 @@
   <div class="xn-table-box">
     <div class="xn-table-box-tools" :class="{ 'is-border': !border }">
       <div class="flex justify-content-between align-items-center">
-        <div class="fz-12">
+        <div class="fz-12" :class="{'pb-10':selection}">
           <template v-if="selection">
             <span>已选择 {{ selectedData.length }} 项</span>
             <el-button
@@ -126,11 +126,11 @@
       </slot>
     </el-table>
 
-    <template v-if="!$utils.isEmpty(pageQuery)">
+    <template v-if="!$utils.isEmpty(page)">
       <xn-page
-        :total="pageQuery.total"
-        :pageNum.sync="pageQuery.pageNum"
-        :pageSize.sync="pageQuery.pageSize"
+        :total="page.total"
+        :pageNum.sync="page.pageNum"
+        :pageSize.sync="page.pageSize"
         @pagination="getList"
         layout="total, prev, pager, next, jumper"
       ></xn-page>
@@ -169,7 +169,7 @@ export default {
       type: String,
       default: "total, prev, pager, next, jumper",
     },
-    pageQuery: {
+    page: {
       type: Object,
       default: () => {},
     },
