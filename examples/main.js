@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import hljs from 'highlight.js';
-import XN from '@/index.js'
+import XN from '@/lib/xianniu-ui.umd.min.js'
 import './assets/common.scss';
 import '@/plugins/index'
 
