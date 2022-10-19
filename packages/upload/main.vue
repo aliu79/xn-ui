@@ -192,7 +192,6 @@ export default {
     },
   },
   created() {
-    console.log(this.$attrs);
   },
   beforeDestroy() {
     this.$emit("update:fileList", []);

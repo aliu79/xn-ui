@@ -30,7 +30,6 @@ const components = [
 const version = require('../package.json').version
 
 const install = function (Vue) {
-    console.log(Vue.prototype);
     if (install.installed) return
     if (!Vue.prototype.$ELEMENT) throw new Error('缺失 element-ui，请进行安装')
     install.installed = true
