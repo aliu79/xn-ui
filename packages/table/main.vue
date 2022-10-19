@@ -126,11 +126,11 @@
       </slot>
     </el-table>
 
-    <template v-if="!$utils.isEmpty(pageConfig)">
+    <template v-if="!$utils.isEmpty(pageQuery)">
       <xn-page
-        :total="pageConfig.total"
-        :page.sync="pageConfig.pageNum"
-        :limit.sync="pageConfig.pageSize"
+        :total="pageQuery.total"
+        :pageNum.sync="pageQuery.pageNum"
+        :pageSize.sync="pageQuery.pageSize"
         @pagination="getList"
         layout="total, prev, pager, next, jumper"
       ></xn-page>
@@ -169,7 +169,7 @@ export default {
       type: String,
       default: "total, prev, pager, next, jumper",
     },
-    pageConfig: {
+    pageQuery: {
       type: Object,
       default: () => {},
     },

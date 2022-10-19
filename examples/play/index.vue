@@ -4,7 +4,7 @@
     :columns="listHeader"
     :data="list"
     show-page
-    :pageConfig="pageConfig"
+    :pageQuery="pageConfig"
     @on-refresh="handleRefresh"
     @handle-buttons="handleButtons"
     @on-page="fnGetList"

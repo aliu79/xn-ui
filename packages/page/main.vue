@@ -3,7 +3,7 @@
     <el-pagination
       :small="isSmall"
       :current-page.sync="currentPage"
-      :page-size.sync="pageSize"
+      :page-size.sync="_pageSize"
       :layout="smallLayout"
       :total="total"
       v-bind="$attrs"
@@ -31,9 +31,9 @@ export default {
       type: Number,
       default: 1,
     },
-    limit: {
+    pageSize: {
       type: Number,
-      default: 1,
+      default: 15,
     },
     pageSizes: {
       type: Array,
@@ -70,24 +70,24 @@ export default {
         this.$emit("update:pageNum", val);
       },
     },
-    pageSize: {
+    _pageSize: {
       get() {
-        return this.limit;
+        return this.pageSize;
       },
       set(val) {
-        this.$emit("update:limit", val);
+        this.$emit("update:pageSize", val);
       },
     },
   },
   methods: {
     handleSizeChange(val) {
-      this.$emit("pagination", { pageNum: this.currentPage, limit: val });
+      this.$emit("pagination", { pageNum: this.currentPage, pageSize: val });
       if (this.autoScroll && !this.isSmall) {
         scrollTo(0, 800);
       }
     },
     handleCurrentChange(val) {
-      this.$emit("pagination", { pageNum: val, pageSize: this.pageSize });
+      this.$emit("pagination", { pageNum: val, pageSize: this._pageSize });
       if (this.autoScroll && !this.isSmall) {
         scrollTo(0, 800);
       }
