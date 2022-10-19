@@ -1,6 +1,6 @@
 .xn-search {
-    &--row {
-        &_col {
+    &--row.el-row {
+        .el-form-item {
             display: flex;
             .el-form-item__content {
                 width: 100%;

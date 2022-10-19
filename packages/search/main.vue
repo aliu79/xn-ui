@@ -1,119 +1,117 @@
 <template>
-  <el-form
-    class="xn-search"
-    ref="form"
-    inline
-    :model="form"
-    :label-width="labelWidth"
-  >
-    <el-row :gutter="0" class="xn-search--row">
-      <template v-for="(item, idx) in formData">
-        <el-col
-          :xs="24"
-          :sm="12"
-          :md="8"
-          :lg="6"
-          :xl="6"
-          :offset="0"
-          :key="idx"
-          v-show="item.isShow || isColl"
-        >
-          <el-form-item
-            v-if="item.type === 'city'"
+  <div class="xn-search">
+    <el-form ref="form" inline :model="form" :label-width="labelWidth">
+      <el-row :gutter="0" class="xn-search--row">
+        <template v-for="(item, idx) in formData">
+          <el-col
+            :xs="24"
+            :sm="12"
+            :md="8"
+            :lg="6"
+            :xl="6"
+            :offset="0"
             :key="idx"
-            :label="item.label"
-            :prop="item.prop"
-            class="xn-search--row_col"
+            v-show="item.isShow || isColl"
           >
-            <xn-city
-              :data-level="(item.options && item.options.dataLevel) || 2"
-              v-model="form.value[idx].modelVal"
-              @on-city="handleChangeCity"
-            />
-          </el-form-item>
-          <el-form-item
-            v-if="item.type === 'input'"
-            :key="idx"
-            :label="item.label"
-            :prop="item.prop"
-            class="xn-search--row_col"
-          >
-            <el-input
-              style="width: 100%"
-              v-model="form.value[idx].modelVal"
-              :clearable="item.clearable || true"
-              :placeholder="item.placeholder || '请填写'+item.label"
-            />
-          </el-form-item>
-          <el-form-item
-            v-if="item.type === 'select'"
-            :key="idx"
-            :label="item.label"
-            :prop="item.prop"
-            class="xn-search--row_col"
-          >
-            <el-select
-              v-model="form.value[idx].modelVal"
-              :placeholder="item.placeholder || '请选择'+item.label"
-              :clearable="item.clearable || true"
-              filterable
+            <el-form-item
+              v-if="item.type === 'city'"
+              :key="idx"
+              :label="item.label"
+              :prop="item.prop"
+              class="xn-search--row_col"
             >
-              <el-option
-                v-for="(itemData, idxData) in item.data"
-                :key="idxData"
-                :label="
-                  itemData[(item.options && item.options.labelKey) || 'label']
-                "
-                :value="
-                  itemData[(item.options && item.options.valueKey) || 'value']
-                "
+              <xn-city
+                :data-level="(item.options && item.options.dataLevel) || 2"
+                v-model="form.value[idx].modelVal"
+                @on-city="handleChangeCity"
               />
-            </el-select>
-          </el-form-item>
-          <el-form-item
-            v-if="isDate(item.type)"
-            :key="idx"
-            :label="item.label"
-            :prop="item.prop"
-            class="xn-search--row_col"
-          >
-            <xn-date
-              v-model="form.value[idx].modelVal"
-              :mode="item.mode || 'range'"
-              :type="item.type || 'daterange'"
-              :is-shortcut="showShortcut(item)"
-              :placeholder="item.placeholder"
-              :startPlaceholder="item.options && item.options.startPlaceholder"
-              :endPlaceholder="item.options && item.options.endPlaceholder"
-              :clearable="item.clearable || true"
-              :default-time="
-                isRange(item.type) && item.defaultTime == undefined
-                  ? ['00:00:00', '23:59:59']
-                  : item.defaultTime
-              "
-              @on-change="onChangeDate"
-              @on-format="onChangeDateFormat"
-            />
+            </el-form-item>
+            <el-form-item
+              v-if="item.type === 'input'"
+              :key="idx"
+              :label="item.label"
+              :prop="item.prop"
+              class="xn-search--row_col"
+            >
+              <el-input
+                style="width: 100%"
+                v-model="form.value[idx].modelVal"
+                :clearable="item.clearable || true"
+                :placeholder="item.placeholder || '请填写' + item.label"
+              />
+            </el-form-item>
+            <el-form-item
+              v-if="item.type === 'select'"
+              :key="idx"
+              :label="item.label"
+              :prop="item.prop"
+              class="xn-search--row_col"
+            >
+              <el-select
+                v-model="form.value[idx].modelVal"
+                :placeholder="item.placeholder || '请选择' + item.label"
+                :clearable="item.clearable || true"
+                filterable
+              >
+                <el-option
+                  v-for="(itemData, idxData) in item.data"
+                  :key="idxData"
+                  :label="
+                    itemData[(item.options && item.options.labelKey) || 'label']
+                  "
+                  :value="
+                    itemData[(item.options && item.options.valueKey) || 'value']
+                  "
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              v-if="isDate(item.type)"
+              :key="idx"
+              :label="item.label"
+              :prop="item.prop"
+              class="xn-search--row_col"
+            >
+              <xn-date
+                v-model="form.value[idx].modelVal"
+                :mode="item.mode || 'range'"
+                :type="item.type || 'daterange'"
+                :is-shortcut="showShortcut(item)"
+                :placeholder="item.placeholder"
+                :startPlaceholder="
+                  item.options && item.options.startPlaceholder
+                "
+                :endPlaceholder="item.options && item.options.endPlaceholder"
+                :clearable="item.clearable || true"
+                :default-time="
+                  isRange(item.type) && item.defaultTime == undefined
+                    ? ['00:00:00', '23:59:59']
+                    : item.defaultTime
+                "
+                @on-change="onChangeDate"
+                @on-format="onChangeDateFormat"
+              />
+            </el-form-item>
+          </el-col>
+        </template>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" :offset="0">
+          <el-form-item :style="{ 'padding-left': `${labelWidth}` }">
+            <el-button type="primary" icon="el-icon-search" @click="onSearch"
+              >查询</el-button
+            >
+            <el-button @click="onReset">重置</el-button>
+            <el-button
+              v-if="formData.length && formData.length > 4"
+              type="text"
+              @click="isColl = !isColl"
+              ><span>{{ isColl ? "收起" : "高级查询" }}</span
+              ><i class="ml-5" :class="toggle"></i
+            ></el-button>
           </el-form-item>
         </el-col>
-      </template>
-      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" :offset="0">
-        <el-form-item :style="{ 'padding-left': `${labelWidth}` }">
-          <el-button type="primary" icon="el-icon-search" @click="onSearch"
-            >查询</el-button
-          >
-          <el-button @click="onReset">重置</el-button>
-          <el-button
-            v-if="formData.length && formData.length > 4"
-            type="text"
-            @click="isColl = !isColl"
-            ><span>{{ isColl ? "收起" : "高级查询" }}</span
-            ><i class="ml-5" :class="toggle"></i
-          ></el-button>
-        </el-form-item>
-      </el-col>
-    </el-row>
-  </el-form>
+      </el-row>
+    </el-form>
+  </div>
 </template>
 
 <script>
