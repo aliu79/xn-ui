@@ -39,7 +39,7 @@ const install = function (Vue) {
     })
 
     Vue.prototype.$XN = {
-        uploadUrl: ''
+        uploadUrl: 'https://gateway.dev.xianniu.cn/file-server/oss/uploadFile'
     }
     Vue.prototype.$utils = Utils.$utils
     Vue.prototype.$reg = Utils.$reg

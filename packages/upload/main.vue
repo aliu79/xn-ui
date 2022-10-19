@@ -6,6 +6,7 @@
     }"
     class="xn-upload xn-upload-main"
     action="###"
+    :limit="limit"
     :list-type="listType"
     v-bind="$attrs"
     :file-list.sync="fileList"
@@ -20,41 +21,37 @@
     <template v-if="listType === 'picture-card'">
       <div slot="trigger" class="upload-limit">
         <i class="el-icon el-icon-plus" />
-        <span
-          ><em>{{ fileList.length }}</em
-          >/<em>{{ limit }}</em>
-        </span>
       </div>
     </template>
     <template v-else>
       <slot>
-        <el-button icon="el-icon-upload">编辑</el-button>
+        <el-button icon="el-icon-upload" :disabled="$attrs.disabled">上传</el-button>
       </slot>
     </template>
     <div
       slot="file"
       slot-scope="{ file }"
       class="xn-upload--slot"
-      :class="{ 'upload-slot-idcard': listType === 'idcard' }"
+      v-if="listType === 'picture-card'"
     >
       <uploadPop :file="file" @on-download="handleDownload(file)"></uploadPop>
-      <template v-if="isImage(file)">
-        <el-image
-          class="el-upload-list__item-thumbnail"
-          :src="file.url"
-          fit="cover"
-          :lazy="true"
-        />
-      </template>
-      <template v-else>
-        <div class="xn-upload-list__item--file">
-          <div class="annex">
-            <i class="el-icon el-icon-folder" />
-            <span class="label">附件</span>
+        <template v-if="$utils.isImg(file)">
+          <el-image
+            class="el-upload-list__item-thumbnail"
+            :src="file.url"
+            fit="cover"
+            :lazy="true"
+          />
+        </template>
+        <template v-else>
+          <div class="xn-upload-list__item-file">
+            <div class="annex">
+              <i class="el-icon el-icon-folder" />
+              <span class="label">附件</span>
+            </div>
+            <div class="file-name">{{ file.name }}</div>
           </div>
-          <div class="file-name">{{ file.accessoryName }}</div>
-        </div>
-      </template>
+        </template>
       <div v-if="file.status === 'uploading'" class="process">
         <el-progress
           :status="file.percentage === 100 ? 'success' : null"
@@ -65,21 +62,21 @@
       </div>
       <span class="el-upload-list__item-actions">
         <span
-          v-if="isImage(file)"
+          v-if="$utils.isImg(file)"
           class="el-upload-list__item-preview"
           @click="handlePictureCardPreview(file)"
         >
           <i class="fz-16 el-icon-zoom-in" />
         </span>
         <span
-          class="el-upload-list__item-delete icon"
+          class="el-upload-list__item-delete icon ml-5"
           @click="handleDownload(file, fileList)"
         >
           <i class="fz-16 el-icon-download" />
         </span>
         <span
           v-if="!$attrs.disabled && !preview"
-          class="el-upload-list__item-delete icon"
+          class="el-upload-list__item-delete icon ml-5"
           @click="handleRemove(file, fileList)"
         >
           <i class="fz-16 el-icon-delete" />
@@ -103,7 +100,7 @@ import axios from "axios";
 import uploadPop from "./upload-pop.vue";
 export default {
   name: "XnUpload",
-  inheritAttrs: true,
+  inheritAttrs: false,
   components: {
     uploadPop,
     ElImageViewer,
@@ -180,11 +177,6 @@ export default {
         return Math.floor(num);
       };
     },
-    isImage() {
-      return (file) => {
-        return file.imgFlag;
-      };
-    },
   },
   watch: {
     fileList: {
@@ -224,7 +216,7 @@ export default {
       if (compress) {
         size = compress;
       } else {
-        size = file.size > _maxSize ? _maxSize / 1024 : file.size
+        size = file.size > _maxSize ? _maxSize / 1024 : file.size;
       }
       return new Promise((resolve) => {
         imageConversion["compressAccurately"](file, size).then((result) => {
@@ -246,22 +238,23 @@ export default {
     },
     async onHttpUpload(file) {
       const formData = new FormData();
-      let result = null;
-      if (this.$utils.isImg(file.file.name)) {
-        result = await this.handleCompress(file.file);
-        var newFile = new window.File([result], file.file.name, {
-          type: file.file.type,
-        });
-      }
-      const _file = result ? newFile : file.file;
+      // let result = null;
+      // if (this.$utils.isImg(file.file.name)) {
+      //   result = await this.handleCompress(file.file);
+      //   var newFile = new window.File([result], file.file.name, {
+      //     type: file.file.type,
+      //   });
+      // }
+      const _file = file.file;
       formData.append("file", _file);
 
       axios({
         method: "post",
-        url: this.$XN.uploadUrl || '',
+        url: this.$XN.uploadUrl || "",
         data: formData,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
+          xnToken: this.$storage.get("xnToken"),
         },
         onUploadProgress(progress) {
           const _progress = Math.round(
@@ -271,11 +264,10 @@ export default {
         },
       })
         .then((res) => {
-          const { accessoryName, accessorySize, ext, imgFlag, url } =
-            res.data.data;
+          const { name, size, ext, imgFlag, url } = res.data.data;
           var obj = {};
-          obj.accessoryName = accessoryName;
-          obj.accessorySize = accessorySize;
+          obj.name = name;
+          obj.size = size;
           obj.ext = ext;
           obj.imgFlag = imgFlag;
           obj.url = url;
@@ -303,7 +295,7 @@ export default {
     },
 
     onExceed() {
-      this.$message.warning(`上传总数限制为【${this.limit}】个，请删除后上传`);
+      this.$message.warning(`上传总数不能超过【${this.limit}】个`);
     },
     handlePictureCardPreview(file) {
       this.isShowImageView = true;
@@ -335,7 +327,6 @@ export default {
         });
       }
       this.$emit("update:fileList", fileList);
-      //   this.$emit('on-change', fileList.map(item => item.url).join(','))
     },
     closeViewer() {
       this.isShowImageView = false;
