@@ -2,9 +2,8 @@
   <xn-table
     :columns="listHeader"
     :data="list"
-    :page="pageConfig"
-    @handle-buttons="handleButtons"
-    @on-page="fnGetList"
+    selection
+    index
   >
     <!-- <template #tools>
       <div>
@@ -22,18 +21,6 @@ export default {
       listHeader: [
         { prop: "id", label: "ID" },
         { prop: "name", label: "姓名" },
-        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
-        { prop: "date", label: "日期", sortable: true },
-        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
-        { prop: "date", label: "日期", sortable: true },
-        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
-        { prop: "date", label: "日期", sortable: true },
-        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
-        { prop: "date", label: "日期", sortable: true },
-        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
-        { prop: "date", label: "日期", sortable: true },
-        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
-        { prop: "date", label: "日期", sortable: true },
         { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
         { prop: "date", label: "日期", sortable: true },
         {
@@ -77,7 +64,7 @@ export default {
       list: [
 
         { id: 122, date: "2011-01-01", name: "lzw", age: 18 },
-        { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
+        // { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
       ],
       pageConfig: {
         total: 100,
