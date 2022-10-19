@@ -14,12 +14,13 @@
           :md="8"
           :lg="6"
           :xl="6"
-          :offset="0" 
+          :offset="0"
           :key="idx"
-          v-if="item.isShow || isColl"
+          v-show="item.isShow || isColl"
         >
           <el-form-item
             v-if="item.type === 'city'"
+            :key="idx"
             :label="item.label"
             :prop="item.prop"
             class="xn-search--row_col"
@@ -32,6 +33,7 @@
           </el-form-item>
           <el-form-item
             v-if="item.type === 'input'"
+            :key="idx"
             :label="item.label"
             :prop="item.prop"
             class="xn-search--row_col"
@@ -40,31 +42,37 @@
               style="width: 100%"
               v-model="form.value[idx].modelVal"
               :clearable="item.clearable || true"
-              :placeholder="item.placeholder"
+              :placeholder="item.placeholder || '请填写'+item.label"
             />
           </el-form-item>
           <el-form-item
             v-if="item.type === 'select'"
+            :key="idx"
             :label="item.label"
             :prop="item.prop"
             class="xn-search--row_col"
           >
             <el-select
               v-model="form.value[idx].modelVal"
-              :placeholder="item.placeholder"
+              :placeholder="item.placeholder || '请选择'+item.label"
               :clearable="item.clearable || true"
               filterable
             >
               <el-option
                 v-for="(itemData, idxData) in item.data"
                 :key="idxData"
-                :label="itemData.label"
-                :value="itemData.value"
+                :label="
+                  itemData[(item.options && item.options.labelKey) || 'label']
+                "
+                :value="
+                  itemData[(item.options && item.options.valueKey) || 'value']
+                "
               />
             </el-select>
           </el-form-item>
           <el-form-item
             v-if="isDate(item.type)"
+            :key="idx"
             :label="item.label"
             :prop="item.prop"
             class="xn-search--row_col"
@@ -122,6 +130,9 @@ export default {
     },
   },
   computed: {
+    _formData() {
+      return this.formData;
+    },
     toggle() {
       return this.isColl ? "el-icon-arrow-up" : "el-icon-arrow-down";
     },
@@ -223,6 +234,11 @@ export default {
     },
     handleChangeCity({ cityCodeLast: cityCode, cityNameLast: cityName }) {
       this.city = { cityCode, cityName };
+    },
+    setData(key, data) {
+      const row =
+        this.formData && this.formData.find((item) => item.label === key);
+      this.$set(row, "data", data);
     },
   },
 };
