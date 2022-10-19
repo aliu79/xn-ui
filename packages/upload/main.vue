@@ -95,7 +95,7 @@
 
 <script>
 import ElImageViewer from "element-ui/packages/image/src/image-viewer";
-import * as imageConversion from "image-conversion";
+// import * as imageConversion from "image-conversion";
 import axios from "axios";
 import uploadPop from "./upload-pop.vue";
 export default {
@@ -208,21 +208,21 @@ export default {
         return false;
       }
     },
-    handleCompress(file) {
-      const { compress } = this;
-      const _maxSize = parseFloat(this.maxSize);
-      let size = 0;
-      if (compress) {
-        size = compress;
-      } else {
-        size = file.size > _maxSize ? _maxSize / 1024 : file.size;
-      }
-      return new Promise((resolve) => {
-        imageConversion["compressAccurately"](file, size).then((result) => {
-          resolve(result);
-        });
-      });
-    },
+    // handleCompress(file) {
+    //   const { compress } = this;
+    //   const _maxSize = parseFloat(this.maxSize);
+    //   let size = 0;
+    //   if (compress) {
+    //     size = compress;
+    //   } else {
+    //     size = file.size > _maxSize ? _maxSize / 1024 : file.size;
+    //   }
+    //   // return new Promise((resolve) => {
+    //   //   imageConversion["compressAccurately"](file, size).then((result) => {
+    //   //     resolve(result);
+    //   //   });
+    //   // });
+    // },
     onExceedSize(size, maxSize) {
       if (size > maxSize) {
         this.$message.warning(
