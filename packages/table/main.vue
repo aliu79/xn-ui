@@ -2,7 +2,7 @@
   <div class="xn-table-box">
     <div class="xn-table-box-tools" :class="{ 'is-border': !border }">
       <div class="flex justify-content-between align-items-center">
-        <div class="fz-12" :class="{'pb-10':selection}">
+        <div class="fz-12" :class="{ 'pb-10': selection }">
           <template v-if="selection">
             <span>已选择 {{ selectedData.length }} 项</span>
             <el-button
@@ -15,7 +15,10 @@
             >
           </template>
         </div>
-        <div :class="{'pb-10': $slots.tools || tools.length}" class=" flex justify-content-between align-items-center">
+        <div
+          :class="{ 'pb-10': $slots.tools || tools.length }"
+          class="flex justify-content-between align-items-center"
+        >
           <slot name="tools">
             <!-- <el-button-group> -->
             <div>
@@ -117,11 +120,92 @@
 
       <slot name="column">
         <template v-for="(item, idx) in columns">
-          <column
+          <el-table-column
+            v-bind="item"
+            v-on="$listeners"
+            :key="idx"
+            v-if="isShowColumn(item)"
+          >
+            <template v-if="item.labelMsg">
+              <template slot="header">
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="item.labelMsg"
+                  placement="right"
+                >
+                  <span>{{ item.label }} <i class="el-icon-question"></i></span>
+                </el-tooltip>
+              </template>
+            </template>
+            <template slot-scope="{ row, $index }">
+              <expandDom
+                v-if="item.render"
+                :column="row"
+                :row="row"
+                :render="item.render"
+                :index="$index"
+              ></expandDom>
+              <template v-else>
+                {{ row[item.prop] }}
+              </template>
+              <!-- 更多操作 -->
+              <template v-if="item.more && item.more.options.length">
+                <template v-for="(itemBtn, idxBtn) in item.more.options">
+                  <expand-dom
+                    v-if="itemBtn.render && itemBtn.show && itemBtn.show(row)"
+                    :key="idxBtn"
+                    :column="itemBtn"
+                    :row="row"
+                    :render="itemBtn.render"
+                    :index="idxBtn"
+                  />
+                  <template v-else>
+                    <el-popconfirm
+                      v-if="itemBtn.isPopConfirm"
+                      :title="
+                        itemBtn.options.title ||
+                        `确定${label(itemBtn, row)}吗？`
+                      "
+                      :key="idxBtn"
+                      :confirm-button-text="itemBtn.options.confirmButtonText"
+                      class="ml-10"
+                      @confirm="handleClick(itemBtn.method, row, $index)"
+                    >
+                      <el-button
+                        :type="itemBtn.type || 'text'"
+                        :size="itemBtn.size || 'mini'"
+                        :icon="itemBtn.icon"
+                        :plain="itemBtn.plain"
+                        slot="reference"
+                        >{{ label(itemBtn, row) }}</el-button
+                      >
+                    </el-popconfirm>
+                    <template v-else>
+                      <el-button
+                        v-if="itemBtn.show ? itemBtn.show(row) : true"
+                        :key="idxBtn"
+                        :disabled="
+                          itemBtn.disabled ? itemBtn.disabled(row) : false
+                        "
+                        :type="itemBtn.type || 'text'"
+                        :size="itemBtn.size || 'mini'"
+                        :icon="itemBtn.icon"
+                        :plain="itemBtn.plain"
+                        @click="handleClick(itemBtn.method, row, $index)"
+                        >{{ label(itemBtn, row) }}</el-button
+                      >
+                    </template>
+                  </template>
+                </template>
+              </template>
+            </template>
+          </el-table-column>
+          <!-- <column
             :key="idx"
             v-if="item.checked === true"
             v-bind="item"
-          ></column>
+          ></column> -->
         </template>
       </slot>
     </el-table>
@@ -139,10 +223,30 @@
 </template>
 
 <script>
-import column from "./column.vue";
 export default {
   name: "XnTable",
-  components: { column },
+  components: {
+    expandDom: {
+      functional: true,
+      props: {
+        row: Object,
+        render: Function,
+        index: Number,
+        column: {
+          type: Object,
+          default: null,
+        },
+      },
+      render: (h, ctx) => {
+        const params = {
+          row: ctx.props.row,
+          index: ctx.props.index,
+        };
+        if (ctx.props.column) params.column = ctx.props.column;
+        return ctx.props.render(h, params);
+      },
+    },
+  },
   props: {
     tools: {
       type: Array,
@@ -184,7 +288,23 @@ export default {
       selectedData: [],
     };
   },
-  computed: {},
+  computed: {
+    label() {
+      return (itemBtn, row) => {
+        return typeof itemBtn.label === "function"
+          ? itemBtn.label(row)
+          : itemBtn.label;
+      };
+    },
+    isShowColumn() {
+      return (row) => {
+        if (row.show != undefined) {
+          return typeof row.show === "function" ? row.show() : row.show;
+        }
+        return true;
+      };
+    },
+  },
   created() {
     this.columns.length &&
       this.columns.forEach((item) => {
@@ -221,6 +341,15 @@ export default {
     },
     doLayout() {
       this.$refs.table.doLayout();
+    },
+    handleClick(method, row, index) {
+      if (this.$parent) {
+        this.$parent.$emit("handle-buttons", {
+          method,
+          row,
+          index,
+        });
+      }
     },
   },
 };
