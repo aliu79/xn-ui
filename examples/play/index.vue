@@ -3,13 +3,9 @@
     :columns="listHeader"
     :data="list"
     selection
+    :page="pageConfig"
     index
   >
-    <!-- <template #tools>
-      <div>
-        123
-      </div>
-    </template> -->
   </xn-table>
 
 </template>
