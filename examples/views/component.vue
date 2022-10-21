@@ -10,8 +10,15 @@
             tag="li"
             class="doc-nav-item__group-list-item"
           >
-            <span>table</span>
             <span class="pl-5">表格</span>
+          </router-link>
+          <router-link
+            to="/component/search"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">查询条件</span>
           </router-link>
           <router-link
             to="/component/tip"
@@ -19,8 +26,52 @@
             tag="li"
             class="doc-nav-item__group-list-item"
           >
-            <span>tip</span>
             <span class="pl-5">提示</span>
+          </router-link>
+        </ul>
+      </ol>
+      <ol>
+        <li class="doc-nav-item__group-title">工具</li>
+        <ul class="doc-nav-item__group-list">
+          <router-link
+            to="/component/tool"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">一些工具</span>
+          </router-link>
+          <router-link
+            to="/component/reg"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">一些正则</span>
+          </router-link>
+          <router-link
+            to="/component/format"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">格式化金额</span>
+          </router-link>
+          <router-link
+            to="/component/code"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">获取权限码</span>
+          </router-link>
+          <router-link
+            to="/component/more"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">更多</span>
           </router-link>
         </ul>
       </ol>

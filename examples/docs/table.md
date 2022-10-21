@@ -1,5 +1,5 @@
 ## table 表格 
-基于 [element-ui](https://element.eleme.cn/#/zh-CN/component/table) 封装的业务组件。
+基于 [element-ui](https://element.eleme.cn/#/zh-CN/component/table) 二次封装。
 
 ::: demo 
 ```html
@@ -11,10 +11,13 @@
     :columns="listHeader"
     :data="list"
     :show-page="false"
-    :pageConfig="pageConfig"
+    :page="pageConfig"
+    show-column
     @on-refresh="handleRefresh"
-    @on-buttons="handleButtons"
+    @handle-buttons="handleButtons"
     @on-page="fnGetList"
+    show-refresh
+    :tools="tools"
   ></xn-table>
 </template>
 
@@ -51,6 +54,17 @@ export default {
         pageSize: 15,
         pageNum: 1,
       },
+      tools:[
+        {
+          label:'按钮1',
+          prop:'btn1',
+          icon:'el-icon-edit'
+        },
+        {
+          label:'按钮2',
+          prop:'btn2',
+        }
+      ]
     };
   },
   created() {},
@@ -83,13 +97,17 @@ export default {
 默认继承 `el-table` 的属性与事件，可直接使用
 :::
 
-| 参数        | 说明         | 类型    | 可选值                               | 默认值                          |
-| ----------- | ------------ | ------- | ------------------------------------ | ------------------------------- |
-| selection   | 是否显示勾选 | boolean | true/false                           | false                           |
-| index       | 是否显示序号 | boolean | true/false                           | false                           |
-| show-page   | 是否显示分页 | boolean | true/false                           | false                           |
-| page-config | 分页的配置项 | oject   | {}                                   | {pageSize:15,pageNum:1,total:0} |
-| columns     | 表头         | array   | 详见[columns-参数](#columns-can-shu) | []                              |
+| 参数        | 说明                 | 类型    | 可选值                               | 默认值                          |
+| ----------- | -------------------- | ------- | ------------------------------------ | ------------------------------- |
+| selection   | 是否显示勾选         | boolean | true/false                           | false                           |
+| radio       | 是否显示单选         | boolean | true/false                           | false                           |
+| index       | 是否显示序号         | boolean | true/false                           | false                           |
+| show-page   | 是否显示分页         | boolean | true/false                           | false                           |
+| page        | 分页的配置项         | oject   | {pageNum:1,pageSize:15}              | {pageSize:15,pageNum:1,total:0} |
+| columns     | 表头                 | array   | 详见[columns-参数](#columns-can-shu) | []                              |
+| show-column | 是否显示勾选表头按钮 | boolean | true/false                           | -                               |
+| show-refresh | 是否显示刷新按钮 | boolean | true/false                           | -                               |
+| tools | 更多工具栏 | array | []                           | -                               |
 
 
 ### columns-属性
@@ -100,3 +118,9 @@ export default {
 | sortable | 是否排序     | boolean | true/false | false  |
 | labelMsg | 表头描述     | string  | -          | -      |
 
+### 事件
+| 参数     | 说明         | 类型    | 可选值     | 默认值 |
+| -------- | ------------ | ------- | ---------- | ------ |
+| on-refresh    | 刷新按钮     | function  | -          | -      |
+| on-page    | 切换分页     | function  | -          | {pageNum,pageSize}      |
+| handle-buttons （render）   | 列表右侧按钮(事件名称，行数据，当前行索引)     | function  | -          | {method,row,index}      |

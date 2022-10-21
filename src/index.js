@@ -13,6 +13,7 @@ import XnImport from '../packages/import/index'
 import XnExport from '../packages/export/index'
 
 import Utils from 'xn-ui/src/utils/index'
+const doc = 'http://lzwr.gitee.io/xn-ui/#/'
 const components = [
     XnDialog,
     XnTable,
@@ -28,7 +29,10 @@ const components = [
     XnExport
 ]
 const version = require('../package.json').version
-
+console.log(process.env);
+if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
+    console.log(`doc:${doc}`);
+}
 const install = function (Vue) {
     if (install.installed) return
     if (!Vue.prototype.$ELEMENT) throw new Error('缺失 element-ui，请进行安装')
@@ -38,13 +42,14 @@ const install = function (Vue) {
     })
 
     Vue.prototype.$XN = {
-        uploadUrl: 'https://gateway.dev.xianniu.cn/file-server/oss/uploadFile'
+        uploadUrl: ''
     }
     Vue.prototype.$utils = Utils.$utils
     Vue.prototype.$reg = Utils.$reg
     Vue.prototype.$format = Utils.$format
     Vue.prototype.$dayjs = Utils.$dayjs
     Vue.prototype.$storage = Utils.$storage
+    Vue.prototype.$lodash = Utils.$lodash
 
 }
 if (typeof window !== 'undefined' && window.Vue) {
@@ -53,6 +58,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 export default {
     version,
+    doc,
     install,
     XnDialog,
     XnTable,

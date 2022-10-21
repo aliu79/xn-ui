@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1 class="text-center">写个文档</h1>
+    <h1 class="text-center">文档</h1>
     <div class="ball">
       <div class="round"></div>
       <div class="round-right"></div>
