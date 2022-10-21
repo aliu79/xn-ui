@@ -1,6 +1,6 @@
 {
   "name": "xianniu-ui",
-  "version": "0.1.11-beta",
+  "version": "0.1.12-beta",
   "private": false,
   "main": "lib/xianniu-ui.umd.min.js",
   "scripts": {
