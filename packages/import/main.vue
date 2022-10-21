@@ -1,61 +1,63 @@
 <template>
-    <xn-dialog
-      title="批量导入"
-      v-bind="$attrs"
-      v-on="$listeners"
-      :show-confirm="true"
-      :show.sync="show"
-      @on-confirm="handleConfirm"
-      size="small"
-    >
-      <div class="xn-import">
-        <el-link
-          class="mb-20"
-          type="success"
-          icon="el-icon-download"
-          :underline="false"
-          @click="handleDownload"
-          >下载模板</el-link
-        >
-        <el-upload
-          ref="import"
-          action="###"
-          class="xn-import-upload"
-          v-bind="$attrs"
-          drag
-          :file-list="fileList"
-          :http-request="onSubmitUpload"
-          :before-upload="handleUploadBefore"
-          :on-exceed="onExceed"
-          :on-change="onChange"
-          :on-remove="onRemove"
-          :accept="accept"
-          v-on="$listeners"
-        >
-          <template slot="trigger">
-            <div class="xn-import-trigger">
-              <i class="xn-import-trigger__icon el-icon-upload" />
-              <span class="xn-import-trigger__text">
-                <span>将文件拖到此处，或</span>
-                <em>点击上传</em>
-              </span>
-            </div>
-          </template>
-          <div v-if="tip" slot="tip" class="el-upload__tip">{{ tip }}</div>
-        </el-upload>
-        <div slot="desc" class="xn-import-desc mt-10 fz-12">
-          <el-alert title="注：" type="warning">
-            <div>
-              <p>
-                1、非系统模板的文件会导入失败，请务必使用系统模板，点击上方按钮进行下载
-              </p>
-              <p>2、导入期间请勿进行其他操作</p>
-              <p>3、导入为替换操作，请谨慎操作</p>
-            </div>
-          </el-alert>
-        </div>
-      </div>
-    </xn-dialog>
+  <xn-dialog
+    title="批量导入"
+    v-bind="$attrs"
+    v-on="$listeners"
+    :show.sync="show"
+    :before-close="onClose"
+    @on-confirm="handleConfirm"
+    size="small"
+  >
+    <div class="xn-import">
+      <el-link
+        class="mb-20"
+        type="success"
+        icon="el-icon-download"
+        :underline="false"
+        @click="handleDownload"
+        >下载模板</el-link
+      >
+      <el-upload
+        ref="import"
+        action="###"
+        class="xn-import-upload"
+        v-bind="$attrs"
+        drag
+        :limit="limit"
+        :file-list="fileList"
+        :auto-upload="autoUpload"
+        :http-request="onSubmitUpload"
+        :before-upload="handleUploadBefore"
+        :on-exceed="onExceed"
+        :on-change="onChange"
+        :on-remove="onRemove"
+        :accept="accept"
+        v-on="$listeners"
+      >
+        <template slot="trigger">
+          <div class="xn-import-trigger">
+            <i class="xn-import-trigger__icon el-icon-upload" />
+            <span class="xn-import-trigger__text">
+              <span>将文件拖到此处，或</span>
+              <em>点击上传</em>
+            </span>
+          </div>
+        </template>
+        <div v-if="tip" slot="tip" class="el-upload__tip">{{ tip }}</div>
+      </el-upload>
+      <slot name="desc" class="xn-import-desc mt-10 fz-12">
+        <el-alert title="注：" type="warning">
+          <div>
+            <p>
+              1、非系统模板的文件会导入失败，请务必使用系统模板，点击上方按钮进行下载
+            </p>
+            <p>2、导入期间请勿进行其他操作</p>
+            <p>3、导入为替换操作，请谨慎操作</p>
+          </div>
+        </el-alert>
+      </slot>
+    </div>
+  </xn-dialog>
 </template>
 <script>
 export default {
@@ -63,6 +65,14 @@ export default {
   inheritAttrs: false,
   props: {
     show: {
+      type: Boolean,
+      default: false,
+    },
+    limit: {
+      type: Number,
+      default: 1,
+    },
+    autoUpload: {
       type: Boolean,
       default: false,
     },
@@ -84,8 +94,7 @@ export default {
       fileList: [],
     };
   },
-  created() {
-  },
+  created() {},
   methods: {
     onClose() {
       this.$emit("update:show", false);

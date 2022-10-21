@@ -18,12 +18,14 @@ const routes = [
     children: [
       { path: '/component/table', name: 'Table', component: () => import('../docs/table.md') },
       { path: '/component/search', name: 'Search', component: () => import('../docs/search.md') },
+      { path: '/component/import', name: 'Import', component: () => import('../docs/import.md') },
+      { path: '/component/upload', name: 'Upload', component: () => import('../docs/upload.md') },
       { path: '/component/tip', name: 'Tip', component: () => import('../docs/tip.md') },
     ]
   },
   {
     path: '/component',
-    name: 'Component',
+    name: 'ComponentTool',
     redirect: '/component/tool',
     component: () => import(/* webpackChunkName: "about" */ '../views/component.vue'),
     children: [
@@ -40,7 +42,7 @@ const routes = [
     redirect: '/other/other',
     component: () => import(/* webpackChunkName: "about" */ '../views/other.vue'),
     children: [
-      { path: '/other/other', name: 'Other', component: () => import('../docs/other.md') },
+      { path: '/other/other', name: 'Othermd', component: () => import('../docs/other.md') },
     ]
   }
 ]

@@ -21,6 +21,22 @@
             <span class="pl-5">查询条件</span>
           </router-link>
           <router-link
+            to="/component/import"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">导入</span>
+          </router-link>
+          <router-link
+            to="/component/upload"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">上传</span>
+          </router-link>
+          <router-link
             to="/component/tip"
             exact-active-class="active"
             tag="li"

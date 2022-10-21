@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :title="title"
-    :visible="show"
+    :visible.sync="show"
     :width="width ? width : _width"
     :before-close="beforeClose"
     :top="top"
@@ -10,19 +10,6 @@
     @open="$emit('on-open')"
     @opened="$emit('on-opened')"
   >
-    <!-- <template #title>
-      <div class="flex align-items-center justify-content-between">
-        <div>
-          <span class="el-dialog__title">{{ title }}</span>
-        </div>
-        <div>
-          <slot name="tools" />
-          <div class="el-dialog__headerbtn" @click="onClose">
-            <span class="el-dialog__close el-icon el-icon-close close" />
-          </div>
-        </div>
-      </div>
-    </template> -->
     <slot />
     <span slot="footer">
       <slot name="footer">
@@ -46,7 +33,7 @@ export default {
   props: {
     beforeClose: {
       type: Function,
-      default: () => {},
+      default: null,
     },
     top: {
       type: String,
@@ -90,11 +77,17 @@ export default {
 
   methods: {
     onClose() {
-      this.beforeClose();
+      this.beforeClose()
     },
     onConfirm() {
       this.$emit("on-confirm");
     },
+    // handleBeforeClose() {
+    //   if (this.beforeClose && typeof this.beforeClose === "function") {
+    //     return this.beforeClose();
+    //   }
+    //   this.onClose();
+    // },
   },
 };
 </script>
