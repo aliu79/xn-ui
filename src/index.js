@@ -29,7 +29,6 @@ const components = [
     XnExport
 ]
 const version = require('../package.json').version
-console.log(process.env);
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
     console.log(`doc:${doc}`);
 }
