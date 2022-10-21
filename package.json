@@ -26,7 +26,7 @@
     "dayjs": "^1.10.7",
     "good-storage": "^1.1.1",
     "lodash": "^4.17.21",
-    "vue": "^2.6.11",
+    "vue": "2.6.11",
     "vue-lottie": "^0.2.1",
     "vue-router": "^3.2.0",
     "vuex": "^3.6.2"
@@ -58,6 +58,6 @@
     "sass": "^1.32.6",
     "sass-loader": "^8.0.2",
     "transliteration": "^1.1.11",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "2.6.11"
   }
 }
