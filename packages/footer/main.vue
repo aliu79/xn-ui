@@ -13,7 +13,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~xn-ui/lib/style/theme/variables.scss';
+@import 'packages/style/src/theme/variables.scss';
 .xn-footer{
   &-main{
     position: fixed;

@@ -65,6 +65,13 @@ export default {
     XnTable,
     XnPage,
     XnSearch,
+    XnDate,
+    XnUpload,
     XnCity,
-    XnTip
+    XnTip,
+    XnDrawer,
+    XnTree,
+    XnImport,
+    XnExport,
+    XnFooter
 }

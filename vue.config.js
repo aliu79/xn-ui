@@ -42,6 +42,7 @@ module.exports = {
             .set('xn-ui', resolve('./'))
             .set('packages', resolve('./packages'))
             .set('examples', resolve('./examples'))
+            .set('lib', resolve('./lib'))
             .end()
         config.module
             .rule('eslint')
