@@ -198,8 +198,8 @@ export default {
       const res = this.data.filter((item) => item.id === val.id);
       this.$emit("on-single", res);
     },
-    handleToolsItem(row, idx) {
-      console.log(row, idx);
+    handleToolsItem(row, index) {
+      this.$emit("on-tools", { row, index });
     },
     handleChangeToolshow(item) {
       item.checked = item.checked === true ? false : true;

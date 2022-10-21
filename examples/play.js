@@ -6,7 +6,6 @@ import 'packages/style/src/index.scss'
 
 Vue.use(XNUI);
 
-console.log('XNUI',XNUI);
 
 new Vue({ // eslint-disable-line
   render: h => h(App)

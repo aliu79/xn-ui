@@ -13,7 +13,6 @@ Vue.use(router)
 Vue.config.productionTip = false
 Vue.use(XN)
 Vue.component('demo-block', demoBlock);
-console.log('XN',XN);
 
 
 router.afterEach(() => {
