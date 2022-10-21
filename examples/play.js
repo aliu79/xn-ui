@@ -10,4 +10,4 @@ console.log('XNUI',XNUI);
 
 new Vue({ // eslint-disable-line
   render: h => h(App)
-}).$mount('#app');
+}).$mount('#appDoc');

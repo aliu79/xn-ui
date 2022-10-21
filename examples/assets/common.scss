@@ -21,7 +21,7 @@ body {
 .doc-nav:hover::-webkit-scrollbar-thumb {
   background-color: rgba(69, 90, 100, 0.2);
 }
-#app {
+#appDoc {
   height: 100%;
 }
 ol,
@@ -158,7 +158,7 @@ textarea {
     padding: 0 20px;
   }
 
-  #app.is-component .headerWrapper .container {
+  #appDoc.is-component .headerWrapper .container {
     padding: 0 12px;
   }
 }
