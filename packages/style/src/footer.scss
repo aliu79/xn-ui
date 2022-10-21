@@ -1,0 +1,15 @@
+@import "packages/style/src/theme/variables.scss";
+.xn-footer {
+  position: relative;
+  height: 60px;
+  &-main {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: 60px;
+    width: calc(100% - #{$sideBarWidth});
+    background-color: #fff;
+    line-height: 60px;
+    padding: 0 15px;
+  }
+}
