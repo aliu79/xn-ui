@@ -1,5 +1,7 @@
 <template>
-  <div>123</div>
+  <div>
+    <xn-footer>123123</xn-footer>
+  </div>
 </template>
 
 <script>

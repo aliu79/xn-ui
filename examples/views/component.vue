@@ -37,6 +37,14 @@
             <span class="pl-5">上传</span>
           </router-link>
           <router-link
+            to="/component/footer"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">底部状态栏</span>
+          </router-link>
+          <router-link
             to="/component/tip"
             exact-active-class="active"
             tag="li"

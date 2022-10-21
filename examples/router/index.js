@@ -20,6 +20,7 @@ const routes = [
       { path: '/component/search', name: 'Search', component: () => import('../docs/search.md') },
       { path: '/component/import', name: 'Import', component: () => import('../docs/import.md') },
       { path: '/component/upload', name: 'Upload', component: () => import('../docs/upload.md') },
+      { path: '/component/footer', name: 'Footer', component: () => import('../docs/footer.md') },
       { path: '/component/tip', name: 'Tip', component: () => import('../docs/tip.md') },
     ]
   },

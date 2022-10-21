@@ -11,6 +11,7 @@ import XnDrawer from '../packages/drawer/index'
 import XnTree from '../packages/tree/index'
 import XnImport from '../packages/import/index'
 import XnExport from '../packages/export/index'
+import XnFooter from '../packages/footer/index'
 
 import Utils from 'xn-ui/src/utils/index'
 const doc = 'http://lzwr.gitee.io/xn-ui/#/'
@@ -26,7 +27,8 @@ const components = [
     XnDrawer,
     XnTree,
     XnImport,
-    XnExport
+    XnExport,
+    XnFooter
 ]
 const version = require('../package.json').version
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
