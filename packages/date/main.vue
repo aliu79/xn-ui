@@ -253,9 +253,9 @@ export default {
       return obj;
     },
     styles() {
-      const _isRange = this.isRange(this.type);
+      // const _isRange = this.isRange(this.type);
       return {
-        width: _isRange ? "100%" : "auto",
+        width: "100%",
       };
     },
     _format() {
