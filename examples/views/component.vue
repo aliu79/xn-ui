@@ -99,6 +99,19 @@
           </router-link>
         </ul>
       </ol>
+      <ol>
+        <li class="doc-nav-item__group-title">内置样式</li>
+        <ul class="doc-nav-item__group-list">
+          <router-link
+            to="/component/css"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">公共样式</span>
+          </router-link>
+        </ul>
+      </ol>
     </div>
     <el-scrollbar
       class="doc-container page-component__scroll"

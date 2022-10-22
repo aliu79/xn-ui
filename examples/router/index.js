@@ -38,6 +38,15 @@ const routes = [
     ]
   },
   {
+    path: '/css',
+    name: 'Css',
+    redirect: '/component/css',
+    component: () => import(/* webpackChunkName: "about" */ '../views/component.vue'),
+    children: [
+      { path: '/component/css', name: 'Css', component: () => import('../docs/css.md') },
+    ]
+  },
+  {
     path: '/other',
     name: 'Other',
     redirect: '/other/other',
