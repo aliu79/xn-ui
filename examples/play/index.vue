@@ -13,6 +13,10 @@ export default {
           label: "报价单状态",
           type: "select",
           prop: "salesCode",
+          options:{
+            labelKey:'asd',
+            valueKey:'a'
+          },
           remote: (val) => this.asd(val),
         },
         {
@@ -45,7 +49,7 @@ export default {
     },
     asd() {
       console.log("rrrrrr");
-      this.$refs.search.setData('报价单状态',[{label:'asdas',value:1}])
+      this.$refs.search.setData('报价单状态',[{asd:'asdas',a:1}])
     },
   },
 };
