@@ -106,7 +106,7 @@
         width="50px"
         align="center"
       ></el-table-column>
-      <el-table-column v-bind="$attrs" v-if="radio" width="30px" align="center">
+      <el-table-column v-bind="$attrs" v-if="radio" width="40px" align="center">
         <template slot-scope="{ row }">
           <el-radio v-model="radioSelected" :label="row.id">&nbsp;</el-radio>
         </template>

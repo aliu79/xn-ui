@@ -1,8 +1,16 @@
 .xn-table-box {
-    &.disabled-all-selection {
-        .el-table__header-wrapper .el-checkbox {
-            display: none;
+    .el-table{
+
+        &.disabled-all-selection {
+            .el-table__header-wrapper .el-checkbox {
+                display: none !important;
+            }
+            .el-table__body-wrapper td.el-table__cell:first-child .cell .el-radio .el-radio__label{
+                font-size: 0 !important;
+                padding-left: 0 !important;
+            }
         }
+        
     }
     &-tools {
         text-align: right;

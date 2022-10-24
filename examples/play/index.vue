@@ -3,6 +3,8 @@
     :columns="listHeader"
     :data="list"
     radio
+    border
+    @on-single="onradio"
     :page="pageConfig"
     index
   >
@@ -22,17 +24,11 @@ export default {
         {
           label: "图片",
           render: (h) => {
-            return h("div", {}, [
-              h("img", {
-                attrs: {
-                  src: "https://i.xianniu.cn/accessory/2022/08/04/b194177e9642454480726feb2ce842fa.jpg",
-                },
-                style: {
-                  width: "100px",
-                },
-              }),
-              h("span", "文字文字文字文字"),
-            ]);
+            return h("el-radio", {
+              props:{
+                label:'空军航空'
+              }
+            });
           },
         },
         {
@@ -60,7 +56,7 @@ export default {
       list: [
 
         { id: 122, date: "2011-01-01", name: "lzw", age: 18 },
-        { id: 122, date: "2011-01-01", name: "lzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzw",  age: 18 },
+        { id: 123, date: "2011-01-01", name: "lzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzw",  age: 18 },
         // { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
       ],
       pageConfig: {
