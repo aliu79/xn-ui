@@ -48,10 +48,15 @@
               class="xn-search--row_col"
             >
               <el-select
+                style="width:100%"
                 v-model="form.value[idx].modelVal"
                 :placeholder="item.placeholder || '请选择' + item.label"
                 :clearable="item.clearable || true"
                 filterable
+                :remote="isRemote(item.remote)"
+                :reserve-keyword="isRemote(item.remote)"
+                :default-first-option="isRemote(item.remote)"
+                :remote-method="item.remote"
               >
                 <el-option
                   v-for="(itemData, idxData) in item.data"
@@ -128,6 +133,11 @@ export default {
     },
   },
   computed: {
+    isRemote(){
+      return (val)=>{
+        return val && typeof val === 'function'
+      }
+    },
     _formData() {
       return this.formData;
     },
@@ -238,6 +248,10 @@ export default {
         this.formData && this.formData.find((item) => item.label === key);
       this.$set(row, "data", data);
     },
+    remoteMethod(item){
+      console.log(item);
+      // this.$emit('on-remote',{key,})
+    }
   },
 };
 </script>

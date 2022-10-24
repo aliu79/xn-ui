@@ -1,99 +1,52 @@
 <template>
-  <xn-table
-    :columns="listHeader"
-    :data="list"
-    selection
-    :page="pageConfig"
-    index
-  >
-  </xn-table>
-
+  <div>
+    <xn-search ref="search" :form-data="formSearch" @on-search="onSearch"></xn-search>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      listHeader: [
-        { prop: "id", label: "ID" },
-        { prop: "name", label: "姓名", },
-        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
-        { prop: "date", label: "日期", sortable: true },
+      formSearch: [
         {
-          label: "图片",
-          render: (h) => {
-            return h("div", {}, [
-              h("img", {
-                attrs: {
-                  src: "https://i.xianniu.cn/accessory/2022/08/04/b194177e9642454480726feb2ce842fa.jpg",
-                },
-                style: {
-                  width: "100px",
-                },
-              }),
-              h("span", "文字文字文字文字"),
-            ]);
-          },
+          label: "报价单状态",
+          type: "select",
+          prop: "salesCode",
+          remote: (val) => this.asd(val),
         },
         {
-          label: "操作",
-          fixed: "right",
-          more: {
-            options: [
-              {
-                label: "按钮",
-                icon: "el-icon-info",
-                method: "info",
-              },
-              {
-                label: "删除",
-                method: "remove",
-                isPopConfirm:true,
-                options: {
-                },
-              },
-
-            ],
-          },
+          label: "报价单状态",
+          type: "select",
+          prop: "salesCode",
+        },
+        {
+          label: "报价单状态",
+          type: "input",
+          prop: "salesCode",
+        },
+        {
+          label: "订单号",
+          type: "city",
+          prop: "city",
+          placeholder: "请输入订单号",
+        },
+        {
+          label: "下单日期",
+          type: "daterange",
+          options: { start: "orderTimeLeft", end: "orderTimeRight" },
         },
       ],
-      list: [
-
-        { id: 122, date: "2011-01-01", name: "lzw", age: 18 },
-        { id: 122, date: "2011-01-01", name: "lzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzw",  age: 18 },
-        // { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
-      ],
-      pageConfig: {
-        total: 100,
-        pageSize: 15,
-        pageNum: 1,
-      },
-      tools:[
-        {label:'导出',prop:'export',icon:'el-icon-files'},
-      ],
-      // pageConfig: {},
     };
   },
-  created() {},
   methods: {
-    handleSort(e) {
-      console.log(e);
-    },
-    handleRefresh() {
-      console.log("re");
-    },
-    handleButtons(args) {
-      console.log(args);
-    },
-    fnGetList(v) {
-      console.log(v);
-    },
-    onradio(val) {
-      console.log("val: ", val);
-    },
-    onSelection(val) {
+    onSearch(val) {
       console.log(val);
-    }
+    },
+    asd() {
+      console.log("rrrrrr");
+      this.$refs.search.setData('报价单状态',[{label:'asdas',value:1}])
+    },
   },
 };
 </script>
