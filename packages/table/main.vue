@@ -214,6 +214,10 @@ export default {
       this.$refs.table.toggleRowSelection(row, status);
     },
     clearSelection() {
+      if(this.radio){
+        this.radioSelected = ''
+        return 
+      }
       this.$refs.table.clearSelection();
     },
     doLayout() {

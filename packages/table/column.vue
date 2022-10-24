@@ -66,7 +66,7 @@
                 :size="itemBtn.size || 'mini'"
                 :icon="itemBtn.icon"
                 :plain="itemBtn.plain"
-                @click="handleClick(itemBtn.method, row, $index)"
+                @click.native.stop="handleClick(itemBtn.method, row, $index)"
                 >{{ label(itemBtn, row) }}</el-button
               >
             </template>
