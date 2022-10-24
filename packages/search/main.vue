@@ -247,10 +247,6 @@ export default {
       const row =
         this.formData && this.formData.find((item) => item.label === key);
       this.$set(row, "data", data);
-    },
-    remoteMethod(item){
-      console.log(item);
-      // this.$emit('on-remote',{key,})
     }
   },
 };
