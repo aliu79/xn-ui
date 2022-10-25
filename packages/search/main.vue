@@ -3,16 +3,7 @@
     <el-form ref="form" inline :model="form" :label-width="labelWidth">
       <el-row :gutter="0" class="xn-search--row">
         <template v-for="(item, idx) in formData">
-          <el-col
-            :xs="24"
-            :sm="12"
-            :md="8"
-            :lg="6"
-            :xl="6"
-            :offset="0"
-            :key="idx"
-            v-show="item.isShow || isColl"
-          >
+          <el-col v-bind="{ ...col }" :key="idx" v-show="item.isShow || isColl">
             <el-form-item
               v-if="item.type === 'city'"
               :key="idx"
@@ -35,7 +26,7 @@
             >
               <el-input
                 style="width: 100%"
-                v-bind="item.options ? {...item.options} : {}"
+                v-bind="item.options ? { ...item.options } : {}"
                 v-model="form.value[idx].modelVal"
                 :clearable="item.clearable || true"
                 :placeholder="item.placeholder || '请填写' + item.label"
@@ -49,12 +40,12 @@
               class="xn-search--row_col"
             >
               <el-select
-                style="width:100%"
+                style="width: 100%"
                 v-model="form.value[idx].modelVal"
                 :placeholder="item.placeholder || '请选择' + item.label"
                 :clearable="item.clearable || true"
                 filterable
-                v-bind="item.options ? {...item.options} : {}"
+                v-bind="item.options ? { ...item.options } : {}"
                 :remote="isRemote(item.remote)"
                 :reserve-keyword="isRemote(item.remote)"
                 :default-first-option="isRemote(item.remote)"
@@ -101,7 +92,7 @@
             </el-form-item>
           </el-col>
         </template>
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" :offset="0">
+        <el-col v-bind="{ ...col }">
           <el-form-item :style="{ 'padding-left': `${labelWidth}` }">
             <el-button type="primary" icon="el-icon-search" @click="onSearch"
               >查询</el-button
@@ -111,9 +102,12 @@
               v-if="formData.length && formData.length > 4"
               type="text"
               @click="isColl = !isColl"
-              ><span>{{ isColl ? "收起" : "高级查询" }}</span
-              ><i class="ml-5" :class="toggle"></i
-            ></el-button>
+            >
+              <template v-if="showColl">
+                <span>{{ isColl ? "收起" : "高级查询" }}</span
+                ><i class="ml-5" :class="toggle"></i>
+              </template>
+            </el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -133,12 +127,32 @@ export default {
       type: String,
       default: "110px",
     },
+    span: {
+      type: Number,
+      default: null,
+    },
+    showColl: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
-    isRemote(){
-      return (val)=>{
-        return val && typeof val === 'function'
-      }
+    col() {
+      const { span } = this;
+      return {
+        span,
+        xs: span ? span : 24,
+        sm: span ? span : 12,
+        md: span ? span : 8,
+        lg: span ? span : 6,
+        xl: span ? span : 6,
+        offset: 0,
+      };
+    },
+    isRemote() {
+      return (val) => {
+        return val && typeof val === "function";
+      };
     },
     _formData() {
       return this.formData;
@@ -191,7 +205,7 @@ export default {
   created() {
     for (let i = 0, formData = this.formData; i < formData.length; i++) {
       const item = formData[i];
-      item.isShow = i > 3 ? false : true;
+      item.isShow = i > 3 && this.showColl ? false : true;
       this.form.value.push({
         key: item.prop,
         modelVal: "",
@@ -249,7 +263,7 @@ export default {
       const row =
         this.formData && this.formData.find((item) => item.label === key);
       this.$set(row, "data", data);
-    }
+    },
   },
 };
 </script>

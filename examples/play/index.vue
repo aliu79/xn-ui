@@ -1,6 +1,6 @@
 <template>
   <div>
-    <xn-search ref="search" :form-data="formSearch" @on-search="onSearch"></xn-search>
+    <xn-search ref="search" :show-coll="false" :form-data="formSearch" @on-search="onSearch"></xn-search>
   </div>
 </template>
 
