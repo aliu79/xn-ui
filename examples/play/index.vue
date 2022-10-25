@@ -1,21 +1,6 @@
 <template>
   <div>
-    <xn-dialog :before-close="()=>show = false" :show.sync="show">
-    <xn-table
-      ref="table"
-      :columns="listHeader"
-      :data="list"
-      radio
-      border
-      @on-single="onradio"
-      :page="pageConfig"
-      @handle-buttons="handleButtons"
-      index
-    >
-    </xn-table>
-  </xn-dialog>
-  <el-button type="primary" size="default" @click="show = true">open</el-button>
-  
+    <xn-search ref="search" :form-data="formSearch" @on-search="onSearch"></xn-search>
   </div>
 </template>
 
@@ -23,85 +8,50 @@
 export default {
   data() {
     return {
-      show:false,
-      listHeader: [
-        { prop: "id", label: "ID" },
-        { prop: "name", label: "姓名" },
-        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
-        { prop: "date", label: "日期", sortable: true },
+      formSearch: [
         {
-          label: "图片",
-          render: (h) => {
-            return h("el-radio", {
-              props: {
-                label: "空军航空",
-              },
-            });
-          },
+          label: "报价单状态",
+          type: "select",
+          prop: "salesCode",
+          data:[{asd:'asdas',a:1},{asd:'sfsddfdsf',a:2}],
+          options:{
+            labelKey:'asd',
+            valueKey:'a',
+            multiple:true
+          }
         },
         {
-          label: "操作",
-          fixed: "right",
-          more: {
-            options: [
-              {
-                label: "按钮",
-                icon: "el-icon-info",
-                method: "info",
-              },
-              {
-                label: "删除",
-                method: "remove",
-                options: {},
-              },
-            ],
-          },
+          label: "报价单状态",
+          type: "select",
+          prop: "field1",
+        },
+        {
+          label: "报价单状态",
+          type: "input",
+          prop: "field2",
+        },
+        {
+          label: "订单号",
+          type: "city",
+          prop: "city",
+          placeholder: "请输入订单号",
+        },
+        {
+          label: "下单日期",
+          type: "daterange",
+          options: { start: "orderTimeLeft", end: "orderTimeRight" },
         },
       ],
-      list: [
-        { id: 122, date: "2011-01-01", name: "lzw", age: 18 },
-        {
-          id: 123,
-          date: "2011-01-01",
-          name: "lzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzw",
-          age: 18,
-        },
-        // { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
-      ],
-      pageConfig: {
-        total: 100,
-        pageSize: 15,
-        pageNum: 1,
-      },
-      tools: [{ label: "导出", prop: "export", icon: "el-icon-files" }],
-      // pageConfig: {},
+      demoList:[{asd:'asdas',a:1},{asd:'sfsddfdsf',a:2}]
     };
   },
-  created() {},
-  watch:{
-    show(n){
-      !n && this.$refs.table.clearSelection()
-    }
-  },
   methods: {
-    handleSort(e) {
-      console.log(e);
-    },
-    handleRefresh() {
-      console.log("re");
-    },
-    handleButtons(args) {
-      console.log(args);
-      this.$refs.table.clearSelection();
-    },
-    fnGetList(v) {
-      console.log(v);
-    },
-    onradio(val) {
-      console.log("val: ", val);
-    },
-    onSelection(val) {
+    onSearch(val) {
       console.log(val);
+    },
+    asd() {
+      console.log("rrrrrr");
+      this.$refs.search.setData('报价单状态',this.demoList)
     },
   },
 };

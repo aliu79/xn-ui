@@ -35,6 +35,7 @@
             >
               <el-input
                 style="width: 100%"
+                v-bind="item.options ? {...item.options} : {}"
                 v-model="form.value[idx].modelVal"
                 :clearable="item.clearable || true"
                 :placeholder="item.placeholder || '请填写' + item.label"
@@ -53,6 +54,7 @@
                 :placeholder="item.placeholder || '请选择' + item.label"
                 :clearable="item.clearable || true"
                 filterable
+                v-bind="item.options ? {...item.options} : {}"
                 :remote="isRemote(item.remote)"
                 :reserve-keyword="isRemote(item.remote)"
                 :default-first-option="isRemote(item.remote)"
