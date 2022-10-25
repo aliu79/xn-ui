@@ -5,6 +5,8 @@
 ```html
 <template>
     <xn-search ref="search" label-width="100px" :form-data="formData" @on-search="handleSearch" @on-reset="handleReset" />
+    <el-divider content-position="left"><span class="text-primary">分割线</span></el-divider>
+    <xn-search ref="search" :span="12" :show-coll="false" :form-data="formData" @on-search="onSearch"></xn-search>
 </template>
 <script>
     export default {
@@ -37,9 +39,11 @@
 
 ### 属性
 
-| 参数        | 说明      | 类型   | 可选值 | 默认值 |
-| ----------- | --------- | ------ | ------ | ------ |
-| label-width | label宽度 | string | -      | 80px   |
+| 参数        | 说明                                | 类型    | 可选值 | 默认值 |
+| ----------- | ----------------------------------- | ------- | ------ | ------ |
+| label-width | label宽度                           | string  | -      | 80px   |
+| span        | 栅格的数量，优先级大于xs/sm/md/lg等 | number  | 0-24      | null   |
+| show-coll   | 是否显示折叠按钮                    | boolean | true/false      | true   |
 
 ### 事件
 | 参数       | 说明 | 类型                                | 可选值 | 默认值 |
@@ -49,20 +53,20 @@
 
 
 ### form-data 参数
-| 参数  | 说明 | 类型   | 可选值 | 默认值 |
-| ----- | ---- | ------ | ------ | ------ |
-| type | 表单的类型 | string | input/select/city/date/datetime/daterange/datetimerange        | -      |
-| label | 名称 | string | -      | -      |
-| prop | 查询需要的key | string | -      | -      |
-| placeholder | 占位符 | string | -      | -      |
-| data | type=select时必传，下拉的数据 | array | -      | -      |
-| options | 默认继承组件的所有属性，同时可以传入自定义，见下方说明 | array | -      | -      |
+| 参数        | 说明                                                   | 类型   | 可选值                                                  | 默认值 |
+| ----------- | ------------------------------------------------------ | ------ | ------------------------------------------------------- | ------ |
+| type        | 表单的类型                                             | string | input/select/city/date/datetime/daterange/datetimerange | -      |
+| label       | 名称                                                   | string | -                                                       | -      |
+| prop        | 查询需要的key                                          | string | -                                                       | -      |
+| placeholder | 占位符                                                 | string | -                                                       | -      |
+| data        | type=select时必传，下拉的数据                          | array  | -                                                       | -      |
+| options     | 默认继承组件的所有属性，同时可以传入自定义，见下方说明 | array  | -                                                       | -      |
 
 
 ### options 详细说明
-| 参数  | 说明 | 类型   | 可选值 | 默认值 |
-| ----- | ---- | ------ | ------ | ------ |
-| labelKey | type=select时可选，label的key | - | - | - |
-| valueKey | type=select时可选，value的key | - | - | - |
-| start | type=daterange时可选，时间范围开始字段的key | - | - | - |
-| end | type=daterange时可选，时间范围结束字段的key | - | - | - |
+| 参数     | 说明                                        | 类型 | 可选值 | 默认值 |
+| -------- | ------------------------------------------- | ---- | ------ | ------ |
+| labelKey | type=select时可选，label的key               | -    | -      | -      |
+| valueKey | type=select时可选，value的key               | -    | -      | -      |
+| start    | type=daterange时可选，时间范围开始字段的key | -    | -      | -      |
+| end      | type=daterange时可选，时间范围结束字段的key | -    | -      | -      |
