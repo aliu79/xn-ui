@@ -34,3 +34,35 @@
 </script>
 ```
 :::
+
+### 属性
+
+| 参数        | 说明      | 类型   | 可选值 | 默认值 |
+| ----------- | --------- | ------ | ------ | ------ |
+| label-width | label宽度 | string | -      | 80px   |
+
+### 事件
+| 参数       | 说明 | 类型                                | 可选值 | 默认值 |
+| ---------- | ---- | ----------------------------------- | ------ | ------ |
+| @on-search | 搜索 | function(val){} val为json格式的数据 | -      | -      |
+| @on-reset  | 重置 | function                            | -      | -      |
+
+
+### form-data 参数
+| 参数  | 说明 | 类型   | 可选值 | 默认值 |
+| ----- | ---- | ------ | ------ | ------ |
+| type | 表单的类型 | string | input/select/city/date/datetime/daterange/datetimerange        | -      |
+| label | 名称 | string | -      | -      |
+| prop | 查询需要的key | string | -      | -      |
+| placeholder | 占位符 | string | -      | -      |
+| data | type=select时必传，下拉的数据 | array | -      | -      |
+| options | 默认继承组件的所有属性，同时可以传入自定义，见下方说明 | array | -      | -      |
+
+
+### options 详细说明
+| 参数  | 说明 | 类型   | 可选值 | 默认值 |
+| ----- | ---- | ------ | ------ | ------ |
+| labelKey | type=select时可选，label的key | - | - | - |
+| valueKey | type=select时可选，value的key | - | - | - |
+| start | type=daterange时可选，时间范围开始字段的key | - | - | - |
+| end | type=daterange时可选，时间范围结束字段的key | - | - | - |

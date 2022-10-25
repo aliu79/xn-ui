@@ -1,12 +1,13 @@
 <template>
   <div class="header">
     <div class="container">
-      <h1>
+      <h1 class="flex align-items-center">
         <a href="#/">
           <img
             src="../assets/images/smile.gif"
           />
         </a>
+        <small style="font-weight: normal" class="fz-14">{{version}}</small>
       </h1>
       <ul class="menu">
         <li class="menu-item">
@@ -53,12 +54,18 @@
 </template>
 
 <script>
+const version = require('xn-ui/package.json').version
 export default {
   data() {
     return {
       offon: false,
     };
   },
+  computed:{
+    version(){
+      return `v${version}`
+    }
+  }
 };
 </script>
 
