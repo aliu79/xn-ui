@@ -8,7 +8,8 @@ const Reg = {
     checkFullName: /^[\u4E00-\u9FA5A-Za-z0-9_]+$/, //中文、英文、数字包括下划线
     positiveInteger: /^[1-9]\d*$/, // 正整数
     twoDecimal: /(^[0-9]{1,20}$)|(^[0-9]{1,20}[.][0-9]{1,2}$)/, // 2位小数
-    text: /^[a-z\d\u4E00-\u9FA5]+$/i // 不含特殊字符和标点
+    text: /^[a-z\d\u4E00-\u9FA5]+$/i, // 不含特殊字符和标点
+    getCity: /.+?(省|市|自治区|自治州|县|区)/g //获取地址中的省市区[省,市,区]
 }
 
 export default Reg

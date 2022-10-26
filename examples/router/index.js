@@ -20,6 +20,7 @@ const routes = [
       { path: '/component/search', name: 'Search', component: () => import('../docs/search.md') },
       { path: '/component/import', name: 'Import', component: () => import('../docs/import.md') },
       { path: '/component/upload', name: 'Upload', component: () => import('../docs/upload.md') },
+      { path: '/component/city', name: 'City', component: () => import('../docs/city.md') },
       { path: '/component/footer', name: 'Footer', component: () => import('../docs/footer.md') },
       { path: '/component/tip', name: 'Tip', component: () => import('../docs/tip.md') },
     ]
@@ -43,7 +44,7 @@ const routes = [
     redirect: '/component/css',
     component: () => import(/* webpackChunkName: "about" */ '../views/component.vue'),
     children: [
-      { path: '/component/css', name: 'Css', component: () => import('../docs/css.md') },
+      { path: '/component/css', name: 'CssClass', component: () => import('../docs/css.md') },
     ]
   },
   {

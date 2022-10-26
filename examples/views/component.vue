@@ -37,6 +37,14 @@
             <span class="pl-5">上传</span>
           </router-link>
           <router-link
+            to="/component/city"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">选择城市</span>
+          </router-link>
+          <router-link
             to="/component/footer"
             exact-active-class="active"
             tag="li"

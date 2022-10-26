@@ -1,17 +1,15 @@
 <template>
   <!-- 城市联动 -->
   <div class="xn-city">
-    <span v-if="showType === 'text'">{{ cityLabel }}</span>
     <el-cascader
-      v-else-if="showType === 'form'"
       ref="xnCity"
       v-model="cityValue"
       placeholder="请选择城市"
       filterable
+      v-bind="propsConf()"
+      v-on="$listeners"
       style="width: 100%"
       :options="cityList"
-      :props="cityProps"
-      :disabled="disabled"
       clearable
       @change="handleChange"
     />
@@ -19,19 +17,15 @@
 </template>
 
 <script>
-import citys from 'xn-ui/src/area/index.js'
-// import tools from '../../../utils/index'
+const ZXCITY = ['北京市','天津市','上海市','重庆市']
+import citys from "xn-ui/src/area/index.js";
 export default {
-  name: 'XnCity',
+  name: "XnCity",
   model: {
-    prop: 'value',
-    event: 'on-change'
+    prop: "value",
+    event: "on-change",
   },
   props: {
-    disabled: {
-      type: Boolean,
-      default: false
-    },
     /**
      * 传入对应的城市code
      * 区级 ->  省|市|区
@@ -40,196 +34,180 @@ export default {
      */
     value: {
       type: [String, Number, Object],
-      default: ''
+      default: "",
     },
     valueKey: {
       type: String,
-      default: ''
-    },
-    /**
-     * 显示级别
-     * 3  ->  省|市|区
-     * 2  ->  省|市
-     */
-    showLevel: {
-      type: Number,
-      default: 3
+      default: "",
     },
     /**
      * 组件类型
      * 静态显示 -> text
      * 表单类型 -> form
      */
-    showType: {
-      type: String,
-      default: 'form'
-    },
     dataLevel: {
       type: Number,
-      default: 3
+      default: 3,
     },
     keyOptions: {
       type: Object,
       default: () => {
         return {
-          codeKey: 'code',
-          labelKey: 'label'
-        }
-      }
-    }
+          codeKey: "code",
+          labelKey: "label",
+        };
+      },
+    },
+    propConfig: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
   },
   data() {
     return {
       // "430000", "430200", "430203"
       val: [],
       cityList: [],
-      cityProps: {
-        label: 'cityName',
-        value: 'cityCode',
-        children: 'subCitys'
+      flattenResult: [],
+      propKey: {
+        props: {
+          label: "cityName",
+          value: "cityCode",
+          children: "subCitys",
+        },
       },
-      flattenResult: []
-    }
+    };
   },
   computed: {
-    // 根据code 获取对应的父级省市区label
-    cityLabel() {
-      const { value, showLevel, showType, valueKey } = this
-      let res = '--'
-      let _value = ''
-      valueKey ? _value = value[valueKey] : _value
-      if (showType === 'text' && value !== '') {
-        // if (!value) throw new Error("静态模式下请传入cityCode！");
-        const level = showLevel > 3 ? 3 : showLevel
-        res = this.findParent(_value, this.flattenResult)
-          .slice(0, level)
-          .map((item) => item.cityName)
-          .join(` | `)
-      }
-      return res
-    },
     cityValue: {
-      set: function(n) {
-        this.val = n
+      set: function (n) {
+        this.val = n;
       },
-      get: function() {
-        const { value, valueKey } = this
-        const _value = valueKey ? value[valueKey] : value
-        const res = this.findParent(
-          _value,
-          this.flattenResult
-        )
-          .map((item) => item.cityCode)
-
-        return res
-      }
-    }
+      get: function () {
+        const { value, valueKey } = this;
+        const _value = valueKey ? value[valueKey] : value;
+        const res = this.findParent(_value, this.flattenResult).map(
+          (item) => item.cityCode
+        );
+        return res;
+      },
+    },
   },
   created() {
-    this.fnGetCitys()
+    this.fnGetCitys();
   },
   methods: {
+    propsConf() {
+      let obj = this.propKey;
+      if (this.$attrs.props) {
+        obj.props = Object.assign(this.$attrs.props, this.propKey.props);
+      }
+      return Object.assign(this.$attrs, obj);
+    },
     // 为所有数据添加父级pid
     addParentKey(tree) {
-      const data = JSON.parse(JSON.stringify(tree)) // deepClone
+      const data = JSON.parse(JSON.stringify(tree)); // deepClone
       function addParentKey(data, parentKey) {
         data.forEach((item) => {
-          const { subCitys, cityCode } = item
-          item.parent = parentKey
+          const { subCitys, cityCode } = item;
+          item.parent = parentKey;
           if (subCitys) {
-            addParentKey(subCitys, cityCode)
+            addParentKey(subCitys, cityCode);
           }
-        })
+        });
       }
-      addParentKey(data, null) // 一开始的时候是null
-      return data
+      addParentKey(data, null); // 一开始的时候是null
+      return data;
     },
     /**
      * @param {array} data 城市联动数据（带pid）
      */
     flattenTreeData(data) {
-      const treeData = JSON.parse(JSON.stringify(data))
-      const flattenData = []
+      const treeData = JSON.parse(JSON.stringify(data));
+      const flattenData = [];
       function flattenTree(data, parentKey) {
         data.forEach((item) => {
-          const { cityName, cityCode, subCitys } = item
-          flattenData.push({ cityName, cityCode, parentKey })
+          const { cityName, cityCode, subCitys } = item;
+          flattenData.push({ cityName, cityCode, parentKey });
           if (subCitys) {
-            flattenTree(subCitys, cityCode)
+            flattenTree(subCitys, cityCode);
           }
-        })
+        });
       }
-      flattenTree(treeData, null)
-      return flattenData
+      flattenTree(treeData, null);
+      return flattenData;
     },
     /**
      * @param {string,number} cityCode 区县对应的code
      * @param {array} flattenTree 扁平化后的城市数据
      */
-    findParent(cityCode, flattenTree) {
-      const parentArr = []
-      function find(cityCode, flattenTree) {
+    findParent(cityCode, flattenTree, typeKey = "cityCode") {
+      const parentArr = [];
+      function find(cityCode, flattenTree, typeKey) {
         flattenTree.forEach((item) => {
           // eslint-disable-next-line eqeqeq
-          if (item.cityCode == cityCode) {
-            parentArr.unshift(item)
-            find(item.parentKey, flattenTree)
+          if (item[typeKey] == cityCode) {
+            parentArr.unshift(item);
+            find(item.parentKey, flattenTree, typeKey);
           }
-        })
+        });
       }
-      find(cityCode, flattenTree)
-      return parentArr
+      find(cityCode, flattenTree, typeKey);
+
+      return parentArr;
     },
     // 接口获取城市联动数据
     fnGetCitys() {
-      const _citys = this.$utils.deepClone(citys)
-      this.cityList = this.toTreeDataLevel(_citys)
+      const _citys = this.$utils.deepClone(citys);
+      this.cityList = this.toTreeDataLevel(_citys);
       this.flattenResult = this.flattenTreeData(
         this.addParentKey(this.cityList)
-      )
+      );
     },
     // 给数据加上level并且去除最后一层空数据
     toTreeDataLevel(data) {
-      if (!Array.isArray(data)) return []
+      if (!Array.isArray(data)) return [];
       const recursive = (data, level = 0) => {
-        level++
+        level++;
         return data.map((item) => {
-          item.level = level
-          const child = item.subCitys
+          item.level = level;
+          const child = item.subCitys;
           if (level >= 2 && this.dataLevel === 2) {
-            delete item.subCitys
+            delete item.subCitys;
           }
           if (child && child.length) {
-            recursive(child, level)
+            recursive(child, level);
           } else {
-            delete item.subCitys
+            delete item.subCitys;
           }
-          return item
-        })
-      }
-      return recursive(data)
+          return item;
+        });
+      };
+      return recursive(data);
     },
     // 获取选中
     handleChange(cityCode) {
       // 返回数组形式 code和label
-      const cityName = this.handleTreeLabel(cityCode, this.cityList)
-      const city = this.handleTreeLabel(cityCode, this.cityList, 2)
-      const cityCodeLast = cityCode[cityCode.length - 1]
-      const cityNameLast = cityName[cityName.length - 1]
-      let value = ''
+      const cityName = this.handleTreeLabel(cityCode, this.cityList);
+      const city = this.handleTreeLabel(cityCode, this.cityList, 2);
+      const cityCodeLast = cityCode[cityCode.length - 1];
+      const cityNameLast = cityName[cityName.length - 1];
+      let value = "";
       if (this.valueKey) {
-        value = city[city.length - 1]
+        value = city[city.length - 1];
       } else {
-        value = cityCodeLast
+        value = cityCodeLast;
       }
-      this.$emit('on-change', value)
-      this.$emit('on-city', {
+      this.$emit("on-change", value);
+      this.$emit("on-city", {
         city,
         cityCode,
         cityName,
         cityCodeLast,
-        cityNameLast
-      })
+        cityNameLast,
+      });
     },
     /**
      * 根据城市code 获取对应的城市
@@ -241,18 +219,54 @@ export default {
         for (var itm of data) {
           // eslint-disable-next-line eqeqeq
           if (itm.cityCode == item) {
-            data = itm.subCitys
+            data = itm.subCitys;
             return type === 1
               ? itm.cityName
               : {
-                [this.keyOptions.codeKey]: itm.cityCode,
-                [this.keyOptions.labelKey]: itm.cityName
-              }
+                  [this.keyOptions.codeKey]: itm.cityCode,
+                  [this.keyOptions.labelKey]: itm.cityName,
+                };
           }
         }
-        return null
-      })
-    }
-  }
-}
+        return null;
+      });
+    },
+
+    // 方法二
+    // getCity(arr, data, city = []) {
+    //     if (typeof data === "object") {
+    //         for (let i = 0; arr[i] !== undefined; i++) {
+    //             for (let j = 0; data[j] !== undefined; j++) {
+    //                 if (arr[i] === data[j].cityName) {
+    //                     city.push(data[j]);
+    //                 }
+    //             }
+    //         }
+    //         for (let i = 0; data[i] !== undefined; i++) {
+    //             this.getCity(arr, data[i].subCitys, city);
+    //         }
+    //     }
+    //     return city;
+    // },
+    getCity(data, nameList) {
+      if (nameList.length === 0) return [];
+      const [cityName, ...rest] = nameList;
+      const item = data.find((i) => i.cityName === cityName || i.cityName.indexOf(cityName.substring(0,2)) > -1);
+      if(item){
+        return [item.cityCode, ...this.getCity(item.subCitys, rest)];
+      }else{
+        return [...this.getCity([], rest)]
+      }
+    },
+    str2Code(val) {
+      if (!val) return;
+      const cityArr = val.match(this.$reg.getCity) || [];
+      const newarr = cityArr.length&&cityArr.map((item,idx,arr)=>{
+        return ZXCITY.includes(item) && idx === 0 ? [item,...arr] : arr
+      })[0]
+      const arr = this.getCity(this.cityList, newarr);
+      return arr[arr.length - 1];
+    },
+  },
+};
 </script>
