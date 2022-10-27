@@ -108,6 +108,7 @@ export default {
 | show-column | 是否显示勾选表头按钮 | boolean | true/false                           | -                               |
 | show-refresh | 是否显示刷新按钮 | boolean | true/false                           | -                               |
 | tools | 更多工具栏 | array | []                           | -                               |
+| idKey | 唯一标识 | string | ''                           | -                               |
 
 
 ### columns-属性

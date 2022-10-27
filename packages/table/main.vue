@@ -108,7 +108,7 @@
       ></el-table-column>
       <el-table-column v-bind="$attrs" v-if="radio" width="40px" align="center">
         <template slot-scope="{ row }">
-          <el-radio v-model="radioSelected" :label="row.id">&nbsp;</el-radio>
+          <el-radio v-model="radioSelected" :label="row[idKey]">&nbsp;</el-radio>
         </template>
       </el-table-column>
       <el-table-column
@@ -174,6 +174,10 @@ export default {
     showColumn: Boolean,
     expand: Boolean,
     isTools: Boolean,
+    idKey: {
+      type: String,
+      default: "id",
+    },
   },
   data() {
     return {
@@ -194,8 +198,9 @@ export default {
     },
     singleElection(val) {
       if (!this.radio) return;
-      this.radioSelected = val.id;
-      const res = this.data.filter((item) => item.id === val.id);
+      const { idKey } = this;
+      this.radioSelected = val[idKey];
+      const res = this.data.filter((item) => item[idKey] === val[idKey]);
       this.$emit("on-single", res);
     },
     handleToolsItem(row, index) {
@@ -214,9 +219,9 @@ export default {
       this.$refs.table.toggleRowSelection(row, status);
     },
     clearSelection() {
-      if(this.radio){
-        this.radioSelected = ''
-        return 
+      if (this.radio) {
+        this.radioSelected = "";
+        return;
       }
       this.$refs.table.clearSelection();
     },
