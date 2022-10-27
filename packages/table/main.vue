@@ -109,7 +109,6 @@
       ></el-table-column>
       <el-table-column v-bind="$attrs" v-if="radio" width="40px" align="center">
         <template slot-scope="{ row }">
-          {{ row[idKey] }}
           <el-radio
             v-model="radioSelected"
             :label="row[idKey]"
