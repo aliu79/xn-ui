@@ -7,7 +7,7 @@
       :data="list"
       radio
       border
-      id-key="uid"
+      id-key="rowIndex"
       @on-single="onradio"
       :page="pageConfig"
       @handle-buttons="handleButtons"
@@ -63,7 +63,7 @@ export default {
         { id: 122,uid:1, date: "2011-01-01", name: "lzw", age: 18 },
         {
           id: 123,
-          uid:2,
+          uid:1,
           date: "2011-01-01",
           name: "lzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzw",
           age: 18,
@@ -99,8 +99,8 @@ export default {
     fnGetList(v) {
       console.log(v);
     },
-    onradio(val) {
-      console.log("val: ", val);
+    onradio(row,a) {
+      console.log("val: ",row,a);
     },
     onSelection(val) {
       console.log(val);

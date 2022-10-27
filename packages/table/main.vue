@@ -97,6 +97,7 @@
       :stripe="stripe"
       @row-click="singleElection"
       @selection-change="selectionChange"
+      :row-class-name="tableRowClassName"
       :class="{ 'disabled-all-selection': radio }"
     >
       <el-table-column
@@ -108,7 +109,12 @@
       ></el-table-column>
       <el-table-column v-bind="$attrs" v-if="radio" width="40px" align="center">
         <template slot-scope="{ row }">
-          <el-radio v-model="radioSelected" :label="row[idKey]">&nbsp;</el-radio>
+          {{ row[idKey] }}
+          <el-radio
+            v-model="radioSelected"
+            :label="row[idKey]"
+            >&nbsp;</el-radio
+          >
         </template>
       </el-table-column>
       <el-table-column
@@ -196,12 +202,14 @@ export default {
     getList(val) {
       this.$emit("on-page", val);
     },
-    singleElection(val) {
+    singleElection(val, column) {
       if (!this.radio) return;
       const { idKey } = this;
       this.radioSelected = val[idKey];
-      const res = this.data.filter((item) => item[idKey] === val[idKey]);
-      this.$emit("on-single", res);
+      const res = this.data.find(
+        (item, idx) => item[idKey] === val[idKey] && idx === val.rowIndex
+      );
+      this.$emit("on-single", res, column);
     },
     handleToolsItem(row, index) {
       this.$emit("on-tools", { row, index });
@@ -227,6 +235,9 @@ export default {
     },
     doLayout() {
       this.$refs.table.doLayout();
+    },
+    tableRowClassName({ row, rowIndex }) {
+      row.rowIndex = rowIndex;
     },
   },
 };
