@@ -125,3 +125,4 @@ export default {
 | on-refresh    | 刷新按钮     | function  | -          | -      |
 | on-page    | 切换分页     | function  | -          | {pageNum,pageSize}      |
 | handle-buttons （render）   | 列表右侧按钮(事件名称，行数据，当前行索引)     | function  | -          | {method,row,index}      |
+| on-single   | 仅在type=radio时有效，点击行选中事件     | function  | -          | {row,column}      |
