@@ -12,6 +12,7 @@ import XnTree from '../packages/tree/index'
 import XnImport from '../packages/import/index'
 import XnExport from '../packages/export/index'
 import XnFooter from '../packages/footer/index'
+import XnDownload from '../packages/download/index'
 
 import Utils from 'xn-ui/src/utils/index'
 const doc = 'http://lzwr.gitee.io/xn-ui/#/'
@@ -28,7 +29,8 @@ const components = [
     XnTree,
     XnImport,
     XnExport,
-    XnFooter
+    XnFooter,
+    XnDownload
 ]
 const version = require('../package.json').version
 if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
@@ -51,6 +53,7 @@ const install = function (Vue) {
     Vue.prototype.$dayjs = Utils.$dayjs
     Vue.prototype.$storage = Utils.$storage
     Vue.prototype.$lodash = Utils.$lodash
+    Vue.prototype.$math = Utils.$math
 
 }
 if (typeof window !== 'undefined' && window.Vue) {

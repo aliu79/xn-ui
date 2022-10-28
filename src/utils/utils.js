@@ -69,11 +69,22 @@ const download = (params = { name: '', url: '' }) => {
   var x = new XMLHttpRequest()
   x.open('GET', url, true)
   // x.responseType = 'blob'
+  // x.responseType = 'blob'
+  x.onprogress = function(p){
+    console.log('p: ', p);
+
+  }
+  console.log(typeof x.response);
   x.onload = function () {
-    // 会创建一个 DOMString，其中包含一个表示参数中给出的对象的URL。这个 URL 的生命周期和创建它的窗口中的 document 绑定。这个新的URL 对象表示指定的 File 对象或 Blob 对象。
-    var url = window.URL.createObjectURL(x.response)
+    var _url = ''
+    try {
+      _url = window.URL.createObjectURL(x.response)
+    } catch (error) {
+      _url = url
+    }
     var a = document.createElement('a')
-    a.href = url
+    a.href = _url
+    a.target = '_blank'
     a.download = name
     a.click()
   }

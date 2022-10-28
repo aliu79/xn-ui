@@ -5,6 +5,8 @@ import dayjs from './dayjs'
 import storage from './storage'
 import utils from './utils'
 import lodash from 'lodash'
+import math from './math'
+console.log('math: ', math);
 const version = () => {
     return `xianniu-tools@${require('./package.json').version}`
 }
@@ -16,5 +18,6 @@ export default {
     $dayjs: dayjs,
     $lodash: lodash,
     $storage: storage,
-    $utils: utils
+    $utils: utils,
+    $math: math
 }
