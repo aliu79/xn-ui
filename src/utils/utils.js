@@ -70,11 +70,8 @@ const download = (params = { name: '', url: '' }) => {
   x.open('GET', url, true)
   // x.responseType = 'blob'
   // x.responseType = 'blob'
-  x.onprogress = function(p){
-    console.log('p: ', p);
-
+  x.onprogress = function(){
   }
-  console.log(typeof x.response);
   x.onload = function () {
     var _url = ''
     try {
