@@ -1,5 +1,13 @@
 import { Decimal } from "decimal.js";
-
+/*
+方式一
+    @params 0 array 要计算的数组
+    @params 1 string 需要计算的key
+    return number 最终结果
+方式二
+    @params number/string 需要计算的数值
+    return number 最终结果
+*/
 class Math {
     constructor(type) {
         this.type = type
@@ -8,7 +16,7 @@ class Math {
         if (!args) {
             throw new Error('error arguments')
         }
-        if (Array.isArray(args[0])) {
+        if (Array.isArray(args[0]) && args[1]) {
             if (!args[0].length) return 0
             const list = args[0]
             const fieldKey = args[1]

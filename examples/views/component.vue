@@ -87,7 +87,7 @@
             tag="li"
             class="doc-nav-item__group-list-item"
           >
-            <span class="pl-5">格式化金额</span>
+            <span class="pl-5">数值计算/格式化</span>
           </router-link>
           <router-link
             to="/component/code"

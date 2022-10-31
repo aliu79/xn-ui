@@ -4,6 +4,7 @@
  * @param {Number} decimals 保留几位小数
  * @param {String} dec_point 小数点符号
  * @param {String} thousands_sep 千分位符号
+ * @param {String} symbol 货币符号
  * @returns
  */
 const priceToText = (number, decimals = 2, dec_point = '.', thousands_sep = ',', symbol = '￥') => {

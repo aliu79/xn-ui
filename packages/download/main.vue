@@ -20,6 +20,9 @@ export default {
     },
   },
   created() {
+    const arr = [{ num: 0.1 }, { num: 0.2 }];
+    console.log("aaaaa", this.$math.sub(arr, "num"));
+    console.log("aaaaa", this.$math.add(1, 2, 3, 4, 5, 345, 2, 23, 324, 5));
   },
   methods: {
     onDownload() {
