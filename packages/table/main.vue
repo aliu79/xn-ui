@@ -100,32 +100,34 @@
       :row-class-name="tableRowClassName"
       :class="{ 'disabled-all-selection': radio }"
     >
-      <el-table-column
-        v-if="selection && data.length"
-        v-bind="$attrs"
-        type="selection"
-        width="50px"
-        align="center"
-      ></el-table-column>
-      <el-table-column v-bind="$attrs" v-if="radio" width="40px" align="center">
-        <template slot-scope="{ row }">
-          <el-radio
-            v-model="radioSelected"
-            :label="row[idKey]"
-            >&nbsp;</el-radio
-          >
-        </template>
-      </el-table-column>
-      <el-table-column
-        width="50px"
-        label="No."
-        v-if="index && data.length"
-        type="index"
-      ></el-table-column>
+    <slot>
+        <el-table-column
+          v-if="selection && data.length"
+          v-bind="$attrs"
+          type="selection"
+          width="50px"
+          align="center"
+        ></el-table-column>
+        <el-table-column v-bind="$attrs" v-if="radio" width="40px" align="center">
+          <template slot-scope="{ row }">
+            <el-radio
+              v-model="radioSelected"
+              :label="row[idKey]"
+              >&nbsp;</el-radio
+            >
+          </template>
+        </el-table-column>
+        <el-table-column
+          width="50px"
+          label="No."
+          v-if="index && data.length"
+          type="index"
+        ></el-table-column>
 
-      <template v-for="(item, idx) in columns">
-        <column :key="idx" v-if="item.checked === true" v-bind="item"></column>
-      </template>
+        <template v-for="(item, idx) in columns">
+          <column :key="idx" v-if="item.checked === true" v-bind="item"></column>
+        </template>
+      </slot>
     </el-table>
 
     <template v-if="!$utils.isEmpty(page)">
