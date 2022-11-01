@@ -5,13 +5,14 @@
       ref="table"
       :columns="listHeader"
       :data="list"
-      radio
+      :index="false"
       border
+      selection
       id-key="rowIndex"
       @on-single="onradio"
       :page="pageConfig"
+      @selection-change="onSelection"
       @handle-buttons="handleButtons"
-      index
     >
     <el-table-column
       prop="id"
