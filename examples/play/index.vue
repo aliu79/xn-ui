@@ -3,7 +3,6 @@
     <xn-dialog :before-close="()=>show = false" :show.sync="show">
     <xn-table
       ref="table"
-      :columns="listHeader"
       :data="list"
       :index="false"
       border

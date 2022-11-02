@@ -62,7 +62,7 @@
             popper-class="xn-table-box-tools__pop"
             class="ml-10"
             trigger="hover"
-            :hidden="!showColumn"
+            :hidden="!showColumn && columns.length"
           >
             <el-scrollbar
               class="xn-table-box-tools__coll"
@@ -163,7 +163,7 @@ export default {
     },
     columns: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
     stripe: Boolean,
     selection: Boolean,
@@ -195,7 +195,9 @@ export default {
   },
   computed: {},
   created() {
-    this.columns.length &&
+    console.log(this.$slots);
+    !this.$slots.default &&
+      this.columns.length &&
       this.columns.forEach((item) => {
         this.$set(item, "checked", true);
       });
