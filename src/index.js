@@ -31,9 +31,6 @@ const components = [
     XnFooter
 ]
 const version = require('../package.json').version
-if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
-    console.log(`doc:${doc}`);
-}
 const install = function (Vue) {
     if (install.installed) return
     if (!Vue.prototype.$ELEMENT) throw new Error('缺失 element-ui，请进行安装')

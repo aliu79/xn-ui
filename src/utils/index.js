@@ -6,7 +6,6 @@ import storage from './storage'
 import utils from './utils'
 import lodash from 'lodash'
 import math from './math'
-console.log('math: ', math);
 const version = () => {
     return `xianniu-tools@${require('./package.json').version}`
 }
