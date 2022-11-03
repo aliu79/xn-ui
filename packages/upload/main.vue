@@ -263,14 +263,8 @@ export default {
         },
       })
         .then((res) => {
-          const { name, size, ext, imgFlag, url } = res.data.data;
-          var obj = {};
-          obj.name = name;
-          obj.size = size;
-          obj.ext = ext;
-          obj.imgFlag = imgFlag;
-          obj.url = url;
-          this.successFiles.push(obj);
+          const { name, size, ext, imgFlag, url,fileId } = res.data.data;
+          this.successFiles.push({name,size,ext,imgFlag,url,fileId});
           file.onSuccess();
           this.$emit("update:fileList", this.successFiles);
           this.$emit("on-success", this.successFiles);
