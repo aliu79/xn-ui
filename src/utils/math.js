@@ -30,7 +30,7 @@ class Math {
             })
         }
     }
-    autoComputed(fields = [], fieldsRules = {}, field = '') {
+    autoComputed(fields = [], fieldsRules = {}, field = '', value) {
         if (!fields.length || !Object.keys(fieldsRules).length) {
             throw new Error('error arguments: fields or fieldsRules')
         }
@@ -41,8 +41,8 @@ class Math {
             _fields.splice(idx, 1)
         }
         _fields.push(field)
-        _fieldsRules[_fields[0]]()
-        return { fields: _fields, fieldsRules: _fieldsRules, field }
+        _fieldsRules[_fields[0]](value)
+        return { fields: _fields, fieldsRules: _fieldsRules, field, value }
     }
 }
 
@@ -61,8 +61,8 @@ const mul = function (...args) {
 const div = function (...args) {
     return new Math('div').result(...args)
 }
-const autoComputed = function (fields = [], fieldsRules = {}, field = '') {
-    return new Math().autoComputed(fields, fieldsRules, field)
+const autoComputed = function (fields = [], fieldsRules = {}, field = '', value) {
+    return new Math().autoComputed(fields, fieldsRules, field, value)
 }
 export default {
     add,
