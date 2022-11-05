@@ -46,8 +46,8 @@ export default {
     }
   },
   methods: {
-    computed(e, v) {
-        const res = this.$math.autoComputed(this.fields,this.arr,v)
+    computed(e, field) {
+        const res = this.$math.autoComputed(this.fields,this.arr,field)
         console.log('res: ', res);
     }
   }
