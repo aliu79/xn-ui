@@ -6,9 +6,6 @@
 ```html
 <template>
   <div>
-        <!-- <el-input v-model="form.a" @input="computed($event,'a')" />
-        <el-input class="mt-20" v-model="form.b" @input="computed($event,'b')" />
-        <el-input class="mt-20" v-model="form.c" @input="computed($event,'c')" /> -->
         <el-form :model="form">
             <el-form-item label="签约金额" prop="">
                 <el-link type="success" :underline="false" icon="el-icon-circle-plus-outline" @click="handleAdd('signingAmounts')">添加明细</el-link>
@@ -42,9 +39,9 @@
                 </el-form-item>
         </el-form>
 
-        <p class="text-success">最终计算结果：{{result}}</p>
+        <p class="text-warning">最终计算结果：{{result}}</p>
         
-        <p class="mt-30">{{fields}}</p>
+        <p class="mt-30">需要计算的字段：{{fields}} （按照表单顺序）</p>
         <p>最终需要计算的：{{fields[0]}}</p>
 
   </div>
@@ -84,7 +81,6 @@ export default {
         },
         totalPrice:(row)=> {
             if(row.taxRate&&row.priceExcludingTax){
-
                 row.totalPrice = this.$math.sub(row.priceExcludingTax,this.$math.mul(row.priceExcludingTax,row.taxRate/100))
                 row.taxAmount = this.$math.sub(row.priceExcludingTax,row.totalPrice)
             }
@@ -96,40 +92,24 @@ export default {
         taxAmount: '',
         totalPrice: ''
       }
-    //   arr: {
-    //     a: () => {
-    //       if (this.form.b && this.form.c) {
-    //         this.form.a = this.$math.add(this.form.b, this.form.c)
-    //       }
-    //     },
-    //     b: () => {
-    //       if (this.form.a && this.form.c) {
-    //         this.form.b = this.$math.add(this.form.a, this.form.c)
-    //       }
-    //     },
-    //     c: () => {
-    //       if (this.form.a && this.form.b) {
-    //         this.form.c = this.$math.add(this.form.a, this.form.b)
-    //       }
-    //     }
-    //   }
     }
   },
   methods: {
     computed(value, field) {
         const res = this.$math.autoComputed(this.fields,this.fieldsRules,field,value)
+        // 计算总未税
         this.result.priceExcludingTax = this.$math.add(this.form.signingAmounts,'priceExcludingTax')
+        // 计算总税率
         this.result.taxRate = this.$math.add(this.form.signingAmounts,'taxRate')
-        this.result.taxAmount = this.$math.add(this.form.signingAmounts,'taxAmount')
+        // 计算总含税
         this.result.totalPrice = this.$math.add(this.form.signingAmounts,'totalPrice')
+        // 计算总税额
+        this.result.taxAmount = this.$math.add(this.form.signingAmounts,'taxAmount')
     },
     handleAdd(type) {
       switch (type) {
         case 'signingAmounts':
           this.form.signingAmounts.push(this.$lodash.cloneDeep(this.tpl[type]))
-          break
-
-        default:
           break
       }
     },
