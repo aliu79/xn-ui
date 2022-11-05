@@ -34,6 +34,7 @@ const routes = [
       { path: '/component/tool', name: 'Tool', component: () => import('../docs/tool.md') },
       { path: '/component/reg', name: 'Reg', component: () => import('../docs/reg.md') },
       { path: '/component/format', name: 'Format', component: () => import('../docs/format.md') },
+      { path: '/component/computed', name: 'Computed', component: () => import('../docs/computed.md') },
       { path: '/component/code', name: 'Code', component: () => import('../docs/code.md') },
       { path: '/component/more', name: 'More', component: () => import('../docs/more.md') },
     ]

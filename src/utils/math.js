@@ -22,16 +22,20 @@ class Math {
             const fieldKey = args[1]
             return list.map(item => item[fieldKey]).reduce((pre, cur) => {
                 let val = new Decimal(pre)
-                return val[this.type](new Decimal(cur)).toNumber()
+                return val[this.type](new Decimal(cur || 0)).toNumber()
             })
         } else {
-            return args.reduce((pre, cur) => new Decimal(pre)[this.type](new Decimal(cur)).toNumber())
+            return args.reduce((pre, cur) => {
+                console.log('pre, cur: ', pre, cur);
+                return new Decimal(pre || 0)[this.type](new Decimal(cur || 0)).toNumber()
+            })
         }
     }
 }
 
 // 加法  (1,2,3) = 6
 const add = function (...args) {
+    console.log('..args: ', {...args});
     return new Math('add').result(...args)
 }
 // 减法 

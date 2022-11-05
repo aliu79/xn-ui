@@ -90,6 +90,14 @@
             <span class="pl-5">数值计算/格式化</span>
           </router-link>
           <router-link
+            to="/component/computed"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">任意框计算</span>
+          </router-link>
+          <router-link
             to="/component/code"
             exact-active-class="active"
             tag="li"
