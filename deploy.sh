@@ -23,3 +23,5 @@ git push -f https://gitee.com/lzwr/xn-ui.git master:gh-pages
 # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
 
 cd -
+
+npm publish
