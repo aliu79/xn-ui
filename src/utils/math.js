@@ -21,21 +21,33 @@ class Math {
             const list = args[0]
             const fieldKey = args[1]
             return list.map(item => item[fieldKey]).reduce((pre, cur) => {
-                let val = new Decimal(pre)
-                return val[this.type](new Decimal(cur || 0)).toNumber()
+                let val = new Decimal(pre - 0)
+                return val[this.type](new Decimal(cur - 0)).toNumber()
             })
         } else {
             return args.reduce((pre, cur) => {
-                console.log('pre, cur: ', pre, cur);
-                return new Decimal(pre || 0)[this.type](new Decimal(cur || 0)).toNumber()
+                return new Decimal(pre - 0)[this.type](new Decimal(cur - 0)).toNumber()
             })
         }
     }
+    autoComputed(fields = [], fieldsRules = {}, field = '') {
+        if (!fields.length || !Object.keys(fieldsRules).length) {
+            throw new Error('error arguments: fields or fieldsRules')
+        }
+        const _fields = fields
+        const _fieldsRules = fieldsRules
+        const idx = _fields.indexOf(field)
+        if (idx !== -1) {
+            _fields.splice(idx, 1)
+        }
+        _fields.push(field)
+        _fieldsRules[_fields[0]]()
+        return { fields: _fields, fieldsRules: _fieldsRules, field }
+    }
 }
 
-// 加法  (1,2,3) = 6
+// 加法  (1,2,3) = 6 or ([{a:1},{a:2}],'a') = 3
 const add = function (...args) {
-    console.log('..args: ', {...args});
     return new Math('add').result(...args)
 }
 // 减法 
@@ -49,11 +61,14 @@ const mul = function (...args) {
 const div = function (...args) {
     return new Math('div').result(...args)
 }
-
+const autoComputed = function (fields = [], fieldsRules = {}, field = '') {
+    return new Math().autoComputed(fields, fieldsRules, field)
+}
 export default {
     add,
     sub,
     mul,
     div,
+    autoComputed,
     D: Decimal
 }
