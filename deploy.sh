@@ -7,11 +7,6 @@ set -e
 # 构建
 npm run build
 
-# 构建umd
-npm run build:lib
-
-# 发布
-npm publish
 
 # cd 到构建输出的目录下 
 cd dist
