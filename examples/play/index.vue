@@ -1,27 +1,25 @@
 <template>
   <div>
-    <xn-dialog :before-close="()=>show = false" :show.sync="show">
-    <xn-table
-      ref="table"
-      :data="list"
-      :index="false"
-      border
-      selection
-      id-key="rowIndex"
-      @on-single="onradio"
-      :page="pageConfig"
-      @selection-change="onSelection"
-      @handle-buttons="handleButtons"
+    <xn-dialog :before-close="() => (show = false)" :show.sync="show">
+      <xn-table
+        ref="table"
+        :data="list"
+        :index="false"
+        border
+        selection
+        id-key="rowIndex"
+        @on-single="onradio"
+        :page="pageConfig"
+        @selection-change="onSelection"
+        @handle-buttons="handleButtons"
+      >
+        <el-table-column prop="id" label="col"> </el-table-column>
+        <template #append> 123123 </template>
+      </xn-table>
+    </xn-dialog>
+    <el-button type="primary" size="default" @click="show = true"
+      >open</el-button
     >
-    <el-table-column
-      prop="id"
-      label="col.label">
-    </el-table-column>
-    
-    </xn-table>
-  </xn-dialog>
-  <el-button type="primary" size="default" @click="show = true">open</el-button>
-  
   </div>
 </template>
 
@@ -29,7 +27,7 @@
 export default {
   data() {
     return {
-      show:false,
+      show: false,
       listHeader: [
         { prop: "id", label: "ID" },
         { prop: "name", label: "姓名" },
@@ -65,10 +63,10 @@ export default {
         },
       ],
       list: [
-        { id: 122,uid:1, date: "2011-01-01", name: "lzw", age: 18 },
+        { id: 122, uid: 1, date: "2011-01-01", name: "lzw", age: 18 },
         {
           id: 123,
-          uid:1,
+          uid: 1,
           date: "2011-01-01",
           name: "lzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzw",
           age: 18,
@@ -85,10 +83,10 @@ export default {
     };
   },
   created() {},
-  watch:{
-    show(n){
-      !n && this.$refs.table.clearSelection()
-    }
+  watch: {
+    show(n) {
+      !n && this.$refs.table.clearSelection();
+    },
   },
   methods: {
     handleSort(e) {
@@ -104,8 +102,8 @@ export default {
     fnGetList(v) {
       console.log(v);
     },
-    onradio(row,a) {
-      console.log("val: ",row,a);
+    onradio(row, a) {
+      console.log("val: ", row, a);
     },
     onSelection(val) {
       console.log(val);

@@ -129,6 +129,9 @@
           ></column>
         </template>
       </slot>
+      <template #append v-if="$slots.append">
+          <slot name="append"></slot>
+      </template>
     </el-table>
 
     <template v-if="!$utils.isEmpty(page)">
@@ -195,6 +198,7 @@ export default {
   },
   computed: {},
   created() {
+    console.log(this.$slots);
     !this.$slots.default &&
       this.columns.length &&
       this.columns.forEach((item) => {
