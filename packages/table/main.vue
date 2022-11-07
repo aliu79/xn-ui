@@ -198,7 +198,6 @@ export default {
   },
   computed: {},
   created() {
-    console.log(this.$slots);
     !this.$slots.default &&
       this.columns.length &&
       this.columns.forEach((item) => {
