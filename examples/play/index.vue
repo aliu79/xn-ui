@@ -7,6 +7,7 @@
         :index="false"
         border
         selection
+        :auto-scroll="false"
         id-key="rowIndex"
         @on-single="onradio"
         :page="pageConfig"
@@ -20,6 +21,8 @@
     <el-button type="primary" size="default" @click="show = true"
       >open</el-button
     >
+
+    <p v-for="item in 999" :key="item">{{item}}</p>
   </div>
 </template>
 
