@@ -70,7 +70,7 @@ const download = (params = { name: '', url: '' }) => {
   x.open('GET', url, true)
   // x.responseType = 'blob'
   // x.responseType = 'blob'
-  x.onprogress = function(){
+  x.onprogress = function () {
   }
   x.onload = function () {
     var _url = ''
@@ -87,10 +87,43 @@ const download = (params = { name: '', url: '' }) => {
   }
   x.send()
 }
+/**
+ * 根据某个key 对数组去重合并
+ * @param {array} arr 需要合并的数组
+ * @param {string} key 传入要合并的key
+ * @return {array} result
+ */
+const arrMerge = (arr = [], key = '') => {
+  if (!key) {
+    throw new Error('error arguments: key is required')
+  }
+  if(!arr.length) return
+  var map = {}; var result = []
 
+  for (var i = 0; i < arr.length; i++) {
+    var ai = arr[i]
+    if (!map[ai[key]]) {
+      result.push({
+        [key]: ai[key],
+        children: [ai]
+      })
+      map[ai[key]] = ai
+    } else {
+      for (var j = 0; j < result.length; j++) {
+        var dj = result[j]
+        if (dj[key] === ai[key]) {
+          dj.children.push(ai)
+          break
+        }
+      }
+    }
+  }
+  return result
+}
 export default {
   isEmpty,
   isImg,
   deepClone,
-  download
+  download,
+  arrMerge
 }

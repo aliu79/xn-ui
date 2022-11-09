@@ -22,7 +22,6 @@
       >open</el-button
     >
 
-    <p v-for="item in 999" :key="item">{{item}}</p>
   </div>
 </template>
 
@@ -68,7 +67,7 @@ export default {
       list: [
         { id: 122, uid: 1, date: "2011-01-01", name: "lzw", age: 18 },
         {
-          id: 123,
+          id: 122,
           uid: 1,
           date: "2011-01-01",
           name: "lzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzw",
@@ -85,7 +84,10 @@ export default {
       // pageConfig: {},
     };
   },
-  created() {},
+  created() {
+    const res = this.$utils.arrMerge(this.list,'id')
+    console.log('res: ', res);
+  },
   watch: {
     show(n) {
       !n && this.$refs.table.clearSelection();
