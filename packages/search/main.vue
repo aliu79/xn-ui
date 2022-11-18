@@ -158,9 +158,6 @@ export default {
         return val && typeof val === "function";
       };
     },
-    _formData() {
-      return this.formData;
-    },
     toggle() {
       return this.isColl ? "el-icon-arrow-up" : "el-icon-arrow-down";
     },
@@ -212,14 +209,15 @@ export default {
   watch: {
     formData: {
       handler(n) {
-        n&&n.length&&this.init();
+        n && n.length && this.init();
       },
-      immediate:true
+      immediate: true,
+      deep: true,
     },
   },
   methods: {
     init() {
-      this.form.value = []
+      this.form.value = [];
       for (let i = 0, formData = this.formData; i < formData.length; i++) {
         const item = formData[i];
         item.isShow = i > 3 && this.showColl ? false : true;
@@ -232,8 +230,8 @@ export default {
     },
     onSearch() {
       const formValue = {};
-      if (this.formData) {
-        for (let i = 0, formData = this.formData; i < formData.length; i++) {
+      if (this.form.value) {
+        for (let i = 0, formData = this.form.value; i < formData.length; i++) {
           const item = formData[i];
           const index = i;
           const key = item.prop;
@@ -256,13 +254,9 @@ export default {
       this.$emit("on-search", formValue);
     },
     onReset() {
-      this.form.value = [];
-      for (let i = 0, formData = this.formData; i < formData.length; i++) {
+      for (let i = 0, formData = this.form.value; i < formData.length; i++) {
         const item = formData[i];
-        this.form.value.push({
-          key: item.prop,
-          modelVal: "",
-        });
+        item.modelVal = "";
       }
       this.$emit("on-reset");
       this.$emit("on-search", {});
@@ -278,7 +272,7 @@ export default {
     },
     setData(key, data) {
       const row =
-        this.formData && this.formData.find((item) => item.label === key);
+        this.form.value && this.form.value.find((item) => item.label === key);
       this.$set(row, "data", data);
     },
   },

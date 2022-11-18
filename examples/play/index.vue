@@ -2,8 +2,9 @@
   <div>
     <el-button type="primary" size="default" @click="change(1)">111</el-button>
     <el-button type="primary" size="default" @click="change(2)">222</el-button>
+    <el-button type="primary" size="default" @click="asd">333</el-button>
     
-    <xn-search ref="search" :form-data="form" @on-search="onSearch"></xn-search>
+    <xn-search ref="search" :form-data="formSearch" @on-search="onSearch"></xn-search>
 
   </div>
 </template>
@@ -26,14 +27,19 @@ export default {
           }
         },
         {
-          label: "报价单状态",
+          label: "报价单状态111",
           type: "select",
           prop: "field1",
+          options:{
+            labelKey:'asd',
+            valueKey:'a',
+          }
         },
         {
           label: "报价单状态",
           type: "input",
           prop: "field2",
+          
         },
         {
           label: "订单号",
@@ -57,9 +63,10 @@ export default {
  
       ],
       demoList:[{asd:'asdas',a:1},{asd:'sfsddfdsf',a:2}],
-      type:''
+      type: 1
     };
   },
+
   methods: {
     change(val){
       this.type = val
@@ -70,7 +77,7 @@ export default {
     },
     asd() {
       console.log("rrrrrr");
-      this.$refs.search.setData('报价单状态',this.demoList)
+      this.$refs.search.setData('报价单状态111',this.demoList)
     },
   },
 };
