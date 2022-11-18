@@ -2,7 +2,7 @@
   <div class="xn-search">
     <el-form ref="form" inline :model="form" :label-width="labelWidth">
       <el-row :gutter="0" class="xn-search--row">
-        <template v-for="(item, idx) in formData">
+        <template v-for="(item, idx) in form.value">
           <el-col v-bind="{ ...col }" :key="idx" v-show="item.isShow || isColl">
             <el-form-item
               v-if="item.type === 'city'"
@@ -12,8 +12,9 @@
               class="xn-search--row_col"
             >
               <xn-city
+                :key="item.prop"
                 :data-level="(item.options && item.options.dataLevel) || 2"
-                v-model="form.value[idx].modelVal"
+                v-model="item.modelVal"
                 @on-city="handleChangeCity"
               />
             </el-form-item>
@@ -25,9 +26,10 @@
               class="xn-search--row_col"
             >
               <el-input
+                :key="item.prop"
                 style="width: 100%"
                 v-bind="item.options ? { ...item.options } : {}"
-                v-model="form.value[idx].modelVal"
+                v-model="item.modelVal"
                 :clearable="item.clearable || true"
                 :placeholder="item.placeholder || '请填写' + item.label"
               />
@@ -40,8 +42,9 @@
               class="xn-search--row_col"
             >
               <el-select
+                :key="item.prop"
                 style="width: 100%"
-                v-model="form.value[idx].modelVal"
+                v-model="item.modelVal"
                 :placeholder="item.placeholder || '请选择' + item.label"
                 :clearable="item.clearable || true"
                 filterable
@@ -71,7 +74,8 @@
               class="xn-search--row_col"
             >
               <xn-date
-                v-model="form.value[idx].modelVal"
+                :key="item.prop"
+                v-model="item.modelVal"
                 :mode="item.mode || 'range'"
                 :type="item.type || 'daterange'"
                 :is-shortcut="showShortcut(item)"
@@ -203,16 +207,29 @@ export default {
     };
   },
   created() {
-    for (let i = 0, formData = this.formData; i < formData.length; i++) {
-      const item = formData[i];
-      item.isShow = i > 3 && this.showColl ? false : true;
-      this.form.value.push({
-        key: item.prop,
-        modelVal: "",
-      });
-    }
+    // this.init();
+  },
+  watch: {
+    formData: {
+      handler(n) {
+        n&&n.length&&this.init();
+      },
+      immediate:true
+    },
   },
   methods: {
+    init() {
+      this.form.value = []
+      for (let i = 0, formData = this.formData; i < formData.length; i++) {
+        const item = formData[i];
+        item.isShow = i > 3 && this.showColl ? false : true;
+        this.form.value.push({
+          ...item,
+          key: item.prop,
+          modelVal: "",
+        });
+      }
+    },
     onSearch() {
       const formValue = {};
       if (this.formData) {
