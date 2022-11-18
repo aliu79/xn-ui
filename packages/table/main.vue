@@ -121,13 +121,13 @@
         type="index"
       ></el-table-column>
       <slot>
-        <template v-for="(item, idx) in columns">
-          <column
-            :key="idx"
-            v-if="item.checked === true"
-            v-bind="item"
-          ></column>
-        </template>
+          <template v-for="(item, idx) in columns">
+            <column
+              :key="idx"
+              v-if="item.checked === true"
+              v-bind="item"
+            ></column>
+          </template>
       </slot>
       <template #append v-if="$slots.append">
           <slot name="append"></slot>
@@ -199,10 +199,13 @@ export default {
   },
   computed: {},
   created() {
+
+  },
+  updated() {
     !this.$slots.default &&
       this.columns.length &&
       this.columns.forEach((item) => {
-        this.$set(item, "checked", true);
+        if(item.checked !== true) this.$set(item, "checked", true);
       });
   },
   methods: {

@@ -5,6 +5,7 @@
         ref="table"
         :data="list"
         :index="false"
+        :columns="header"
         border
         selection
         :auto-scroll="false"
@@ -14,13 +15,10 @@
         @selection-change="onSelection"
         @handle-buttons="handleButtons"
       >
-        <el-table-column prop="id" label="col"> </el-table-column>
-        <template #append> 123123 </template>
       </xn-table>
     </xn-dialog>
-    <el-button type="primary" size="default" @click="show = true"
-      >open</el-button
-    >
+    <el-button type="primary" size="default" @click="open(1)">open</el-button>
+    <el-button type="primary" size="default" @click="open(2)">open</el-button>
 
   </div>
 </template>
@@ -30,39 +28,43 @@ export default {
   data() {
     return {
       show: false,
+      type:1,
+      listHeader2:[
+        { prop: "id", label: "ID" },
+      ],
       listHeader: [
         { prop: "id", label: "ID" },
         { prop: "name", label: "姓名" },
         { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
         { prop: "date", label: "日期", sortable: true },
-        {
-          label: "图片",
-          render: (h) => {
-            return h("el-radio", {
-              props: {
-                label: "空军航空",
-              },
-            });
-          },
-        },
-        {
-          label: "操作",
-          fixed: "right",
-          more: {
-            options: [
-              {
-                label: "按钮",
-                icon: "el-icon-info",
-                method: "info",
-              },
-              {
-                label: "删除",
-                method: "remove",
-                options: {},
-              },
-            ],
-          },
-        },
+        // {
+        //   label: "图片",
+        //   render: (h) => {
+        //     return h("el-radio", {
+        //       props: {
+        //         label: "空军航空",
+        //       },
+        //     });
+        //   },
+        // },
+        // {
+        //   label: "操作",
+        //   fixed: "right",
+        //   more: {
+        //     options: [
+        //       {
+        //         label: "按钮",
+        //         icon: "el-icon-info",
+        //         method: "info",
+        //       },
+        //       {
+        //         label: "删除",
+        //         method: "remove",
+        //         options: {},
+        //       },
+        //     ],
+        //   },
+        // },
       ],
       list: [
         { id: 122, uid: 1, date: "2011-01-01", name: "lzw", age: 18 },
@@ -84,6 +86,11 @@ export default {
       // pageConfig: {},
     };
   },
+  computed:{
+    header(){
+      return this.type === 1 ? this.listHeader2 : this.listHeader
+    }
+  },
   created() {
     const res = this.$utils.arrMerge(this.list,'id')
     console.log('res: ', res);
@@ -94,6 +101,10 @@ export default {
     },
   },
   methods: {
+    open(val){
+      this.type = val
+      this.show = true
+    },
     handleSort(e) {
       console.log(e);
     },
