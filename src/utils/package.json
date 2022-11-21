@@ -1,8 +1,17 @@
 {
-  "name": "xn-tools",
+  "name": "xianniu-utils",
   "version": "0.1.0",
   "description": "一些工具",
   "main": "index.js",
   "author": "liuzengwei",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "utils:lib": "vue-cli-service build  --target libUtils --entry src/utils/index.js --name xianniu-utils"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.2",
+    "@babel/preset-env": "^7.20.2",
+    "rollup": "^3.3.0",
+    "rollup-plugin-babel": "^4.4.0"
+  }
 }

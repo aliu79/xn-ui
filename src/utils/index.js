@@ -7,7 +7,7 @@ import utils from './utils'
 import lodash from 'lodash'
 import math from './math'
 const version = () => {
-    return `xianniu-tools@${require('./package.json').version}`
+    return `xianniu-utils@${require('./package.json').version}`
 }
 
 export default {
