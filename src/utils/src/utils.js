@@ -1,17 +1,17 @@
 /**
  * 判断各种值是否为空
- * @param {*} val 
+ * @param {*} val
  * @returns Boolean
  */
-const isEmpty = function (val) {
+const isEmpty = function(val) {
   if (val) {
     if (val instanceof Array) {
-      return val.length == 0;
+      return val.length === 0
     }
     if (val instanceof Object) {
-      return Object.keys(val).length == 0;
+      return Object.keys(val).length === 0
     }
-    return false;
+    return false
   }
   return true
 }
@@ -35,8 +35,8 @@ const isImg = (file) => {
 }
 /**
  * 深拷贝
- * @param {*} source 
- * @returns 
+ * @param {*} source
+ * @returns
  */
 const deepClone = (source) => {
   if (!source && typeof source !== 'object') {
@@ -54,9 +54,9 @@ const deepClone = (source) => {
 }
 
 /**
- * 
- * @param {object} params 
- * @param {string} name 文件名 
+ *
+ * @param {object} params
+ * @param {string} name 文件名
  * @param {string} url 文件地址
  */
 const download = (params = { name: '', url: '' }) => {
@@ -70,9 +70,9 @@ const download = (params = { name: '', url: '' }) => {
   x.open('GET', url, true)
   // x.responseType = 'blob'
   // x.responseType = 'blob'
-  x.onprogress = function () {
+  x.onprogress = function() {
   }
-  x.onload = function () {
+  x.onload = function() {
     var _url = ''
     try {
       _url = window.URL.createObjectURL(x.response)
@@ -97,7 +97,7 @@ const arrMerge = (arr = [], key = '') => {
   if (!key) {
     throw new Error('error arguments: key is required')
   }
-  if(!arr.length) return
+  if (!arr.length) return
   var map = {}; var result = []
 
   for (var i = 0; i < arr.length; i++) {

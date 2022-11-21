@@ -13,7 +13,7 @@ import XnImport from '../packages/import/index'
 import XnExport from '../packages/export/index'
 import XnFooter from '../packages/footer/index'
 
-import Utils from 'xn-ui/src/utils/index'
+import Utils from 'xn-ui/src/utils/lib/xianniu-utils.min.js'
 const doc = 'http://lzwr.gitee.io/xn-ui/#/'
 const components = [
     XnDialog,

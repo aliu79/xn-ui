@@ -66,7 +66,9 @@ export default {
       type: 1
     };
   },
-
+  created(){
+    console.log(this);
+  },
   methods: {
     change(val){
       this.type = val

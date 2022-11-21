@@ -14,7 +14,7 @@ const priceToText = (number, decimals = 2, dec_point = '.', thousands_sep = ',',
   var sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep
   var dec = (typeof dec_point === 'undefined') ? '.' : dec_point
   var s = ''
-  var toFixedFix = function (n, prec) {
+  var toFixedFix = function(n, prec) {
     var k = Math.pow(10, prec)
     return '' + Math.round(n * k) / k
   }
@@ -35,7 +35,7 @@ const priceToText = (number, decimals = 2, dec_point = '.', thousands_sep = ',',
  * @param {Number} money
  * @returns
  */
-const priceToUpperCase = function (money) {
+const priceToUpperCase = function(money) {
   if (!money) { return '' }
   // 数字的汉字数组
   const numberCNList = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
@@ -118,7 +118,7 @@ const priceToUpperCase = function (money) {
 
 /**
  * 格式化字节
- * 
+ *
  */
 
 const bytesToSize = (bytes) => {

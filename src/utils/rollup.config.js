@@ -1,14 +1,47 @@
-import babel from "rollup-plugin-babel";
+import resolve from 'rollup-plugin-node-resolve'
+import commonjs from 'rollup-plugin-commonjs'
+import babel from 'rollup-plugin-babel'
+import replace from 'rollup-plugin-replace'
+import { uglify } from 'rollup-plugin-uglify'
+
+const packages = require('./package.json')
+
+const ENV = process.env.NODE_ENV
+
+const paths = {
+  input: {
+    root: 'src/index.js'
+  },
+  output: {
+    root: 'lib/'
+  }
+}
+
+const fileNames = {
+  development: `${packages.name}.js`,
+  production: `${packages.name}.min.js`
+}
+
+const fileName = fileNames[ENV]
+
 export default {
-    input: "src/utils/index.js",
-    output: {
-        file: "libUtils/utils.min.js",
-        format: "umd",
-        name: 'bundle-name'
-    },
-    plugins: [
-        babel({
-            exclude: 'node_modules/**',
-        }),
-    ]
-};
+  input: `${paths.input.root}`,
+  output: {
+    file: `${paths.output.root}${fileName}`,
+    format: 'umd',
+    name: 'bundle-name'
+  },
+  plugins: [
+    resolve(),
+    commonjs(),
+    babel({
+      exclude: 'node_modules/**',
+      runtimeHelpers: true
+    }),
+    replace({
+      exclude: 'node_modules/**',
+      ENV: JSON.stringify(process.env.NODE_ENV)
+    }),
+    (ENV === 'production' && uglify())
+  ]
+}
