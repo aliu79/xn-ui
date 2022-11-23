@@ -26,7 +26,7 @@
         :index="$index"
       ></expandDom>
       <template v-else>
-        {{ row[$attrs.prop] }}
+        {{ row[$attrs.prop] || '-' }}
       </template>
       <!-- 更多操作 -->
       <template v-if="$attrs.more && $attrs.more.options.length">
