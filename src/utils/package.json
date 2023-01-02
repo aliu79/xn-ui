@@ -1,6 +1,6 @@
 {
-  "name": "xn-tools",
-  "version": "0.1.0",
+  "name": "xianniu-utils",
+  "version": "0.1.1",
   "description": "一些工具",
   "main": "index.js",
   "author": "liuzengwei",
