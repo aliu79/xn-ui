@@ -4,5 +4,11 @@
   "description": "一些工具",
   "main": "index.js",
   "author": "liuzengwei",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "dayjs": "^1.10.7",
+    "decimal.js": "^10.4.2",
+    "good-storage": "^1.1.1",
+    "lodash": "^4.17.21"
+  }
 }
