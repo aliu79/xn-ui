@@ -1,6 +1,6 @@
 {
-  "name": "xn-ui-style",
-  "version": "1.0.0",
+  "name": "xianniu-style",
+  "version": "0.1.0",
   "description": "",
   "main": "lib/index.css",
   "style": "lib/index.css",

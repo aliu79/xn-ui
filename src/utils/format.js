@@ -7,7 +7,18 @@
  * @param {String} symbol 货币符号
  * @returns
  */
-const priceToText = (number, decimals = 2, dec_point = '.', thousands_sep = ',', symbol = '￥') => {
+const priceToText = (number,conf) => {
+
+  const obj = {
+    decimals: 2,
+    dec_point: '.',
+    thousands_sep: ',',
+    symbol: '￥'
+  }
+
+  Object.assign(obj, conf)
+  console.log('obj: ', obj);
+  let {  decimals, dec_point, thousands_sep, symbol } = obj
   number = (number + '').replace(/[^0-9+-Ee.]/g, '')
   var n = !isFinite(+number) ? 0 : +number
   var prec = !isFinite(+decimals) ? 0 : Math.abs(decimals)

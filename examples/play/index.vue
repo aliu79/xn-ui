@@ -5,7 +5,7 @@
     <el-button type="primary" size="default" @click="asd">333</el-button>
     
     <xn-search ref="search" :form-data="formSearch" @on-search="onSearch"></xn-search>
-
+  {{value}}
   </div>
 </template>
 
@@ -66,7 +66,12 @@ export default {
       type: 1
     };
   },
+  computed:{
+      value(){
+        return this.$format.toText(98,{symbol:''})
+      }
 
+  },
   methods: {
     change(val){
       this.type = val
