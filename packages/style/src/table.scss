@@ -47,7 +47,7 @@
         .el-table__fixed,
         .el-table__fixed-right {
             height: calc(100% - 7px) !important;
-            box-shadow: -7px 0px 7px -7px rgb(0 0 0 / 12%);
+            box-shadow: -7px 0px 7px -7px rgba(0 ,0 ,0 , .12);
         }
     }
 }

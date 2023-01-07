@@ -68,7 +68,7 @@ export default {
   },
   computed:{
       value(){
-        return this.$format.toText(98,{symbol:''})
+        return this.$format.toText(30)
       }
 
   },
