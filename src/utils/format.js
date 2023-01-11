@@ -17,7 +17,6 @@ const priceToText = (number,conf) => {
   }
 
   Object.assign(obj, conf)
-  console.log('obj: ', obj);
   let {  decimals, dec_point, thousands_sep, symbol } = obj
   number = (number + '').replace(/[^0-9+-Ee.]/g, '')
   var n = !isFinite(+number) ? 0 : +number
