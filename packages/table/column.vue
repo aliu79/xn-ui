@@ -112,7 +112,7 @@ export default {
     isShowColumn() {
       return (row) => {
         if (row.show != undefined) {
-          return typeof row.show === "function" ? row.show() : row.show;
+          return typeof row.show === "function" ? row.show(row) : row.show;
         }
         return true;
       };

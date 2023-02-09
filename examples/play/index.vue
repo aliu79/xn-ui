@@ -1,11 +1,25 @@
 <template>
   <div>
-    <el-button type="primary" size="default" @click="change(1)">111</el-button>
-    <el-button type="primary" size="default" @click="change(2)">222</el-button>
-    <el-button type="primary" size="default" @click="asd">333</el-button>
-    
-    <xn-search ref="search" :form-data="formSearch" @on-search="onSearch"></xn-search>
-  {{value}}
+    <xn-dialog :before-close="() => (show = false)" :show.sync="show">
+      <xn-table
+        ref="table"
+        :data="list"
+        :index="false"
+        :columns="header"
+        border
+        selection
+        :auto-scroll="false"
+        id-key="rowIndex"
+        @on-single="onradio"
+        :page="pageConfig"
+        @selection-change="onSelection"
+        @handle-buttons="handleButtons"
+      >
+      </xn-table>
+    </xn-dialog>
+    <el-button type="primary" size="default" @click="open(1)">open</el-button>
+    <el-button type="primary" size="default" @click="open(2)">open</el-button>
+
   </div>
 </template>
 
@@ -13,76 +27,105 @@
 export default {
   data() {
     return {
-      form:[],
-      formSearch: [
-        {
-          label: "报价单状态",
-          type: "select",
-          prop: "salesCode",
-          data:[{asd:'asdas',a:1},{asd:'sfsddfdsf',a:2}],
-          options:{
-            labelKey:'asd',
-            valueKey:'a',
-            multiple:true
-          }
-        },
-        {
-          label: "报价单状态111",
-          type: "select",
-          prop: "field1",
-          options:{
-            labelKey:'asd',
-            valueKey:'a',
-          }
-        },
-        {
-          label: "报价单状态",
-          type: "input",
-          prop: "field2",
-          
-        },
-        {
-          label: "订单号",
-          type: "city",
-          prop: "city",
-          placeholder: "请输入订单号",
-        },
-        {
-          label: "下单日期",
-          type: "daterange",
-          options: { start: "orderTimeLeft", end: "orderTimeRight" },
-        },
+      show: false,
+      type:1,
+      listHeader2:[
+        { prop: "id", label: "ID",show:(row)=>{
+          console.log(row);
+          return false
+        } },
       ],
-      formSearch1: [
-        
-        {
-          label: "报价单状态",
-          type: "select",
-          prop: "field1333",
-        },
- 
+      listHeader: [
+        { prop: "id", label: "ID" },
+        { prop: "name", label: "姓名" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "date", label: "日期", sortable: true },
+        // {
+        //   label: "图片",
+        //   render: (h) => {
+        //     return h("el-radio", {
+        //       props: {
+        //         label: "空军航空",
+        //       },
+        //     });
+        //   },
+        // },
+        // {
+        //   label: "操作",
+        //   fixed: "right",
+        //   more: {
+        //     options: [
+        //       {
+        //         label: "按钮",
+        //         icon: "el-icon-info",
+        //         method: "info",
+        //       },
+        //       {
+        //         label: "删除",
+        //         method: "remove",
+        //         options: {},
+        //       },
+        //     ],
+        //   },
+        // },
       ],
-      demoList:[{asd:'asdas',a:1},{asd:'sfsddfdsf',a:2}],
-      type: 1
+      list: [
+        { id: 122, uid: 1, date: "2011-01-01", name: "lzw", age: 18 },
+        {
+          id: 122,
+          uid: 1,
+          date: "2011-01-01",
+          name: "lzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzw",
+          age: 18,
+        },
+        // { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
+      ],
+      pageConfig: {
+        total: 100,
+        pageSize: 15,
+        pageNum: 1,
+      },
+      tools: [{ label: "导出", prop: "export", icon: "el-icon-files" }],
+      // pageConfig: {},
     };
   },
   computed:{
-      value(){
-        return this.$format.toText(30)
-      }
-
+    header(){
+      return this.type === 1 ? this.listHeader2 : this.listHeader
+    }
+  },
+  created() {
+    const res = this.$utils.arrMerge(this.list,'id')
+    console.log('res: ', res);
+  },
+  watch: {
+    show(n) {
+      !n && this.$refs.table.clearSelection();
+    },
   },
   methods: {
-    change(val){
+    open(val){
       this.type = val
-      this.form = val === 1 ? this.formSearch : this.formSearch1
+      this.show = true
     },
-    onSearch(val) {
+    handleSort(e) {
+      console.log(e);
+    },
+    handleRefresh() {
+      console.log("re");
+    },
+    handleButtons(args) {
+      console.log(args);
+      this.$refs.table.clearSelection();
+    },
+    fnGetList(v) {
+      console.log(v);
+    },
+    onradio(row, a) {
+      console.log("val: ", row, a);
+    },
+    onSelection(val) {
       console.log(val);
-    },
-    asd() {
-      console.log("rrrrrr");
-      this.$refs.search.setData('报价单状态111',this.demoList)
     },
   },
 };
