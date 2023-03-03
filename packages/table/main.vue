@@ -8,7 +8,7 @@
             <el-button
               type="text"
               v-show="selectedData.length"
-              class="ml-5"
+              class="ml-5 pt-0 pb-0"
               size="mini"
               @click="clearSelection"
               >取消</el-button

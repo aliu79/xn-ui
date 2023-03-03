@@ -1,6 +1,7 @@
 <template>
   <div>
     <xn-dialog :before-close="() => (show = false)" :show.sync="show">
+    </xn-dialog>
       <xn-table
         ref="table"
         :data="list"
@@ -16,7 +17,6 @@
         @handle-buttons="handleButtons"
       >
       </xn-table>
-    </xn-dialog>
     <el-button type="primary" size="default" @click="open(1)">open</el-button>
     <el-button type="primary" size="default" @click="open(2)">open</el-button>
 
@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       show: false,
-      type:1,
+      type:2,
       listHeader2:[
         { prop: "id", label: "ID",show:(row)=>{
           console.log(row);
@@ -37,7 +37,7 @@ export default {
       ],
       listHeader: [
         { prop: "id", label: "ID" },
-        { prop: "name", label: "姓名" },
+        {  label: "姓名",sortable:true,render:(h,{row})=>h('span',row.name) },
         { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
         { prop: "date", label: "日期", sortable: true },
         // {
@@ -70,12 +70,12 @@ export default {
         // },
       ],
       list: [
-        { id: 122, uid: 1, date: "2011-01-01", name: "lzw", age: 18 },
+        { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
         {
-          id: 122,
+          id: 123,
           uid: 1,
           date: "2011-01-01",
-          name: "lzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzwlzw",
+          name: "地方",
           age: 18,
         },
         // { id: 2, date: "2011-01-03", name: "lzw", age: 22 },

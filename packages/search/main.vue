@@ -139,6 +139,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    defaultColl:{
+      type: Number,
+      default: 3,
+    }
   },
   computed: {
     col() {
@@ -220,7 +224,7 @@ export default {
       this.form.value = [];
       for (let i = 0, formData = this.formData; i < formData.length; i++) {
         const item = formData[i];
-        item.isShow = i > 3 && this.showColl ? false : true;
+        item.isShow = i > this.defaultColl && this.showColl ? false : true;
         this.form.value.push({
           ...item,
           key: item.prop,
