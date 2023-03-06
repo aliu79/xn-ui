@@ -1,25 +1,15 @@
 <template>
   <div>
-    <xn-dialog :before-close="() => (show = false)" :show.sync="show">
-    </xn-dialog>
-      <xn-table
-        ref="table"
-        :data="list"
-        :index="false"
-        :columns="header"
-        border
-        selection
-        :auto-scroll="false"
-        id-key="rowIndex"
-        @on-single="onradio"
-        :page="pageConfig"
-        @selection-change="onSelection"
-        @handle-buttons="handleButtons"
-      >
-      </xn-table>
-    <el-button type="primary" size="default" @click="open(1)">open</el-button>
-    <el-button type="primary" size="default" @click="open(2)">open</el-button>
+    <el-button type="primary" size="default" @click="change(1)">111</el-button>
+    <el-button type="primary" size="default" @click="change(2)">222</el-button>
+    <el-button type="primary" size="default" @click="asd">333</el-button>
 
+    <xn-search
+      ref="search"
+      :form-data="formSearch"
+      @on-search="onSearch"
+    ></xn-search>
+    {{ value }}
   </div>
 </template>
 
@@ -27,105 +17,78 @@
 export default {
   data() {
     return {
-      show: false,
-      type:2,
-      listHeader2:[
-        { prop: "id", label: "ID",show:(row)=>{
-          console.log(row);
-          return false
-        } },
-      ],
-      listHeader: [
-        { prop: "id", label: "ID" },
-        {  label: "姓名",sortable:true,render:(h,{row})=>h('span',row.name) },
-        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
-        { prop: "date", label: "日期", sortable: true },
-        // {
-        //   label: "图片",
-        //   render: (h) => {
-        //     return h("el-radio", {
-        //       props: {
-        //         label: "空军航空",
-        //       },
-        //     });
-        //   },
-        // },
-        // {
-        //   label: "操作",
-        //   fixed: "right",
-        //   more: {
-        //     options: [
-        //       {
-        //         label: "按钮",
-        //         icon: "el-icon-info",
-        //         method: "info",
-        //       },
-        //       {
-        //         label: "删除",
-        //         method: "remove",
-        //         options: {},
-        //       },
-        //     ],
-        //   },
-        // },
-      ],
-      list: [
-        { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+      form: [],
+      formSearch: [
         {
-          id: 123,
-          uid: 1,
-          date: "2011-01-01",
-          name: "地方",
-          age: 18,
+          label: "报价单状态",
+          type: "select",
+          prop: "salesCode",
+          data: [
+            { asd: "asdas", a: 1 },
+            { asd: "sfsddfdsf", a: 2 },
+          ],
+          options: {
+            labelKey: "asd",
+            valueKey: "a",
+            multiple: true,
+          },
         },
-        // { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
+        {
+          label: "报价单状态111",
+          type: "select",
+          prop: "field1",
+          options: {
+            labelKey: "asd",
+            valueKey: "a",
+          },
+        },
+        {
+          label: "报价单状态",
+          type: "input",
+          prop: "field2",
+        },
+        {
+          label: "订单号",
+          type: "city",
+          prop: "city",
+          placeholder: "请输入订单号",
+        },
+        {
+          label: "下单日期",
+          type: "daterange",
+          options: { start: "orderTimeLeft", end: "orderTimeRight" },
+        },
       ],
-      pageConfig: {
-        total: 100,
-        pageSize: 15,
-        pageNum: 1,
-      },
-      tools: [{ label: "导出", prop: "export", icon: "el-icon-files" }],
-      // pageConfig: {},
+      formSearch1: [
+        {
+          label: "报价单状态",
+          type: "select",
+          prop: "field1333",
+        },
+      ],
+      demoList: [
+        { asd: "asdas", a: 1 },
+        { asd: "sfsddfdsf", a: 2 },
+      ],
+      type: 1,
     };
   },
-  computed:{
-    header(){
-      return this.type === 1 ? this.listHeader2 : this.listHeader
-    }
-  },
-  created() {
-    const res = this.$utils.arrMerge(this.list,'id')
-    console.log('res: ', res);
-  },
-  watch: {
-    show(n) {
-      !n && this.$refs.table.clearSelection();
+  computed: {
+    value() {
+      return this.$format.toText(30);
     },
   },
   methods: {
-    open(val){
-      this.type = val
-      this.show = true
+    change(val) {
+      this.type = val;
+      this.form = val === 1 ? this.formSearch : this.formSearch1;
     },
-    handleSort(e) {
-      console.log(e);
-    },
-    handleRefresh() {
-      console.log("re");
-    },
-    handleButtons(args) {
-      console.log(args);
-      this.$refs.table.clearSelection();
-    },
-    fnGetList(v) {
-      console.log(v);
-    },
-    onradio(row, a) {
-      console.log("val: ", row, a);
-    },
-    onSelection(val) {
+    onSearch(val) {
       console.log(val);
+    },
+    asd() {
+      console.log("rrrrrr");
+      this.$refs.search.setData("报价单状态111", this.demoList);
     },
   },
 };

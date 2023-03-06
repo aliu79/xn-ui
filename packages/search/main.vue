@@ -107,7 +107,7 @@
               type="text"
               @click="isColl = !isColl"
             >
-              <template v-if="showColl">
+              <template v-if="_showColl">
                 <span>{{ isColl ? "收起" : "高级查询" }}</span
                 ><i class="ml-5" :class="toggle"></i>
               </template>
@@ -139,12 +139,23 @@ export default {
       type: Boolean,
       default: true,
     },
-    defaultColl:{
+    defaultColl: {
       type: Number,
       default: 3,
-    }
+    },
   },
   computed: {
+    _showColl() {
+      const {
+        form: { value },
+        defaultColl,
+        showColl,
+      } = this;
+      if (value.length <= defaultColl) {
+        return false;
+      }
+      return showColl;
+    },
     col() {
       const { span } = this;
       return {
@@ -224,7 +235,7 @@ export default {
       this.form.value = [];
       for (let i = 0, formData = this.formData; i < formData.length; i++) {
         const item = formData[i];
-        item.isShow = i > this.defaultColl && this.showColl ? false : true;
+        item.isShow = i >= this.defaultColl && this.showColl ? false : true;
         this.form.value.push({
           ...item,
           key: item.prop,

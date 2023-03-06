@@ -44,6 +44,7 @@
 | label-width | label宽度                           | string  | -      | 80px   |
 | span        | 栅格的数量，优先级大于xs/sm/md/lg等 | number  | 0-24      | null   |
 | show-coll   | 是否显示折叠按钮                    | boolean | true/false      | true   |
+| default-coll   | 默认下显示几个搜索字段                    | number | -      | 3   |
 
 ### 事件
 | 参数       | 说明 | 类型                                | 可选值 | 默认值 |
