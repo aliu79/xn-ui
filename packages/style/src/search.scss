@@ -9,6 +9,11 @@
             .el-form-item__label {
                 flex: none;
             }
+            &.xn-search-searchbtn{
+                .el-form-item__content{
+                    white-space: nowrap;
+                }
+            }
         }
     }
 }

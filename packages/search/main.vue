@@ -97,7 +97,8 @@
           </el-col>
         </template>
         <el-col v-bind="{ ...col }">
-          <el-form-item :style="{ 'padding-left': `${labelWidth}` }">
+          <!-- <el-form-item label-width="0"> -->
+          <el-form-item class="xn-search-searchbtn" :style="{ 'padding-left': `${labelWidth}` }">
             <el-button type="primary" icon="el-icon-search" @click="onSearch"
               >查询</el-button
             >
