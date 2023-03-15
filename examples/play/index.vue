@@ -6,9 +6,17 @@
 
     <xn-search
       ref="search"
+      last-label-width="0"
       :form-data="formSearch"
       @on-search="onSearch"
-    ></xn-search>
+    >
+      <template #prepend>
+        <el-button type="primary">选择</el-button>
+      </template>
+      <template #append>
+        <el-button type="primary">选择</el-button>
+      </template>
+    </xn-search>
     {{ value }}
   </div>
 </template>

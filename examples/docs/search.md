@@ -4,7 +4,10 @@
 :::demo 
 ```html
 <template>
-    <xn-search ref="search" label-width="100px" :form-data="formData" @on-search="handleSearch" @on-reset="handleReset" />
+    <xn-search ref="search" label-width="100px" :form-data="formData" @on-search="handleSearch" @on-reset="handleReset">
+        <template #prepend>前边的</template>    
+        <template #append>后边的</template>    
+    </xn-search>
     <el-divider content-position="left"><span class="text-primary">分割线</span></el-divider>
     <xn-search ref="search" :span="12" :show-coll="false" :form-data="formData" @on-search="onSearch"></xn-search>
 </template>
@@ -39,12 +42,13 @@
 
 ### 属性
 
-| 参数        | 说明                                | 类型    | 可选值 | 默认值 |
-| ----------- | ----------------------------------- | ------- | ------ | ------ |
-| label-width | label宽度                           | string  | -      | 80px   |
-| span        | 栅格的数量，优先级大于xs/sm/md/lg等 | number  | 0-24      | null   |
-| show-coll   | 是否显示折叠按钮                    | boolean | true/false      | true   |
-| default-coll   | 默认下显示几个搜索字段                    | number | -      | 3   |
+| 参数             | 说明                                | 类型    | 可选值     | 默认值      |
+| ---------------- | ----------------------------------- | ------- | ---------- | ----------- |
+| label-width      | label宽度                           | string  | -          | 80px        |
+| span             | 栅格的数量，优先级大于xs/sm/md/lg等 | number  | 0-24       | null        |
+| show-coll        | 是否显示折叠按钮                    | boolean | true/false | true        |
+| default-coll     | 默认下显示几个搜索字段              | number  | -          | 3           |
+| last-label-width | 最后搜索按钮的label-width           | string  | -          | label-width |
 
 ### 事件
 | 参数       | 说明 | 类型                                | 可选值 | 默认值 |
@@ -71,3 +75,12 @@
 | valueKey | type=select时可选，value的key               | -    | -      | -      |
 | start    | type=daterange时可选，时间范围开始字段的key | -    | -      | -      |
 | end      | type=daterange时可选，时间范围结束字段的key | -    | -      | -      |
+
+
+### slots 插槽
+搜索按钮区域额外的插槽
+
+| 参数    | 说明           | 类型 | 可选值 | 默认值 |
+| ------- | -------------- | ---- | ------ | ------ |
+| prepend | 搜索按钮前面的 | -    | -      | -      |
+| append  | 重置按钮后面的 | -    | -      | -      |

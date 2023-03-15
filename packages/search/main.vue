@@ -97,19 +97,23 @@
           </el-col>
         </template>
         <el-col v-bind="{ ...col }">
-          <!-- <el-form-item label-width="0"> -->
-          <el-form-item class="xn-search-searchbtn" :style="{ 'padding-left': `${labelWidth}` }">
+          <el-form-item
+            class="xn-search-searchbtn"
+            :style="{ 'padding-left': `${lastLabelWidth || labelWidth}` }"
+          >
+            <slot name="prepend"></slot>
             <el-button type="primary" icon="el-icon-search" @click="onSearch"
               >查询</el-button
             >
             <el-button @click="onReset">重置</el-button>
+            <slot name="append"></slot>
             <el-button
               v-if="formData.length && formData.length > 4"
               type="text"
               @click="isColl = !isColl"
             >
               <template v-if="_showColl">
-                <span>{{ isColl ? "收起" : "高级查询" }}</span
+                <span>{{ isColl ? "收起" : "展开" }}</span
                 ><i class="ml-5" :class="toggle"></i>
               </template>
             </el-button>
@@ -143,6 +147,10 @@ export default {
     defaultColl: {
       type: Number,
       default: 3,
+    },
+    lastLabelWidth: {
+      type: String,
+      default: null,
     },
   },
   computed: {
