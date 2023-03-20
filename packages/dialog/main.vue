@@ -13,7 +13,7 @@
     <slot />
     <span slot="footer">
       <slot name="footer">
-        <el-button @click="onClose">取消</el-button>
+        <el-button @click="onClose" v-if="$attrs['show-cancel'] !== false">取消</el-button>
         <el-button
           v-if="$attrs['show-confirm'] !== false"
           type="primary"
