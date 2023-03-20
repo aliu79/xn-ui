@@ -6,7 +6,9 @@
       :default-color="item"
       effect="dark"
       icon="el-icon-edit"
-      >Tag</xn-tag
+      >
+      
+      Tag</xn-tag
     >
   </div>
 </template>
