@@ -13,6 +13,7 @@ import XnImport from '../packages/import/index'
 import XnExport from '../packages/export/index'
 import XnFooter from '../packages/footer/index'
 import XnEmpty from '../packages/empty/index'
+import XnTag from '../packages/tag/index'
 
 import Utils from 'xn-ui/src/utils/index'
 const doc = 'http://lzwr.gitee.io/xn-ui/#/'
@@ -30,7 +31,8 @@ const components = [
     XnImport,
     XnExport,
     XnFooter,
-    XnEmpty
+    XnEmpty,
+    XnTag
 ]
 const version = require('../package.json').version
 const install = function (Vue) {
