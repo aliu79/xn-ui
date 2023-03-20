@@ -3,6 +3,7 @@
     ref="upload"
     :class="{
       'is-disabled': $attrs.disabled != undefined,
+      'is-hidden': preview
     }"
     class="xn-upload xn-upload-main"
     action="###"

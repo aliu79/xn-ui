@@ -1,6 +1,12 @@
 .xn-upload {
+    &.is-hidden {
+        .el-upload {
+            &.el-upload--picture-card {
+                display: none;
+            }
+        }
+    }
     &-list__item {
-        
         &-file {
             height: 100%;
             display: flex;
@@ -53,10 +59,10 @@
         }
     }
     // &-main {
-        
+
     // }
-    .el-upload-list{
-        &.el-upload-list--picture-card{
+    .el-upload-list {
+        &.el-upload-list--picture-card {
             .el-upload-list__item {
                 width: 80px;
                 height: 80px;
@@ -82,7 +88,7 @@
             .upload-limit {
                 width: inherit;
                 height: inherit;
-                i{
+                i {
                     font-size: 20px;
                 }
             }
