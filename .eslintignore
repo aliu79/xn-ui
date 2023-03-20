@@ -6,3 +6,4 @@ coverage
 *.scss
 *.woff
 *.ttf
+**/packageName
