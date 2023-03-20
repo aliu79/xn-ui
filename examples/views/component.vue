@@ -60,6 +60,14 @@
           >
             <span class="pl-5">提示</span>
           </router-link>
+          <router-link
+            to="/component/tag"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">Tag</span>
+          </router-link>
         </ul>
       </ol>
       <ol>

@@ -23,6 +23,7 @@ const routes = [
       { path: '/component/city', name: 'City', component: () => import('../docs/city.md') },
       { path: '/component/footer', name: 'Footer', component: () => import('../docs/footer.md') },
       { path: '/component/tip', name: 'Tip', component: () => import('../docs/tip.md') },
+      { path: '/component/tag', name: 'Tag', component: () => import('../docs/tag.md') },
     ]
   },
   {
