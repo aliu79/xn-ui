@@ -133,7 +133,7 @@ export default {
       default: "",
     },
     accept: {
-      type: Array,
+      type: [Array,String],
       default: () => ["jpg", "jpeg", "png", "pdf"],
     },
     maxSize: {
@@ -204,7 +204,7 @@ export default {
       // 判断上传格式
       fileExt = `${fileExt}`.toLowerCase();
 
-      if (!this.accept.includes(fileExt)) {
+      if (!this.accept.includes(fileExt) && this.accept !== '*') {
         this.$message.warning(`请上传指定格式【${this.accept}】`);
         return false;
       }

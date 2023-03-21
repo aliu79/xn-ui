@@ -2,8 +2,6 @@
   <xn-upload
     :fileList.sync="fileList"
     :limit="limit"
-    preview
-    disabled
     @on-success="onSuccess"
   ></xn-upload>
 </template>
