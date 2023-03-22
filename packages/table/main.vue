@@ -121,13 +121,12 @@
         type="index"
       ></el-table-column>
       <slot>
-          <template v-for="(item, idx) in columns">
-            <column
-              :key="idx"
-              v-if="item.checked === true"
-              v-bind="item"
-            ></column>
-          </template>
+          <column
+            v-for="(item, idx) in columns"
+            :key="idx"
+            v-show="item.checked === true"
+            v-bind="item"
+          ></column>
       </slot>
       <template #append v-if="$slots.append">
           <slot name="append"></slot>
