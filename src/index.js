@@ -14,6 +14,7 @@ import XnExport from '../packages/export/index'
 import XnFooter from '../packages/footer/index'
 import XnEmpty from '../packages/empty/index'
 import XnTag from '../packages/tag/index'
+import XnEllipsis from '../packages/ellipsis/index'
 
 import Utils from 'xn-ui/src/utils/index'
 const doc = 'http://lzwr.gitee.io/xn-ui/#/'
@@ -32,7 +33,8 @@ const components = [
     XnExport,
     XnFooter,
     XnEmpty,
-    XnTag
+    XnTag,
+    XnEllipsis
 ]
 const version = require('../package.json').version
 const install = function (Vue) {
@@ -75,5 +77,8 @@ export default {
     XnTree,
     XnImport,
     XnExport,
-    XnFooter
+    XnFooter,
+    XnEmpty,
+    XnTag,
+    XnEllipsis
 }
