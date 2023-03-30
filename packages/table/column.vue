@@ -2,7 +2,6 @@
   <el-table-column
     v-bind="$attrs"
     v-on="$listeners"
-    :showOverflowTooltip="$attrs.showOverflowTooltip !== false"
     v-if="isShowColumn($attrs)"
   >
     <template v-if="$attrs.labelMsg">
