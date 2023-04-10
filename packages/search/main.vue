@@ -108,7 +108,7 @@
             <el-button @click="onReset">重置</el-button>
             <slot name="append"></slot>
             <el-button
-              v-if="formData.length && formData.length > 4"
+              v-if="formData.length && formData.length > defaultColl"
               type="text"
               @click="isColl = !isColl"
             >
