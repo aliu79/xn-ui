@@ -55,59 +55,46 @@ module.exports = {
                 // 修改它的选项...
                 return options
             })
-        config.optimization.delete('splitChunks')
+        // config.optimization.delete('splitChunks')
         config.plugins.delete('copy')
         config.plugins.delete('html')
         config.plugins.delete('preload')
         config.plugins.delete('prefetch')
         config.plugins.delete('hmr')
         config.entryPoints.delete('app')
-    //     config
-    //   .when(process.env.NODE_ENV !== 'development',
-    //     config => {
-    //     //   config
-    //     //     .plugin('ScriptExtHtmlWebpackPlugin')
-    //     //     .after('html')
-    //     //     .use('script-ext-html-webpack-plugin', [{
-    //     //       // `runtime` must same as runtimeChunk name. default is `runtime`
-    //     //       inline: /runtime\..*\.js$/
-    //     //     }])
-    //     //     .end()
-    //       config
-    //         .optimization.splitChunks({
-    //           chunks: 'initial',
-    //           cacheGroups: {
-    //             // libs: {
-    //             //   test: /[\\/]node_modules[\\/]/,
-    //             //   chunks: 'initial',
-    //             //   maxSize: 100000,
-    //             //   minSize: 30000,
-    //             //   priority: -10,
-    //             //   maxInitialRequests: 3,
-    //             //   reuseExistingChunk: true
-    //             //   // only package third parties that are initially dependent
-    //             // },
-    //             // elementUI: {
-    //             //   name: 'chunk-elementUI', // split elementUI into a single package
-    //             //   priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-    //             //   test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
-    //             // },
-    //             // commons: {
-    //             //   name: 'chunk-commons',
-    //             //   test: resolve('src/components'), // can customize your rules
-    //             //   minChunks: 3, //  minimum common number
-    //             //   priority: 5,
-    //             //   reuseExistingChunk: true
-    //             // }
-    //           }
-    //         })
-    //       // https:// webpack.js.org/configuration/optimization/#optimizationruntimechunk
-    //     //   config.optimization.runtimeChunk('single')
-    //     }
-    //   )
+        config
+      .when(process.env.NODE_ENV !== 'development',
+        config => {
+        //   config
+        //     .plugin('ScriptExtHtmlWebpackPlugin')
+        //     .after('html')
+        //     .use('script-ext-html-webpack-plugin', [{
+        //       // `runtime` must same as runtimeChunk name. default is `runtime`
+        //       inline: /runtime\..*\.js$/
+        //     }])
+        //     .end()
+        config.optimization.minimize(true);
+          config
+            .optimization.splitChunks({
+              chunks: 'async',
+            })
+          // https:// webpack.js.org/configuration/optimization/#optimizationruntimechunk
+        //   config.optimization.runtimeChunk('single')
+        }
+      )
     // config.resolve.symlinks(true)
     },
     configureWebpack: config => {
+
+        if (process.env.NODE_ENV === 'production') {// 为生产环境修改配置...
+            config.mode = 'production';
+            config["performance"] = {//打包文件大小配置
+              "maxEntrypointSize": 10000000,
+              "maxAssetSize": 30000000
+            }
+            
+          }
+          
         config.plugins.push(
             new CopyWebpackPlugin([
                 {
