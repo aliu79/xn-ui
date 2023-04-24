@@ -297,15 +297,24 @@ export default {
         this.imageView = file.url;
       });
     },
-    async handleDownload({ url }) {
-      const elt = document.createElement("a");
-      elt.setAttribute("href", url);
-      elt.setAttribute("download", "下载文件");
-      elt.style.display = "none";
-      elt.target = "_blank";
-      document.body.appendChild(elt);
-      elt.click();
-      document.body.removeChild(elt);
+    async handleDownload(file) {
+      const {url,name} = file
+      const x= new XMLHttpRequest()
+      x.open('GET',url,true)
+      x.responseType = 'blob'
+      x.onload = function(){
+        const _url = window.URL.createObjectURL(x.response)
+        const elt = document.createElement("a");
+            elt.setAttribute("href", _url);
+            elt.setAttribute("download", name);
+            elt.style.display = "none";
+            elt.target = "_blank";
+            document.body.appendChild(elt);
+            elt.click();
+            document.body.removeChild(elt);
+      }
+      x.send()
+     
     },
     handleRemove(file, fileList) {
       fileList.forEach((item, idx) => {

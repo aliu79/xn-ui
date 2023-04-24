@@ -14,7 +14,6 @@ Vue.config.productionTip = false
 Vue.use(XN)
 Vue.component('demo-block', demoBlock);
 
-
 router.afterEach(() => {
   Vue.nextTick(() => {
     const blocks = document.querySelectorAll('pre code:not(.hljs)');
