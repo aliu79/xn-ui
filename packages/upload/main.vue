@@ -3,7 +3,7 @@
     ref="upload"
     :class="{
       'is-disabled': $attrs.disabled != undefined,
-      'is-hidden': preview
+      'is-hidden': preview,
     }"
     class="xn-upload xn-upload-main"
     action="###"
@@ -26,7 +26,9 @@
     </template>
     <template v-else>
       <slot>
-        <el-button icon="el-icon-upload" :disabled="$attrs.disabled">上传</el-button>
+        <el-button icon="el-icon-upload" :disabled="$attrs.disabled"
+          >上传</el-button
+        >
       </slot>
     </template>
     <div
@@ -36,26 +38,26 @@
       v-if="listType === 'picture-card'"
     >
       <uploadPop :file="file" @on-download="handleDownload(file)"></uploadPop>
-        <template v-if="$utils.isImg(file)">
-          <el-image
-            class="el-upload-list__item-thumbnail"
-            :src="file.url"
-            fit="cover"
-            :lazy="true"
-          />
-        </template>
-        <template v-else>
-          <div class="xn-upload-list__item-file">
-            <div class="annex">
-              <i class="el-icon el-icon-folder" />
-              <span class="label">附件</span>
-            </div>
-            <div class="file-name">{{ file.name }}</div>
+      <template v-if="$utils.isImg(file)">
+        <el-image
+          class="el-upload-list__item-thumbnail"
+          :src="file.url"
+          fit="cover"
+          :lazy="true"
+        />
+      </template>
+      <template v-else>
+        <div class="xn-upload-list__item-file">
+          <div class="annex">
+            <i class="el-icon el-icon-folder" />
+            <span class="label">附件</span>
           </div>
-        </template>
+          <div class="file-name">{{ file.name }}</div>
+        </div>
+      </template>
       <div v-if="file.status === 'uploading'" class="process">
         <el-progress
-          :status="file.percentage === 100 ? 'success' : null"
+          :status="file.percentage === 100 && !isUploading ? 'success' : null"
           type="circle"
           :percentage="process(file.percentage)"
           :stroke-width="6"
@@ -133,12 +135,12 @@ export default {
       default: "",
     },
     accept: {
-      type: [Array,String],
+      type: [Array, String],
       default: () => ["jpg", "jpeg", "png", "pdf"],
     },
     maxSize: {
       type: Number,
-      default: 1024 * 5 * 1024, // 最大限制 5M
+      default: 1024 * 50 * 1024, // 最大限制 50M
     },
     compress: {
       type: Number,
@@ -170,6 +172,7 @@ export default {
       viewList: [],
       files: [],
       successFiles: [],
+      isUploading:false
     };
   },
   computed: {
@@ -192,62 +195,40 @@ export default {
       immediate: true,
     },
   },
-  created() {
-  },
+  created() {},
   beforeDestroy() {
     this.$emit("update:fileList", []);
   },
   methods: {
     onBeforeUpload(file) {
       let fileExt = file.name.substring(file.name.lastIndexOf(".") + 1);
-
       // 判断上传格式
       fileExt = `${fileExt}`.toLowerCase();
 
-      if (!this.accept.includes(fileExt) && this.accept !== '*') {
+      if (!this.accept.includes(fileExt) && this.accept !== "*") {
         this.$message.warning(`请上传指定格式【${this.accept}】`);
         return false;
       }
+      return this.onExceedSize(file.size);
     },
-    // handleCompress(file) {
-    //   const { compress } = this;
-    //   const _maxSize = parseFloat(this.maxSize);
-    //   let size = 0;
-    //   if (compress) {
-    //     size = compress;
-    //   } else {
-    //     size = file.size > _maxSize ? _maxSize / 1024 : file.size;
-    //   }
-    //   // return new Promise((resolve) => {
-    //   //   imageConversion["compressAccurately"](file, size).then((result) => {
-    //   //     resolve(result);
-    //   //   });
-    //   // });
-    // },
-    onExceedSize(size, maxSize) {
-      if (size > maxSize) {
+    onExceedSize(size) {
+      if (size > this.maxSize) {
         this.$message.warning(
-          `最大不能超过${this.$utils.bytesToSize(maxSize)}`
+          `最大不能超过${this.$format.bytesToSize(this.maxSize)}`
         );
-        return false;
+        return Promise.reject();
       }
-      return true;
+      return Promise.resolve();
     },
     onChange(file, fileList) {
       this.files = fileList;
     },
     async onHttpUpload(file) {
       const formData = new FormData();
-      // let result = null;
-      // if (this.$utils.isImg(file.file.name)) {
-      //   result = await this.handleCompress(file.file);
-      //   var newFile = new window.File([result], file.file.name, {
-      //     type: file.file.type,
-      //   });
-      // }
       const _file = file.file;
       formData.append("file", _file);
-      this.$emit('on-uploading')
+      this.$emit("on-uploading");
+      this.isUploading = true
       axios({
         method: "post",
         url: this.$XN.uploadUrl || "",
@@ -256,23 +237,25 @@ export default {
           "Content-Type": "application/x-www-form-urlencoded",
           xnToken: this.$storage.get("xnToken"),
         },
-        onUploadProgress(progress) {
-          const _progress = Math.round(
+        onUploadProgress: (progress) => {
+          let _progress = Math.round(
             (progress.loaded / progress.total) * 100
           );
+          _progress = _progress === 100 ? 99 : _progress
           file.onProgress({ percent: _progress });
         },
       })
         .then((res) => {
-          const { name, size, ext, imgFlag, url,fileId } = res.data.data;
-          this.successFiles.push({name,size,ext,imgFlag,url,fileId});
+          const { name, size, ext, imgFlag, url, fileId } = res.data.data;
+          this.successFiles.push({ name, size, ext, imgFlag, url, fileId });
           file.onSuccess();
           this.$emit("update:fileList", this.successFiles);
           this.$emit("on-success", this.successFiles);
-          this.$emit('on-uploaded')
+          this.$emit("on-uploaded");
+          this.isUploading = false
         })
-        .catch(() => {
-          // console.log(err);
+        .catch((err) => {
+          console.log(err);
           this.$emit("update:fileList", this.successFiles);
           file.onError();
         });
@@ -299,23 +282,22 @@ export default {
       });
     },
     async handleDownload(file) {
-      const {url,name} = file
-      const x= new XMLHttpRequest()
-      x.open('GET',url,true)
-      x.responseType = 'blob'
-      x.onload = function(){
-        const _url = window.URL.createObjectURL(x.response)
+      const { url, name } = file;
+      const x = new XMLHttpRequest();
+      x.open("GET", url, true);
+      x.responseType = "blob";
+      x.onload = function () {
+        const _url = window.URL.createObjectURL(x.response);
         const elt = document.createElement("a");
-            elt.setAttribute("href", _url);
-            elt.setAttribute("download", name);
-            elt.style.display = "none";
-            elt.target = "_blank";
-            document.body.appendChild(elt);
-            elt.click();
-            document.body.removeChild(elt);
-      }
-      x.send()
-     
+        elt.setAttribute("href", _url);
+        elt.setAttribute("download", name);
+        elt.style.display = "none";
+        elt.target = "_blank";
+        document.body.appendChild(elt);
+        elt.click();
+        document.body.removeChild(elt);
+      };
+      x.send();
     },
     handleRemove(file, fileList) {
       fileList.forEach((item, idx) => {

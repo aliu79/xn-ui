@@ -78,6 +78,7 @@
             height: 80px;
             line-height: 80px;
             font-size: 14px;
+            position: relative;
             .el-upload-list__item {
                 width: 80px;
                 height: 80px;
@@ -92,31 +93,31 @@
                     font-size: 20px;
                 }
             }
-            .process {
-                position: absolute;
-                left: 0;
-                top: 0;
-                background: rgba($color: #000000, $alpha: 0.4);
-                width: 100%;
-                height: 100%;
-
-                .el-progress {
-                    width: 40%;
-                    height: auto;
-                    .el-progress-circle {
-                        width: 99% !important;
-                        height: 99% !important;
-                    }
-                    .el-progress__text {
-                        color: #fff;
-                        font-size: 12px !important;
-                    }
-                }
-            }
+            
         }
     }
     &--slot {
         height: 100%;
+        .process {
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: rgba($color: #000000, $alpha: 0.4);
+            width: 100%;
+            height: 100%;
+            .el-progress {
+                width: 70%;
+                height: auto;
+                .el-progress-circle {
+                    width: 99% !important;
+                    height: 99% !important;
+                }
+                .el-progress__text {
+                    color: #fff !important;
+                    font-size: 12px !important;
+                }
+            }
+        }
         &__ext {
             position: absolute;
             bottom: 0;
