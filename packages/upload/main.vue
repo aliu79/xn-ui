@@ -101,7 +101,7 @@ import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 // import * as imageConversion from "image-conversion";
 import axios from "axios";
 import uploadPop from "./upload-pop.vue";
-const MAX_WARNING = 1024 * 20 * 1024
+const MAX_WARNING = 1024 * 10 * 1024;
 export default {
   name: "XnUpload",
   inheritAttrs: false,
@@ -141,7 +141,7 @@ export default {
     },
     maxSize: {
       type: Number,
-      default: 1024 * 50 * 1024, // 最大限制 50M
+      default: 1024 * 2000 * 1024, // 最大限制 50M
     },
     compress: {
       type: Number,
@@ -235,8 +235,8 @@ export default {
       const formData = new FormData();
       const _file = file.file;
       formData.append("file", _file);
-      this.$emit("on-uploading");
       this.isUploading = true;
+      this.$emit("on-uploaded", false);
       axios({
         method: "post",
         url: this.$XN.uploadUrl || "",
@@ -257,16 +257,16 @@ export default {
           file.onSuccess();
           this.$emit("update:fileList", this.successFiles);
           this.$emit("on-success", this.successFiles);
-          this.$emit("on-uploaded");
+          this.$emit("on-uploaded", true);
           this.isUploading = false;
           if (this.file.size > MAX_WARNING) {
-            this.$notify.closeAll()
+            this.$notify.closeAll();
             this.bigFileSucces();
           }
         })
         .catch((err) => {
           console.log(err);
-          this.$notify.closeAll()
+          this.$notify.closeAll();
           this.$emit("update:fileList", this.successFiles);
           file.onError();
         });

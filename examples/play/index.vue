@@ -4,6 +4,7 @@
     :limit="limit"
     :accept="['zip','jpg']"
     @on-success="onSuccess"
+    @on-uploaded="handleUoloaded"
   ></xn-upload>
 </template>
 
@@ -29,6 +30,10 @@ export default {
     },
     beforeUpload(val) {
       console.log("val", val);
+    },
+    handleUoloaded(val){
+      console.log('val: ', val);
+
     },
     onProgress() {},
     onPreview() {},
