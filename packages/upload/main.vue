@@ -247,7 +247,7 @@ export default {
       // }
       const _file = file.file;
       formData.append("file", _file);
-
+      this.$emit('on-uploading')
       axios({
         method: "post",
         url: this.$XN.uploadUrl || "",
@@ -269,6 +269,7 @@ export default {
           file.onSuccess();
           this.$emit("update:fileList", this.successFiles);
           this.$emit("on-success", this.successFiles);
+          this.$emit('on-uploaded')
         })
         .catch(() => {
           // console.log(err);
