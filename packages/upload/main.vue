@@ -101,6 +101,7 @@ import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 // import * as imageConversion from "image-conversion";
 import axios from "axios";
 import uploadPop from "./upload-pop.vue";
+const MAX_WARNING = 1024 * 20 * 1024
 export default {
   name: "XnUpload",
   inheritAttrs: false,
@@ -213,7 +214,7 @@ export default {
         return false;
       }
       this.file = file;
-      if (file.size > 1024 * 1 * 1024) {
+      if (file.size > MAX_WARNING) {
         this.bigFileWarning();
       }
       return this.onExceedSize(file.size);
@@ -258,7 +259,7 @@ export default {
           this.$emit("on-success", this.successFiles);
           this.$emit("on-uploaded");
           this.isUploading = false;
-          if (this.file.size > 1024 * 1 * 1024) {
+          if (this.file.size > MAX_WARNING) {
             this.$notify.closeAll()
             this.bigFileSucces();
           }
