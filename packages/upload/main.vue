@@ -140,7 +140,7 @@ export default {
     },
     maxSize: {
       type: Number,
-      default: 1024 * 2000 * 1024, // 最大限制 50M
+      default: 1024 * 200 * 1024, // 最大限制 50M
     },
     compress: {
       type: Number,
