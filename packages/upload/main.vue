@@ -128,7 +128,7 @@ export default {
 
     limit: {
       type: Number,
-      default: 1,
+      default: 9,
     },
     tip: {
       type: String,
@@ -172,7 +172,8 @@ export default {
       viewList: [],
       files: [],
       successFiles: [],
-      isUploading:false
+      isUploading: false,
+      file: {},
     };
   },
   computed: {
@@ -180,6 +181,9 @@ export default {
       return (num) => {
         return Math.floor(num);
       };
+    },
+    fileSize() {
+      return this.$format.bytesToSize(this.file.size);
     },
   },
   watch: {
@@ -204,10 +208,13 @@ export default {
       let fileExt = file.name.substring(file.name.lastIndexOf(".") + 1);
       // 判断上传格式
       fileExt = `${fileExt}`.toLowerCase();
-
       if (!this.accept.includes(fileExt) && this.accept !== "*") {
         this.$message.warning(`请上传指定格式【${this.accept}】`);
         return false;
+      }
+      this.file = file;
+      if (file.size > 1024 * 1 * 1024) {
+        this.bigFileWarning();
       }
       return this.onExceedSize(file.size);
     },
@@ -228,7 +235,7 @@ export default {
       const _file = file.file;
       formData.append("file", _file);
       this.$emit("on-uploading");
-      this.isUploading = true
+      this.isUploading = true;
       axios({
         method: "post",
         url: this.$XN.uploadUrl || "",
@@ -238,10 +245,8 @@ export default {
           xnToken: this.$storage.get("xnToken"),
         },
         onUploadProgress: (progress) => {
-          let _progress = Math.round(
-            (progress.loaded / progress.total) * 100
-          );
-          _progress = _progress === 100 ? 99 : _progress
+          let _progress = Math.round((progress.loaded / progress.total) * 100);
+          _progress = _progress === 100 ? 99 : _progress;
           file.onProgress({ percent: _progress });
         },
       })
@@ -252,10 +257,15 @@ export default {
           this.$emit("update:fileList", this.successFiles);
           this.$emit("on-success", this.successFiles);
           this.$emit("on-uploaded");
-          this.isUploading = false
+          this.isUploading = false;
+          if (this.file.size > 1024 * 1 * 1024) {
+            this.$notify.closeAll()
+            this.bigFileSucces();
+          }
         })
         .catch((err) => {
           console.log(err);
+          this.$notify.closeAll()
           this.$emit("update:fileList", this.successFiles);
           file.onError();
         });
@@ -316,6 +326,26 @@ export default {
     },
     closeViewer() {
       this.isShowImageView = false;
+    },
+    bigFileWarning() {
+      return this.$notify({
+        title: "提示",
+        duration: 0,
+        dangerouslyUseHTMLString: true,
+        message: `
+        <p class="text-primary">当前文件体积过大，请您耐心等待。</p>
+        <p>名称：${this.file.name}</p>
+        <p>体积：${this.fileSize}</p>
+        `,
+        type: "warning",
+      });
+    },
+    bigFileSucces() {
+      return this.$notify({
+        title: "提示",
+        message: "上传成功",
+        type: "success",
+      });
     },
   },
 };
