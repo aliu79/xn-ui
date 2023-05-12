@@ -98,7 +98,6 @@
 
 <script>
 import ElImageViewer from "element-ui/packages/image/src/image-viewer";
-// import * as imageConversion from "image-conversion";
 import axios from "axios";
 import uploadPop from "./upload-pop.vue";
 const MAX_WARNING = 1024 * 10 * 1024;
@@ -334,7 +333,7 @@ export default {
         duration: 0,
         dangerouslyUseHTMLString: true,
         message: `
-        <p class="text-primary">当前文件体积过大，请您耐心等待。</p>
+        <p class="text-primary">当前文件体积过大，请您耐心等待，在此期间请勿刷新页面。</p>
         <p>名称：${this.file.name}</p>
         <p>体积：${this.fileSize}</p>
         `,
