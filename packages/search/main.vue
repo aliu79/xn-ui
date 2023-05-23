@@ -299,6 +299,26 @@ export default {
         this.form.value && this.form.value.find((item) => item.label === key);
       this.$set(row, "data", data);
     },
+    setValue(key, value) {
+      if (Object.prototype.toString.call(key) === "[object Object]") {
+        const list = this.form.value;
+        const keys = Object.keys(key)
+        for (let i = 0; i < list.length; i++) {
+          const item = list[i];
+          if(keys.includes(item.prop)){
+            console.log(item,key[item.prop]);
+            item.modelVal = key[item.prop]
+          }
+        }
+        return;
+      }
+
+      const row =
+        this.form.value && this.form.value.find((item) => item.label === key);
+      if (row) {
+        this.$set(row, "modelVal", value);
+      }
+    },
   },
 };
 </script>
