@@ -1,80 +1,43 @@
 <template>
-  <div>
-
-    <xn-search
-      ref="search"
-      last-label-width="0"
-      :form-data="formSearch"
-      @on-search="onSearch"
-    >
-      <template #prepend>
-        <el-button type="primary">选择</el-button>
-      </template>
-      <template #append>
-        <el-button type="primary">选择</el-button>
-      </template>
-    </xn-search>
-  </div>
+  <xn-upload
+    :fileList.sync="fileList"
+    :limit="limit"
+    :accept="['zip','jpg']"
+    @on-success="onSuccess"
+    @on-uploaded="handleUoloaded"
+  ></xn-upload>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      form: [],
-      formSearch: [
+      limit: 22,
+      config: {
+        accept: "image", //接受上传的文件类型：zip、pdf、excel、image，也可以是文件类型所组成的数组类型如：['image', 'pdf']，则只可以上传图片或pdf类型的文件，也可以为空，则任何类型的文件都可以上传
+        max: 100, //文件大小
+      },
+      fileList: [
         {
-          label: "报价单状态",
-          type: "select",
-          prop: "salesCode",
-          data: [
-            { asd: "a", a: 1 },
-            { asd: "b", a: 2 },
-          ],
-          options: {
-            labelKey: "asd",
-            valueKey: "a",
-            multiple: true,
-          },
+          url: "https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/27/d7adc4c79b2a4aa297403485739d65f1.pdf",
         },
-        {
-          label: "报价单状态111",
-          type: "select",
-          prop: "field1",
-          options: {
-            labelKey: "asd",
-            valueKey: "a",
-          },
-        },
-        {
-          label: "报价单状态1",
-          type: "input",
-          prop: "field2",
-        },
-        
-        
       ],
     };
   },
- 
-  mounted(){
-    this.$refs.search.setValue({
-      field2:'a',
-      salesCode:[1]
-    })
-  },
   methods: {
-    change(val) {
-      this.type = val;
-      this.form = val === 1 ? this.formSearch : this.formSearch1;
-    },
-    onSearch(val) {
+    onSuccess(val) {
       console.log(val);
     },
-    asd() {
-      console.log("rrrrrr");
-      this.$refs.search.setData("报价单状态111", this.demoList);
+    beforeUpload(val) {
+      console.log("val", val);
     },
+    handleUoloaded(val){
+      console.log('val: ', val);
+
+    },
+    onProgress() {},
+    onPreview() {},
+    onRemove() {},
   },
 };
 </script>
