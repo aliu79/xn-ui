@@ -7,6 +7,7 @@ import 'packages/style/src/index.scss'
 
 Vue.use(XNUI);
 Vue.prototype.$XN.stsUrl = 'https://gateway.dev.xianniu.cn/xn-file/oss/getAssumeRoleResponse'
+Vue.prototype.$XN.setFileIdUrl = 'https://gateway.dev.xianniu.cn/xn-file/oss/saveFileInfo'
 console.log(this);
 
 new Vue({ // eslint-disable-line

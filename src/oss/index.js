@@ -6,6 +6,7 @@ class Client {
     constructor(params = {}) {
         this.uploadHost = null
         this.stsUrl = params.stsUrl || ''
+        this.setFileIdUrl = params.setFileIdUrl || ''
         this.oss = null
     }
     getToken() {
@@ -37,6 +38,7 @@ class Client {
             if (!this.stsUrl) {
                 return console.error('获取临时凭证地址不能为空')
             }
+            
             fetch(this.stsUrl + '?xnToken=' + this.getToken()).then(response => response.json()).then((res) => {
                 const { data: { accessKeyId, accessKeySecret, securityToken: stsToken, uploadHost, bucket, region } } = res
                 const obj = {
@@ -47,7 +49,7 @@ class Client {
                     bucket,
                     region
                 }
-               this.uploadHost = uploadHost
+                this.uploadHost = uploadHost
                 this.oss = new OSS({
                     ...obj,
                 })
@@ -58,7 +60,26 @@ class Client {
 
         })
     }
+    setFileId(params) {
+        return new Promise((resolve, reject) => {
+            fetch(this.setFileIdUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'xnToken':this.getToken()
+                },
+                body: JSON.stringify(params)
+            })
+                .then(response => response.json())
+                .then(() => {
+                    resolve()
+                }).catch(() => {
+                    reject()
+                });
+        })
+    }
     upload(file, headers = {}) {
+        
         const currentFile = file.file
         const fileName = currentFile.name
         const newFileName = this.getFileNameUUID() + '.' + this.getExt(currentFile)
@@ -70,7 +91,7 @@ class Client {
                     const _progress = parseFloat(p * 100)
                     file.onProgress({ percent: _progress });
                 }
-            }).then(res => {
+            }).then(async res => {
                 file.onSuccess()
                 const obj = {
                     name: fileName,
@@ -79,7 +100,14 @@ class Client {
                     imgFlag: ~~this.isImg(currentFile),
                     url: this.uploadHost + res.name,
                 }
-                resolve(obj)
+                this.setFileId(obj).then(()=>{
+                    resolve(obj)
+
+                }).catch((err)=>{
+                    file.onError();
+                    reject(err)
+                })
+
             }).catch(err => {
                 file.onError();
                 reject(err)

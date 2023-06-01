@@ -178,6 +178,7 @@ export default {
   created() {
     this.client = new Client({
       stsUrl: this.$XN.stsUrl || "",
+      setFileIdUrl: this.$XN.setFileIdUrl || "",
     });
   },
   beforeDestroy() {
