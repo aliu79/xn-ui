@@ -6,7 +6,7 @@ import App from './play/index.vue';
 import 'packages/style/src/index.scss'
 
 Vue.use(XNUI);
-Vue.prototype.$XN.stsApi = 'https://gateway.dev.xianniu.cn/xn-file/oss/getAssumeRoleResponse'
+Vue.prototype.$XN.stsUrl = 'https://gateway.dev.xianniu.cn/xn-file/oss/getAssumeRoleResponse'
 console.log(this);
 
 new Vue({ // eslint-disable-line

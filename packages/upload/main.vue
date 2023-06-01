@@ -177,7 +177,7 @@ export default {
   },
   created() {
     this.client = new Client({
-      stsApi: this.$XN.stsApi || "",
+      stsUrl: this.$XN.stsUrl || "",
     });
   },
   beforeDestroy() {
