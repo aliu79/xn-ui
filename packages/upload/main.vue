@@ -15,7 +15,6 @@
     :on-error="onError"
     :before-upload="onBeforeUpload"
     :style="styles"
-    :headers="uploadHeaders"
     :on-exceed="onExceed"
     :on-change="onChange"
   >
@@ -98,9 +97,9 @@
 
 <script>
 import ElImageViewer from "element-ui/packages/image/src/image-viewer";
-import axios from "axios";
+import Client from "@/oss";
 import uploadPop from "./upload-pop.vue";
-const MAX_WARNING = 1024 * 10 * 1024;
+// const MAX_WARNING = 1024 * 10 * 1024;
 export default {
   name: "XnUpload",
   inheritAttrs: false,
@@ -112,10 +111,6 @@ export default {
     listType: {
       type: String,
       default: "picture-card",
-    },
-    hiddenUpload: {
-      type: Boolean,
-      default: false,
     },
     preview: {
       type: Boolean,
@@ -136,22 +131,11 @@ export default {
     },
     accept: {
       type: [Array, String],
-      default: () => ["jpg", "jpeg", "png", "pdf"],
+      default: () => "*",
     },
     maxSize: {
       type: Number,
-      default: 1024 * 200 * 1024, // 最大限制 50M
-    },
-    compress: {
-      type: Number,
-      default: 0,
-    },
-    type: {
-      type: String,
-      default: "front",
-      validator: (val) => {
-        return ["front", "back"].includes(val);
-      },
+      default: 1024 * 200 * 1024, // 最大限制 200M
     },
     styles: {
       type: Object,
@@ -163,17 +147,13 @@ export default {
       isShowImageView: false,
       imageView: "",
       isHidden: false,
-      // actionParams: {
-      //   action: '',
-      // },
-      uploadHeaders: {
-        xnToken: "",
-      },
       viewList: [],
       files: [],
       successFiles: [],
       isUploading: false,
       file: {},
+      oss: null,
+      client: null,
     };
   },
   computed: {
@@ -190,89 +170,93 @@ export default {
     fileList: {
       handler(n) {
         this.successFiles = n;
-        if (this.limit === n.length) {
-          this.isHidden = true;
-        } else {
-          this.isHidden = false;
-        }
+        this.isHidden = this.limit === n.length;
       },
       immediate: true,
     },
   },
-  created() {},
+  created() {
+    this.client = new Client({
+      stsApi: this.$XN.stsApi || "",
+    });
+  },
   beforeDestroy() {
     this.$emit("update:fileList", []);
   },
   methods: {
-    onBeforeUpload(file) {
-      let fileExt = file.name.substring(file.name.lastIndexOf(".") + 1);
-      // 判断上传格式
-      fileExt = `${fileExt}`.toLowerCase();
-      if (!this.accept.includes(fileExt) && this.accept !== "*") {
-        this.$message.warning(`请上传指定格式【${this.accept}】`);
-        return false;
-      }
+    async onBeforeUpload(file) {
       this.file = file;
-      if (file.size > MAX_WARNING) {
-        this.bigFileWarning();
-      }
-      return this.onExceedSize(file.size);
+      return Promise.all([
+        this.checkFileExt(file),
+        this.onExceedSize(file.size),
+        this.getStsToken(),
+      ])
+        .then(() => {
+          return Promise.resolve();
+        })
+        .catch((err) => {
+          return Promise.reject(err);
+        });
+    },
+    async getStsToken() {
+      return new Promise((resolve, reject) => {
+        this.client
+          .getStsToken()
+          .then((res) => {
+            this.oss = res;
+            resolve();
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    checkFileExt(file) {
+      return new Promise((resolve, reject) => {
+        let fileExt = file.name.substring(file.name.lastIndexOf(".") + 1);
+        // 判断上传格式
+        fileExt = `${fileExt}`.toLowerCase();
+        if (!this.accept.includes(fileExt) && this.accept !== "*") {
+          this.$message.warning(`请上传指定格式【${this.accept}】`);
+          reject();
+        }
+        resolve();
+      });
     },
     onExceedSize(size) {
-      if (size > this.maxSize) {
-        this.$message.warning(
-          `最大不能超过${this.$format.bytesToSize(this.maxSize)}`
-        );
-        return Promise.reject();
-      }
-      return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        if (size > this.maxSize) {
+          this.$message.warning(
+            `最大不能超过${this.$format.bytesToSize(this.maxSize)}`
+          );
+          reject();
+        }
+        resolve();
+      });
     },
     onChange(file, fileList) {
       this.files = fileList;
     },
     async onHttpUpload(file) {
-      const formData = new FormData();
-      const _file = file.file;
-      formData.append("file", _file);
       this.isUploading = true;
       this.$emit("on-uploaded", false);
-      axios({
-        method: "post",
-        url: this.$XN.uploadUrl || "",
-        data: formData,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          xnToken: this.$storage.get("xnToken"),
-        },
-        onUploadProgress: (progress) => {
-          let _progress = Math.round((progress.loaded / progress.total) * 100);
-          _progress = _progress === 100 ? 99 : _progress;
-          file.onProgress({ percent: _progress });
-        },
-      })
+      this.oss
+        .upload(file)
         .then((res) => {
-          const { name, size, ext, imgFlag, url, fileId } = res.data.data;
-          this.successFiles.push({ name, size, ext, imgFlag, url, fileId });
-          file.onSuccess();
+          this.successFiles.push(res);
           this.$emit("update:fileList", this.successFiles);
           this.$emit("on-success", this.successFiles);
           this.$emit("on-uploaded", true);
           this.isUploading = false;
-          if (this.file.size > MAX_WARNING) {
-            this.$notify.closeAll();
-            this.bigFileSucces();
-          }
         })
         .catch((err) => {
           console.log(err);
-          this.$notify.closeAll();
           this.$emit("update:fileList", this.successFiles);
-          file.onError();
         });
     },
 
-    onError() {
-      // console.log(err);
+    onError(err) {
+      console.log(err);
       this.$message.error("上传失败，请重试");
     },
     onSubmitUpload() {
@@ -281,7 +265,6 @@ export default {
     onAbort() {
       this.$refs.upload.abort();
     },
-
     onExceed() {
       this.$message.warning(`上传总数不能超过【${this.limit}】个`);
     },
@@ -327,25 +310,8 @@ export default {
     closeViewer() {
       this.isShowImageView = false;
     },
-    bigFileWarning() {
-      return this.$notify({
-        title: "提示",
-        duration: 0,
-        dangerouslyUseHTMLString: true,
-        message: `
-        <p class="text-primary">当前文件体积过大，请您耐心等待，在此期间请勿刷新页面。</p>
-        <p>名称：${this.file.name}</p>
-        <p>体积：${this.fileSize}</p>
-        `,
-        type: "warning",
-      });
-    },
-    bigFileSucces() {
-      return this.$notify({
-        title: "提示",
-        message: "上传成功",
-        type: "success",
-      });
+    abortUpload() {
+      return this.oss.oss.cancel();
     },
   },
 };

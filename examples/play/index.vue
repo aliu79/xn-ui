@@ -1,11 +1,17 @@
 <template>
-  <xn-upload
+ <div>
+   <xn-upload
+   ref="upload"
     :fileList.sync="fileList"
     :limit="limit"
-    :accept="['zip','jpg']"
     @on-success="onSuccess"
     @on-uploaded="handleUoloaded"
   ></xn-upload>
+
+  <el-button type="primary" size="default" @click="stopUpload">stop upload</el-button>
+  
+  
+ </div>
 </template>
 
 <script>
@@ -28,16 +34,19 @@ export default {
     onSuccess(val) {
       console.log(val);
     },
-    beforeUpload(val) {
-      console.log("val", val);
+    beforeUpload() {
+      // console.log("val", val);
     },
-    handleUoloaded(val){
-      console.log('val: ', val);
+    handleUoloaded(){
+      // console.log('val: ', val);
 
     },
     onProgress() {},
     onPreview() {},
     onRemove() {},
+    stopUpload(){
+      this.$refs.upload.abortUpload()
+    }
   },
 };
 </script>
