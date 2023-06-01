@@ -5,11 +5,10 @@ const { v4: uuidv4 } = require('uuid');
 class Client {
     constructor(params = {}) {
         this.uploadHost = null
-        this.token = localStorage.getItem('xnToken')
         this.stsUrl = params.stsUrl || ''
         this.oss = null
     }
-    _getToken() {
+    getToken() {
         const _token = localStorage.getItem('xnToken')
         let token = ''
         if (_token) {
@@ -38,7 +37,7 @@ class Client {
             if (!this.stsUrl) {
                 return console.error('获取临时凭证地址不能为空')
             }
-            fetch(this.stsUrl + '?xnToken=' + this.token).then(response => response.json()).then((res) => {
+            fetch(this.stsUrl + '?xnToken=' + this.getToken()).then(response => response.json()).then((res) => {
                 const { data: { accessKeyId, accessKeySecret, securityToken: stsToken, uploadHost, bucket, region } } = res
                 const obj = {
                     accessKeyId,
