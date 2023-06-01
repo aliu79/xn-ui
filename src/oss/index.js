@@ -26,7 +26,7 @@ class Client {
         return `${fileExt}`.toLowerCase();
     }
     isImg(file) {
-        return ~~file.type.indexOf('image') > -1
+        return file.type.indexOf('image') > -1
     }
     getFileNameUUID() {
         const uuid = uuidv4()
@@ -76,7 +76,7 @@ class Client {
                     name: fileName,
                     size: currentFile.size,
                     ext: this.getExt(currentFile),
-                    imgFlag: this.isImg(currentFile),
+                    imgFlag: ~~this.isImg(currentFile),
                     url: this.uploadHost + res.name,
                 }
                 resolve(obj)
