@@ -38,7 +38,7 @@ class Client {
             if (!this.stsUrl) {
                 return console.error('获取临时凭证地址不能为空')
             }
-            
+
             fetch(this.stsUrl + '?xnToken=' + this.getToken()).then(response => response.json()).then((res) => {
                 const { data: { accessKeyId, accessKeySecret, securityToken: stsToken, uploadHost, bucket, region } } = res
                 const obj = {
@@ -66,7 +66,7 @@ class Client {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'xnToken':this.getToken()
+                    'xnToken': this.getToken()
                 },
                 body: JSON.stringify(params)
             })
@@ -79,7 +79,6 @@ class Client {
         })
     }
     upload(file, headers = {}) {
-        
         const currentFile = file.file
         const fileName = currentFile.name
         const newFileName = this.getFileNameUUID() + '.' + this.getExt(currentFile)
@@ -99,11 +98,13 @@ class Client {
                     ext: this.getExt(currentFile),
                     imgFlag: ~~this.isImg(currentFile),
                     url: this.uploadHost + res.name,
+                    accessoryName: fileName,
+                    accessorySize: currentFile.size
                 }
-                this.setFileId(obj).then(()=>{
+                this.setFileId(obj).then(() => {
                     resolve(obj)
 
-                }).catch((err)=>{
+                }).catch((err) => {
                     file.onError();
                     reject(err)
                 })
