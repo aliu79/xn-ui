@@ -70,11 +70,16 @@ class Client {
                 },
                 body: JSON.stringify(params)
             })
-                .then(response => response.json())
-                .then(() => {
-                    resolve()
-                }).catch(() => {
-                    reject()
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json()
+                })
+                .then(({ data }) => {
+                    resolve(data)
+                }).catch((err) => {
+                    reject(err)
                 });
         })
     }
@@ -101,10 +106,10 @@ class Client {
                     accessoryName: fileName,
                     accessorySize: currentFile.size
                 }
-                this.setFileId(obj).then(() => {
-                    resolve(obj)
-
+                this.setFileId(obj).then((res) => {
+                    resolve({ ...obj, fileId: res.fileId })
                 }).catch((err) => {
+                    console.log('err: ', err);
                     file.onError();
                     reject(err)
                 })
