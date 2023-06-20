@@ -10,6 +10,7 @@
 
   <el-button type="primary" size="default" @click="stopUpload">stop upload</el-button>
   
+  <el-button type="primary" size="default" @click="onDownload({url:'https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/11/20b365d38e5646f2896e1f2e6c010f93.png',name:'123123'})">download</el-button>
   
  </div>
 </template>
@@ -46,6 +47,9 @@ export default {
     onRemove() {},
     stopUpload(){
       this.$refs.upload.abortUpload()
+    },
+    onDownload({url,name}){
+      this.$utils.download({url,name})
     }
   },
 };
