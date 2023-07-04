@@ -1,10 +1,8 @@
 <template>
   <div class="xn-card">
-    <div class="xn-card-header flex justify-content-between">
-      <slot name="title" v-if="title || $slots.title">
-        <slot name="title">
+    <div class="xn-card-header flex justify-content-between"  v-if="title || $slots.title || $slots.more">
+      <slot name="title">
           <h3><span>{{title}}</span></h3>
-        </slot>
       </slot>
       <div class="xn-card-header__more">
         <slot name="more"></slot>
