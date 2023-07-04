@@ -116,7 +116,7 @@
       </el-table-column>
       <el-table-column
         width="50px"
-        label="No."
+        label="序号"
         v-if="index && data.length"
         type="index"
       ></el-table-column>

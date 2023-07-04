@@ -1,58 +1,36 @@
 <template>
- <div>
-   <xn-upload
-   ref="upload"
-    :fileList.sync="fileList"
-    :limit="limit"
-    @on-success="onSuccess"
-    @on-uploaded="handleUoloaded"
-  ></xn-upload>
-
-  <el-button type="primary" size="default" @click="stopUpload">stop upload</el-button>
-  
-  <el-button type="primary" size="default" @click="onDownload({url:'https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/11/20b365d38e5646f2896e1f2e6c010f93.png',name:'123123'})">download</el-button>
-  
- </div>
+  <div style="background-color: #ccc">
+    <xn-card title="什么东西" :body-style="{ padding: '18px 0' }">
+      <template #more>
+        <el-button-group>
+          <el-button type="" size="mini">1111</el-button>
+          <el-button type="" size="mini">22222</el-button>
+        </el-button-group>
+        <el-button class="ml-20" type="primary" size="mini">按钮</el-button>
+      </template>
+      <xn-table border :columns="[{ label: 'ID', prop: 'id' }]" :data="[{id:123}]"></xn-table>
+    </xn-card>
+    <xn-card title="什么玩意">
+      <el-descriptions>
+        <el-descriptions-item label="用户名">kooriookami</el-descriptions-item>
+        <el-descriptions-item label="手机号">18100000000</el-descriptions-item>
+        <el-descriptions-item label="居住地">苏州市</el-descriptions-item>
+        <el-descriptions-item label="备注">
+          <el-tag size="small">学校</el-tag>
+        </el-descriptions-item>
+        <el-descriptions-item label="联系地址"
+          >江苏省苏州市吴中区吴中大道 1188 号</el-descriptions-item
+        >
+      </el-descriptions>
+    </xn-card>
+    <xn-card title="啐！">
+     <xn-empty></xn-empty>
+    </xn-card>
+  </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      limit: 22,
-      config: {
-        accept: "image", //接受上传的文件类型：zip、pdf、excel、image，也可以是文件类型所组成的数组类型如：['image', 'pdf']，则只可以上传图片或pdf类型的文件，也可以为空，则任何类型的文件都可以上传
-        max: 100, //文件大小
-      },
-      fileList: [
-        {
-          url: "https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/27/d7adc4c79b2a4aa297403485739d65f1.pdf",
-        },
-      ],
-    };
-  },
-  methods: {
-    onSuccess(val) {
-      console.log(val);
-    },
-    beforeUpload() {
-      // console.log("val", val);
-    },
-    handleUoloaded(){
-      // console.log('val: ', val);
-
-    },
-    onProgress() {},
-    onPreview() {},
-    onRemove() {},
-    stopUpload(){
-      this.$refs.upload.abortUpload()
-    },
-    onDownload({url,name}){
-      this.$utils.download({url,name})
-    }
-  },
-};
+export default {};
 </script>
 
 <style>

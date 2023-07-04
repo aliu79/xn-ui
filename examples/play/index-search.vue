@@ -38,6 +38,12 @@ export default {
           },
         },
         {
+          label: "city",
+          type: "city",
+          prop: "fieldcity",
+         
+        },
+        {
           label: "报价单状态111",
           type: "select",
           prop: "field1",

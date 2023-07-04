@@ -6,6 +6,7 @@ import XN from '@/index'
 import './assets/common.scss';
 import '@/plugins/index'
 
+
 import 'packages/style/src/index.scss'
 
 import demoBlock from './components/demo-block';

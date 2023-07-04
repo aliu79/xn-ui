@@ -1,0 +1,8 @@
+.el-descriptions{
+    .el-descriptions-item__label:not(.is-bordered-label){
+        color: #909097;
+    }
+    &--small{
+        font-size: 14px;
+    }
+}
