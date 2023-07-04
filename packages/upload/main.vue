@@ -190,7 +190,7 @@ export default {
       return Promise.all([
         this.checkFileExt(file),
         this.onExceedSize(file.size),
-        this.getStsToken(),
+        this.getStsToken(file),
       ])
         .then(() => {
           return Promise.resolve();
@@ -280,6 +280,7 @@ export default {
       return this.$utils.download({url, name})
     },
     handleRemove(file, fileList) {
+      console.log('file, fileList: ', file, fileList,this.files);
       fileList.forEach((item, idx) => {
         if (file.uid === item.uid) {
           fileList.splice(idx, 1);

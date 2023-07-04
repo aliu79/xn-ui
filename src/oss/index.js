@@ -1,7 +1,7 @@
 const OSS = require('ali-oss')
 import $dayjs from '@/utils/dayjs'
 const { v4: uuidv4 } = require('uuid');
-
+import { Message } from 'element-ui';
 class Client {
     constructor(params = {}) {
         this.uploadHost = null
@@ -33,10 +33,12 @@ class Client {
         const uuid = uuidv4()
         return uuid
     }
-    getStsToken() {
+    getStsToken(file) {
         return new Promise((resolve, reject) => {
             if (!this.stsUrl) {
-                return console.error('获取临时凭证地址不能为空')
+                Message.error('获取临时凭证地址不能为空')
+                file.onError()
+                return
             }
 
             fetch(this.stsUrl + '?xnToken=' + this.getToken()).then(response => response.json()).then((res) => {
