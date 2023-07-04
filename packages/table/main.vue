@@ -57,34 +57,6 @@
               plain
             ></el-button>
           </el-tooltip>
-          <el-popover
-            placement="bottom-end"
-            popper-class="xn-table-box-tools__pop"
-            class="ml-10"
-            trigger="hover"
-            :hidden="!showColumn && columns.length"
-          >
-            <el-scrollbar
-              class="xn-table-box-tools__coll"
-              wrap-style="overflow-x:hidden;"
-            >
-              <div v-for="(item, idx) in columns" :key="idx" class="mb-5">
-                <el-checkbox
-                  :value="item.checked"
-                  :checked="item.checked"
-                  @change="handleChangeToolshow(item)"
-                  >{{ item.label }}</el-checkbox
-                >
-              </div>
-            </el-scrollbar>
-            <el-button
-              plain
-              size="mini"
-              type="primary"
-              icon="el-icon-setting"
-              slot="reference"
-            ></el-button>
-          </el-popover>
         </div>
       </div>
     </div>
@@ -95,6 +67,7 @@
       v-bind="$attrs"
       :border="border"
       :stripe="stripe"
+      :header-row-class-name="headerRowClassName"
       @row-click="singleElection"
       @selection-change="selectionChange"
       :row-class-name="tableRowClassName"
@@ -196,7 +169,9 @@ export default {
       selectedData: [],
     };
   },
-  computed: {},
+  computed: {
+    
+  },
   created() {
 
   },
@@ -223,10 +198,7 @@ export default {
     handleToolsItem(row, index) {
       this.$emit("on-tools", { row, index });
     },
-    handleChangeToolshow(item) {
-      item.checked = item.checked === true ? false : true;
-      this.$refs.table.doLayout();
-    },
+
     selectionChange(val) {
       this.selectedData = val;
       this.$emit("selection-change", val);
@@ -248,6 +220,10 @@ export default {
     tableRowClassName({ row, rowIndex }) {
       row.rowIndex = rowIndex;
     },
+    headerRowClassName(row, rowIndex){
+      console.log('row, rowIndex: ', row, rowIndex);
+      return 'cus-table-header'
+    }
   },
 };
 </script>
