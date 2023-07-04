@@ -1,7 +1,6 @@
 const OSS = require('ali-oss')
 import $dayjs from '@/utils/dayjs'
 const { v4: uuidv4 } = require('uuid');
-import { Message } from 'element-ui';
 class Client {
     constructor(params = {}) {
         this.uploadHost = null
@@ -36,7 +35,7 @@ class Client {
     getStsToken(file) {
         return new Promise((resolve, reject) => {
             if (!this.stsUrl) {
-                Message.error('获取临时凭证地址不能为空')
+                console.error('获取临时凭证地址不能为空');
                 file.onError()
                 return
             }
