@@ -1,5 +1,11 @@
+## card 卡片
+
+根据页面效果图，封装card组件
+
+::: demo 
+```html
 <template>
-  <div style="background-color: #ccc">
+   <div style="background-color: #ccc;padding:30px">
     <xn-card title="什么东西" :body-style="{ padding: '18px 0' }">
       <template #more>
         <el-button-group>
@@ -29,9 +35,20 @@
   </div>
 </template>
 
-<script>
-export default {};
-</script>
+```
+:::
 
-<style>
-</style>
+### 属性
+
+| 参数       | 说明       | 类型   | 可选值 | 默认值 |
+| ---------- | ---------- | ------ | ------ | ------ |
+| title      | 标题       | string | -      | -      |
+| body-style | 内容区样式 | object | -      | -      |
+
+### 插槽 slot
+
+| 参数  | 说明                 | 类型 | 可选值 | 默认值 |
+| ----- | -------------------- | ---- | ------ | ------ |
+| title | 标题插槽             | -    | -      | -      |
+| more  | 头部右边区域扩展内容 | -    | -      | -      |
+| -     | 内容区域             | -    | -      | -      |

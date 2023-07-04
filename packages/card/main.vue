@@ -1,7 +1,7 @@
 <template>
   <div class="xn-card">
     <div class="xn-card-header flex justify-content-between">
-      <slot name="title" v-if="title">
+      <slot name="title" v-if="title || $slots.title">
         <slot name="title">
           <h3><span>{{title}}</span></h3>
         </slot>
