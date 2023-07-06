@@ -116,10 +116,32 @@ const arrMerge = (arr = [], key = '') => {
   }
   return result
 }
+// 判空
+const isBlank = (str) => {
+  if (str === null || (!str && str !== 0)) {
+      return true
+  }
+  return false
+}
+/* 重置方法 */
+const reset = (obj) => {
+  for (const key in obj) {
+      if (Array.isArray(obj[key])) {
+          obj[key] = []
+      } else if (typeof obj[key] === 'object') {
+          obj[key] = reset(obj[key])
+      } else {
+          obj[key] = ''
+      }
+  }
+  return obj
+}
 export default {
   isEmpty,
   isImg,
   deepClone,
   download,
-  arrMerge
+  arrMerge,
+  reset,
+  isBlank
 }
