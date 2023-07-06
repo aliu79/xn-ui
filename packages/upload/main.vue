@@ -3,22 +3,28 @@
     ref="upload"
     :class="{
       'is-disabled': $attrs.disabled != undefined,
-      'is-hidden': preview || hideUpload,
+      'is-hidden': preview || hideUpload || isHidden,
+      'is-idcard': listType === 'idcard',
     }"
-    class="xn-upload xn-upload-main"
+    class="xn-upload"
     action="###"
     :limit="limit"
-    :list-type="listType"
+    :list-type="listType === 'idcard' ? 'picture-card' : listType"
     v-bind="$attrs"
     :file-list.sync="fileList"
     :http-request="onHttpUpload"
     :on-error="onError"
     :before-upload="onBeforeUpload"
-    :style="styles"
+    :style="{ ...styles,...idCardSizeData }"
     :on-exceed="onExceed"
     :on-change="onChange"
   >
-    <template v-if="listType === 'picture-card'">
+    <template v-if="listType === 'idcard'">
+      <template slot="trigger">
+        <idCard ref="idcard" :type="type" />
+      </template>
+    </template>
+    <template v-else-if="listType === 'picture-card'">
       <div slot="trigger" class="upload-limit">
         <i class="el-icon el-icon-plus" />
       </div>
@@ -30,11 +36,12 @@
         >
       </slot>
     </template>
+
     <div
       slot="file"
       slot-scope="{ file }"
       class="xn-upload--slot"
-      v-if="listType === 'picture-card'"
+      v-if="['picture-card', 'idcard'].includes(listType)"
     >
       <uploadPop :file="file" @on-download="handleDownload(file)"></uploadPop>
       <template v-if="$utils.isImg(file)">
@@ -57,7 +64,7 @@
         <el-progress
           :status="file.percentage === 100 && !isUploading ? 'success' : null"
           type="circle"
-          :percentage="process(file.percentage)"
+          :percentage="process(file.percentage || 0)"
           :stroke-width="6"
         />
       </div>
@@ -98,6 +105,7 @@
 import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import Client from "@/oss";
 import uploadPop from "./upload-pop.vue";
+import idCard from "./idCard.vue";
 // const MAX_WARNING = 1024 * 10 * 1024;
 export default {
   name: "XnUpload",
@@ -105,6 +113,7 @@ export default {
   components: {
     uploadPop,
     ElImageViewer,
+    idCard,
   },
   props: {
     listType: {
@@ -140,10 +149,17 @@ export default {
       type: Object,
       default: () => {},
     },
-    hideUpload:{
+    hideUpload: {
       type: Boolean,
       default: false,
-    }
+    },
+    type: {
+      type: String,
+      default: "front",
+      validator: (val) => {
+        return ["front", "back"].includes(val);
+      },
+    },
   },
   data() {
     return {
@@ -157,6 +173,7 @@ export default {
       file: {},
       oss: null,
       client: null,
+      idCardSizeData: {},
     };
   },
   computed: {
@@ -183,11 +200,19 @@ export default {
       stsUrl: this.$XN.stsUrl || "",
       setFileIdUrl: this.$XN.setFileIdUrl || "",
     });
+    this.idCardSize()
   },
   beforeDestroy() {
     this.$emit("update:fileList", []);
   },
   methods: {
+    async idCardSize() {
+      if (this.listType !== "idcard") return {};
+      this.$nextTick(() => {
+        this.idCardSizeData =
+          this.$refs.idcard && this.$refs.idcard.getIdcardSize();
+      });
+    },
     async onBeforeUpload(file) {
       this.file = file;
       return Promise.all([
@@ -280,10 +305,10 @@ export default {
     },
     async handleDownload(file) {
       const { url, name } = file;
-      return this.$utils.download({url, name})
+      return this.$utils.download({ url, name });
     },
     handleRemove(file, fileList) {
-      console.log('file, fileList: ', file, fileList,this.files);
+      console.log("file, fileList: ", file, fileList, this.files);
       fileList.forEach((item, idx) => {
         if (file.uid === item.uid) {
           fileList.splice(idx, 1);
