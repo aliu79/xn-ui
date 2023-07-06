@@ -3,7 +3,7 @@
     ref="upload"
     :class="{
       'is-disabled': $attrs.disabled != undefined,
-      'is-hidden': preview,
+      'is-hidden': preview || hideUpload,
     }"
     class="xn-upload xn-upload-main"
     action="###"
@@ -42,7 +42,6 @@
           class="el-upload-list__item-thumbnail"
           :src="file.url"
           fit="cover"
-          :lazy="true"
         />
       </template>
       <template v-else>
@@ -77,7 +76,7 @@
           <i class="fz-16 el-icon-download" />
         </span>
         <span
-          v-if="!$attrs.disabled && !preview"
+          v-if="(!$attrs.disabled && !preview) || hideUpload"
           class="el-upload-list__item-delete icon ml-5"
           @click="handleRemove(file, fileList)"
         >
@@ -141,6 +140,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    hideUpload:{
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
