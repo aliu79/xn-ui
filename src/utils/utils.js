@@ -65,7 +65,6 @@ const download = (params = { name: '', url: '' }) => {
     name: '下载模板'
   }
   const _params = Object.assign(defaultParams, params)
-  console.log('_params: ', _params);
   const { url, name } = _params
   const x = new XMLHttpRequest();
   x.open("GET", url, true);
