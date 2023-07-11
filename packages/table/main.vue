@@ -194,6 +194,7 @@ export default {
         (item, idx) => item[idKey] === val[idKey] && idx === val.rowIndex
       );
       this.$emit("on-single", res, column);
+      this.$emit("on-radio", res, column);
     },
     handleToolsItem(row, index) {
       this.$emit("on-tools", { row, index });
@@ -202,6 +203,7 @@ export default {
     selectionChange(val) {
       this.selectedData = val;
       this.$emit("selection-change", val);
+      this.$emit("on-selection", val);
       // this.$refs.table.get
     },
     toggleRowSelection(row, status) {
@@ -220,8 +222,7 @@ export default {
     tableRowClassName({ row, rowIndex }) {
       row.rowIndex = rowIndex;
     },
-    headerRowClassName(row, rowIndex){
-      console.log('row, rowIndex: ', row, rowIndex);
+    headerRowClassName(){
       return 'cus-table-header'
     }
   },
