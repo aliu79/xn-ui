@@ -1,35 +1,22 @@
 <template>
   <div>
-    <xn-upload
-      ref="upload"
-      :fileList.sync="fileList"
-      :limit="limit"
-      list-type="idcard"
-      @on-success="onSuccess"
-      @on-uploaded="handleUoloaded"
-    ></xn-upload>
-    <xn-upload
-      ref="upload"
-      :fileList.sync="fileList"
-      :limit="limit"
-      @on-success="onSuccess"
-      @on-uploaded="handleUoloaded"
-    ></xn-upload>
-    <el-button type="primary" size="default" @click="stopUpload"
-      >stop upload</el-button
-    >
+    <!-- <el-tabs v-model="activeName">
+      <el-tab-pane label="用户管理" name="1">用户管理</el-tab-pane>
+      <el-tab-pane label="配置管理" name="2">
+        <template v-if="activeName === '2'">
+          <demo-table></demo-table>
+        </template>
+      </el-tab-pane>
+    </el-tabs> -->
 
-    <el-button
-      type="primary"
-      size="default"
-      @click="
-        onDownload({
-          url: 'https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/11/20b365d38e5646f2896e1f2e6c010f93.png',
-          name: '123123',
-        })
-      "
-      >download</el-button
-    >
+    <xn-table
+      selection
+      :selectable="handleSelectable"
+      :columns="listHeader"
+      disabled-key="id"
+      :disabled-list="disabledList"
+      :data="list"
+    ></xn-table>
   </div>
 </template>
 
@@ -37,36 +24,109 @@
 export default {
   data() {
     return {
-      limit: 1,
-      config: {
-        accept: "image", //接受上传的文件类型：zip、pdf、excel、image，也可以是文件类型所组成的数组类型如：['image', 'pdf']，则只可以上传图片或pdf类型的文件，也可以为空，则任何类型的文件都可以上传
-        max: 100, //文件大小
-      },
-      fileList: [
+      show: false,
+      activeName: "1",
+      type: 2,
+      listHeader2: [
         {
-          url: "https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/11/20b365d38e5646f2896e1f2e6c010f93.png",
+          prop: "id",
+          label: "ID",
+          show: (row) => {
+            console.log(row);
+            return false;
+          },
         },
       ],
+      listHeader: [
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        {
+          label: "姓名",
+          sortable: true,
+          render: (h, { row }) => h("span", row.name),
+        },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "date", label: "日期", sortable: true },
+        {
+          label: "操作",
+          fixed: "right",
+          more: {
+            options: [
+              { label: "你好" },
+              { label: "你好" },
+              { label: "你好" },
+              { label: "你好" },
+              { label: "你好" },
+              { label: "你好" },
+            ],
+          },
+        },
+      ],
+      disabledList: [122],
+      list: [
+        { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        {
+          id: 123,
+          uid: 1,
+          date: "2011-01-01",
+          name: "地方",
+          age: 18,
+        },
+        // { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
+      ],
+      pageConfig: {
+        total: 100,
+        pageSize: 15,
+        pageNum: 1,
+      },
+      tools: [{ label: "导出", prop: "export", icon: "el-icon-files" }],
+      // pageConfig: {},
     };
   },
+  computed: {},
+  created() {},
+  watch: {},
   methods: {
-    onSuccess(val) {
+    handleSort(e) {
+      console.log(e);
+    },
+    handleRefresh() {
+      console.log("re");
+    },
+    handleButtons(args) {
+      console.log(args);
+      this.$refs.table.clearSelection();
+    },
+    fnGetList(v) {
+      console.log(v);
+    },
+    onradio(row, a) {
+      console.log("val: ", row, a);
+    },
+    onSelection(val) {
       console.log(val);
     },
-    beforeUpload() {
-      // console.log("val", val);
-    },
-    handleUoloaded() {
-      // console.log('val: ', val);
-    },
-    onProgress() {},
-    onPreview() {},
-    onRemove() {},
-    stopUpload() {
-      this.$refs.upload.abortUpload();
-    },
-    onDownload({ url, name }) {
-      this.$utils.download({ url, name });
+    handleSelectable(a, b ) {
+      console.log("a,b,c: ", a, b );
+      return false
     },
   },
 };

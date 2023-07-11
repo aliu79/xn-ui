@@ -79,6 +79,7 @@
         type="selection"
         width="50px"
         align="center"
+        :selectable="handleSelectable"
       ></el-table-column>
       <el-table-column v-bind="$attrs" v-if="radio" width="40px" align="center">
         <template slot-scope="{ row }">
@@ -94,15 +95,15 @@
         type="index"
       ></el-table-column>
       <slot>
-          <column
-            v-for="(item, idx) in columns"
-            :key="idx"
-            v-show="item.checked === true"
-            v-bind="item"
-          ></column>
+        <column
+          v-for="(item, idx) in columns"
+          :key="idx"
+          v-show="item.checked === true"
+          v-bind="item"
+        ></column>
       </slot>
       <template #append v-if="$slots.append">
-          <slot name="append"></slot>
+        <slot name="append"></slot>
       </template>
     </el-table>
 
@@ -162,6 +163,26 @@ export default {
       type: String,
       default: "id",
     },
+    disabledList: {
+      type: Array,
+      require: false,
+      default: () => {
+        return [];
+      },
+    },
+    disabledKey: {
+      type: String,
+      require: false,
+      default: "",
+    },
+    /* 筛选条件,正则 */
+    filterQuery: {
+      type: Object,
+      require: false,
+      default: () => {
+        return {};
+      },
+    },
   },
   data() {
     return {
@@ -169,17 +190,13 @@ export default {
       selectedData: [],
     };
   },
-  computed: {
-    
-  },
-  created() {
-
-  },
+  computed: {},
+  created() {},
   updated() {
     !this.$slots.default &&
       this.columns.length &&
       this.columns.forEach((item) => {
-        if(item.checked !== true) this.$set(item, "checked", true);
+        if (item.checked !== true) this.$set(item, "checked", true);
       });
   },
   methods: {
@@ -222,9 +239,46 @@ export default {
     tableRowClassName({ row, rowIndex }) {
       row.rowIndex = rowIndex;
     },
-    headerRowClassName(){
-      return 'cus-table-header'
-    }
+    headerRowClassName() {
+      return "cus-table-header";
+    },
+    handleSelectable(row, idx) {
+      if (
+        this.selection &&
+        this.$attrs.selectable &&
+        typeof this.$attrs.selectable === "function"
+      ) {
+        return this.$attrs.selectable(row, idx);
+      } 
+      const list = this.disabledList;
+        const filter = this.filterQuery;
+        if (
+          list &&
+          list.length &&
+          this.disabledKey &&
+          list.includes(row[this.disabledKey])
+        ) {
+          return 0;
+        } else if (Object.keys(filter).length) {
+          let step = 0;
+          Object.keys(filter).forEach((key) => {
+            if (filter[key].test(row[key])) {
+              step = step + 1;
+            }
+          });
+
+          if (step >= Object.keys(filter).length) {
+            /* if (isChange) {
+              this.key = Date.parse(new Date());
+            } */
+            return 1;
+          } else {
+            return 0;
+          }
+        } else {
+          return 1;
+        }
+    },
   },
 };
 </script>
