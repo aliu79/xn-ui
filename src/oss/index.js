@@ -110,7 +110,6 @@ class Client {
                 this.setFileId(obj).then((res) => {
                     resolve({ ...obj, fileId: res.fileId })
                 }).catch((err) => {
-                    console.log('err: ', err);
                     file.onError();
                     reject(err)
                 })
