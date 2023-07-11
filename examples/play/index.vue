@@ -10,8 +10,7 @@
     </el-tabs> -->
 
     <xn-table
-      selection
-      :selectable="handleSelectable"
+      radio
       :columns="listHeader"
       disabled-key="id"
       :disabled-list="disabledList"

@@ -2,8 +2,8 @@
   <div class="xn-table-box">
     <div class="xn-table-box-tools" :class="{ 'is-border': !border }">
       <div class="flex justify-content-between align-items-center">
-        <div class="fz-12" :class="{ 'pb-10': selection }">
-          <template v-if="selection">
+        <div class="fz-12" :class="{ 'pb-10': isSelection }">
+          <template v-if="isSelection">
             <span>已选择 {{ selectedData.length }} 项</span>
             <el-button
               type="text"
@@ -71,17 +71,17 @@
       @row-click="singleElection"
       @selection-change="selectionChange"
       :row-class-name="tableRowClassName"
-      :class="{ 'disabled-all-selection': radio }"
+      :class="{ 'disabled-all-selection': isRadio }"
     >
       <el-table-column
-        v-if="selection && data.length"
+        v-if="isSelection && data.length"
         v-bind="$attrs"
         type="selection"
         width="50px"
         align="center"
         :selectable="handleSelectable"
       ></el-table-column>
-      <el-table-column v-bind="$attrs" v-if="radio" width="40px" align="center">
+      <el-table-column v-bind="$attrs" v-if="isRadio" width="40px" align="center">
         <template slot-scope="{ row }">
           <el-radio v-model="radioSelected" :label="row[idKey]"
             >&nbsp;</el-radio
@@ -142,6 +142,13 @@ export default {
       type: Array,
       default: () => [],
     },
+    type:{
+      type: String,
+      default:'',
+      validator: (val) => {
+        return ["selection", "radio"].indexOf(val) !== -1;
+      },
+    },
     stripe: Boolean,
     selection: Boolean,
     radio: Boolean,
@@ -190,7 +197,14 @@ export default {
       selectedData: [],
     };
   },
-  computed: {},
+  computed: {
+    isSelection(){
+      return this.type === 'selection' || this.selection
+    },
+    isRadio(){
+      return this.type === 'radio' || this.radio
+    }
+  },
   created() {},
   updated() {
     !this.$slots.default &&
@@ -204,7 +218,7 @@ export default {
       this.$emit("on-page", val);
     },
     singleElection(val, column) {
-      if (!this.radio) return;
+      if (!this.isRadio) return;
       const { idKey } = this;
       this.radioSelected = val[idKey];
       const res = this.data.find(
@@ -227,7 +241,7 @@ export default {
       this.$refs.table.toggleRowSelection(row, status);
     },
     clearSelection() {
-      if (this.radio) {
+      if (this.isRadio) {
         this.radioSelected = "";
         return;
       }
@@ -244,7 +258,7 @@ export default {
     },
     handleSelectable(row, idx) {
       if (
-        this.selection &&
+        this.isSelection &&
         this.$attrs.selectable &&
         typeof this.$attrs.selectable === "function"
       ) {
