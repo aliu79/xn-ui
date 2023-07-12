@@ -145,9 +145,6 @@ export default {
     type:{
       type: String,
       default:'',
-      validator: (val) => {
-        return ["selection", "radio"].indexOf(val) !== -1;
-      },
     },
     stripe: Boolean,
     selection: Boolean,

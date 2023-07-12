@@ -10,11 +10,12 @@
     </el-tabs> -->
 
     <xn-table
-      radio
+      type="radio"
       :columns="listHeader"
       disabled-key="id"
       :disabled-list="disabledList"
       :data="list"
+      @on-radio="onradio"
     ></xn-table>
   </div>
 </template>
@@ -118,7 +119,7 @@ export default {
       console.log(v);
     },
     onradio(row, a) {
-      console.log("val: ", row, a);
+      console.log("val: ", {...row}, {...a});
     },
     onSelection(val) {
       console.log(val);
