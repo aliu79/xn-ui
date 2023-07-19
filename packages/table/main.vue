@@ -81,7 +81,12 @@
         align="center"
         :selectable="handleSelectable"
       ></el-table-column>
-      <el-table-column v-bind="$attrs" v-if="isRadio" width="40px" align="center">
+      <el-table-column
+        v-bind="$attrs"
+        v-if="isRadio"
+        width="40px"
+        align="center"
+      >
         <template slot-scope="{ row }">
           <el-radio v-model="radioSelected" :label="row[idKey]"
             >&nbsp;</el-radio
@@ -142,9 +147,9 @@ export default {
       type: Array,
       default: () => [],
     },
-    type:{
+    type: {
       type: String,
-      default:'',
+      default: "",
     },
     stripe: Boolean,
     selection: Boolean,
@@ -195,12 +200,12 @@ export default {
     };
   },
   computed: {
-    isSelection(){
-      return this.type === 'selection' || this.selection
+    isSelection() {
+      return this.type === "selection" || this.selection;
     },
-    isRadio(){
-      return this.type === 'radio' || this.radio
-    }
+    isRadio() {
+      return this.type === "radio" || this.radio;
+    },
   },
   created() {},
   updated() {
@@ -260,35 +265,35 @@ export default {
         typeof this.$attrs.selectable === "function"
       ) {
         return this.$attrs.selectable(row, idx);
-      } 
+      }
       const list = this.disabledList;
-        const filter = this.filterQuery;
-        if (
-          list &&
-          list.length &&
-          this.disabledKey &&
-          list.includes(row[this.disabledKey])
-        ) {
-          return 0;
-        } else if (Object.keys(filter).length) {
-          let step = 0;
-          Object.keys(filter).forEach((key) => {
-            if (filter[key].test(row[key])) {
-              step = step + 1;
-            }
-          });
+      const filter = this.filterQuery;
+      if (
+        list &&
+        list.length &&
+        this.disabledKey &&
+        list.includes(row[this.disabledKey])
+      ) {
+        return 0;
+      } else if (Object.keys(filter).length) {
+        let step = 0;
+        Object.keys(filter).forEach((key) => {
+          if (filter[key].test(row[key])) {
+            step = step + 1;
+          }
+        });
 
-          if (step >= Object.keys(filter).length) {
-            /* if (isChange) {
+        if (step >= Object.keys(filter).length) {
+          /* if (isChange) {
               this.key = Date.parse(new Date());
             } */
-            return 1;
-          } else {
-            return 0;
-          }
-        } else {
           return 1;
+        } else {
+          return 0;
         }
+      } else {
+        return 1;
+      }
     },
   },
 };

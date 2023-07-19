@@ -135,6 +135,24 @@ const reset = (obj) => {
   }
   return obj
 }
+
+
+
+export const toCamelCase = (string)=> {
+  var words = string.split('-'); // 步1
+  var camelCaseWords = [words[0]];
+  
+  for (var i = 1; i < words.length; i++) {
+    var word = words[i];
+    var capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1); // 步骤2
+    camelCaseWords.push(capitalizedWord);
+  }
+  
+  var camelCaseString = camelCaseWords.join(''); // 步骤3
+  return camelCaseString;
+}
+
+
 export default {
   isEmpty,
   isImg,
@@ -142,5 +160,6 @@ export default {
   download,
   arrMerge,
   reset,
-  isBlank
+  isBlank,
+  toCamelCase
 }

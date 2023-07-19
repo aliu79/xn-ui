@@ -315,7 +315,6 @@ export default {
         for (let i = 0; i < list.length; i++) {
           const item = list[i];
           if (keys.includes(item.prop)) {
-            console.log(item, key[item.prop]);
             item.modelVal = key[item.prop];
           }
         }
