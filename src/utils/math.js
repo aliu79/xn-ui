@@ -22,11 +22,13 @@ class Math {
             const fieldKey = args[1]
             return list.map(item => item[fieldKey]).reduce((pre, cur) => {
                 let val = new Decimal(pre - 0)
-                return val[this.type](new Decimal(cur - 0)).toNumber()
+                const res = val[this.type](new Decimal(cur - 0)).toFixed(2)
+                return new Decimal(res).toNumber()
             })
         } else {
             return args.reduce((pre, cur) => {
-                return new Decimal(pre - 0)[this.type](new Decimal(cur - 0)).toNumber()
+                 const res = new Decimal(pre - 0)[this.type](new Decimal(cur - 0)).toFixed(2)
+                 return new Decimal(res).toNumber()
             })
         }
     }
