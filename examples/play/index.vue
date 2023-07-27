@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <xn-search
       ref="search"
       last-label-width="0"
@@ -41,7 +40,6 @@ export default {
           label: "city",
           type: "city",
           prop: "fieldcity",
-         
         },
         {
           label: "报价单状态111",
@@ -57,22 +55,24 @@ export default {
           type: "input",
           prop: "field2",
         },
-        
-        
       ],
     };
   },
- 
-  mounted(){
+
+  mounted() {
     this.$refs.search.setValue({
-      field2:'a',
-      salesCode:[1]
-    })
-
-
-   console.log( this.$math.mul(this.$math.add(1,6/100),259.75));
-   console.log( this.$math.add(0.1,0.2123213));
-
+      field2: "a",
+      salesCode: [1],
+    });
+    console.log(
+      this.$math.mul(
+        this.$math.add(1, 6.5 / 100,{unFixed:true}),
+        53287.25
+      )
+    );
+    console.log(
+      this.$math.add(1, 6.5 / 100)
+    );
   },
   methods: {
     change(val) {
