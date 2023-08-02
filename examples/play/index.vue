@@ -40,6 +40,9 @@ export default {
           label: "city",
           type: "city",
           prop: "fieldcity",
+          options:{
+            props:{ checkStrictly: true }
+          }
         },
         {
           label: "报价单状态111",

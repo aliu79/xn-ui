@@ -22,6 +22,7 @@
                 :key="item.prop"
                 :data-level="(item.options && item.options.dataLevel) || 2"
                 v-model="item.modelVal"
+                v-bind="item.options ? { ...item.options } : {}"
                 @on-city="handleChangeCity"
                 
               />
