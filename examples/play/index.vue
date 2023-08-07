@@ -63,7 +63,9 @@ export default {
     };
   },
   methods: {
-    handleImportFile() {},
+    handleImportFile(file) {
+        console.log(file,{...this.form});
+    },
     handleBeforeConfirm() {
       return new Promise((resolve, reject) => {
         this.$refs.form.validate(async (valid) => {
