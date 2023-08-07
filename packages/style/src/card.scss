@@ -1,0 +1,16 @@
+.xn-card {
+    background-color: #fff;
+    padding: 0 30px;
+    &-header {
+        padding: 20px 0 13px 0;
+        border-bottom: 1px solid #f2f2f2;
+        h3 {
+            margin: 0;
+            padding: 0;
+            font-size: 18px;
+            font-weight: 500;
+            color: #202131;
+            line-height: 25px;
+        }
+    }
+}

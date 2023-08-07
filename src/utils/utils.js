@@ -66,26 +66,21 @@ const download = (params = { name: '', url: '' }) => {
   }
   const _params = Object.assign(defaultParams, params)
   const { url, name } = _params
-  var x = new XMLHttpRequest()
-  x.open('GET', url, true)
-  // x.responseType = 'blob'
-  // x.responseType = 'blob'
-  x.onprogress = function () {
-  }
+  const x = new XMLHttpRequest();
+  x.open("GET", url, true);
+  x.responseType = "blob";
   x.onload = function () {
-    var _url = ''
-    try {
-      _url = window.URL.createObjectURL(x.response)
-    } catch (error) {
-      _url = url
-    }
-    var a = document.createElement('a')
-    a.href = _url
-    a.target = '_blank'
-    a.download = name
-    a.click()
-  }
-  x.send()
+    const _url = window.URL.createObjectURL(x.response);
+    const elt = document.createElement("a");
+    elt.setAttribute("href", _url);
+    elt.setAttribute("download", name);
+    elt.style.display = "none";
+    elt.target = "_blank";
+    document.body.appendChild(elt);
+    elt.click();
+    document.body.removeChild(elt);
+  };
+  x.send();
 }
 /**
  * 根据某个key 对数组去重合并
@@ -97,7 +92,7 @@ const arrMerge = (arr = [], key = '') => {
   if (!key) {
     throw new Error('error arguments: key is required')
   }
-  if(!arr.length) return
+  if (!arr.length) return
   var map = {}; var result = []
 
   for (var i = 0; i < arr.length; i++) {
@@ -120,10 +115,51 @@ const arrMerge = (arr = [], key = '') => {
   }
   return result
 }
+// 判空
+const isBlank = (str) => {
+  if (str === null || (!str && str !== 0)) {
+      return true
+  }
+  return false
+}
+/* 重置方法 */
+const reset = (obj) => {
+  for (const key in obj) {
+      if (Array.isArray(obj[key])) {
+          obj[key] = []
+      } else if (typeof obj[key] === 'object') {
+          obj[key] = reset(obj[key])
+      } else {
+          obj[key] = ''
+      }
+  }
+  return obj
+}
+
+
+
+export const toCamelCase = (string)=> {
+  var words = string.split('-'); // 步1
+  var camelCaseWords = [words[0]];
+  
+  for (var i = 1; i < words.length; i++) {
+    var word = words[i];
+    var capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1); // 步骤2
+    camelCaseWords.push(capitalizedWord);
+  }
+  
+  var camelCaseString = camelCaseWords.join(''); // 步骤3
+  return camelCaseString;
+}
+
+
 export default {
   isEmpty,
   isImg,
   deepClone,
   download,
-  arrMerge
+  arrMerge,
+  reset,
+  isBlank,
+  toCamelCase
 }

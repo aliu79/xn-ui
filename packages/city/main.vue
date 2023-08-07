@@ -17,7 +17,7 @@
 </template>
 
 <script>
-const ZXCITY = ['北京市','天津市','上海市','重庆市']
+const ZXCITY = ["北京市", "天津市", "上海市", "重庆市"];
 import citys from "xn-ui/src/area/index.js";
 export default {
   name: "XnCity",
@@ -251,19 +251,24 @@ export default {
     getCity(data, nameList) {
       if (nameList.length === 0) return [];
       const [cityName, ...rest] = nameList;
-      const item = data.find((i) => i.cityName === cityName || i.cityName.indexOf(cityName.substring(0,2)) > -1);
-      if(item){
+      const item =
+        data &&
+        data.find((i) => i.cityName === cityName || cityName.indexOf(i.cityName) > -1);
+      if (item) {
         return [item.cityCode, ...this.getCity(item.subCitys, rest)];
-      }else{
-        return [...this.getCity([], rest)]
+      } else {
+        return [...this.getCity([], rest)];
       }
     },
     str2Code(val) {
       if (!val) return;
+      val = val.replace(/[^\u4e00-\u9fa5]/g, "");
       const cityArr = val.match(this.$reg.getCity) || [];
-      const newarr = cityArr.length&&cityArr.map((item,idx,arr)=>{
-        return ZXCITY.includes(item) && idx === 0 ? [item,...arr] : arr
-      })[0]
+      const newarr =
+        cityArr.length &&
+        cityArr.map((item, idx, arr) => {
+          return ZXCITY.includes(item) && idx === 0 ? [item, ...arr] : arr;
+        })[0];
       const arr = this.getCity(this.cityList, newarr);
       return arr[arr.length - 1];
     },

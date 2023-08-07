@@ -2,8 +2,8 @@
   <div class="xn-table-box">
     <div class="xn-table-box-tools" :class="{ 'is-border': !border }">
       <div class="flex justify-content-between align-items-center">
-        <div class="fz-12" :class="{ 'pb-10': selection }">
-          <template v-if="selection">
+        <div class="fz-12" :class="{ 'pb-10': isSelection }">
+          <template v-if="isSelection">
             <span>已选择 {{ selectedData.length }} 项</span>
             <el-button
               type="text"
@@ -57,34 +57,6 @@
               plain
             ></el-button>
           </el-tooltip>
-          <el-popover
-            placement="bottom-end"
-            popper-class="xn-table-box-tools__pop"
-            class="ml-10"
-            trigger="hover"
-            :hidden="!showColumn && columns.length"
-          >
-            <el-scrollbar
-              class="xn-table-box-tools__coll"
-              wrap-style="overflow-x:hidden;"
-            >
-              <div v-for="(item, idx) in columns" :key="idx" class="mb-5">
-                <el-checkbox
-                  :value="item.checked"
-                  :checked="item.checked"
-                  @change="handleChangeToolshow(item)"
-                  >{{ item.label }}</el-checkbox
-                >
-              </div>
-            </el-scrollbar>
-            <el-button
-              plain
-              size="mini"
-              type="primary"
-              icon="el-icon-setting"
-              slot="reference"
-            ></el-button>
-          </el-popover>
         </div>
       </div>
     </div>
@@ -95,19 +67,26 @@
       v-bind="$attrs"
       :border="border"
       :stripe="stripe"
+      :header-row-class-name="headerRowClassName"
       @row-click="singleElection"
       @selection-change="selectionChange"
       :row-class-name="tableRowClassName"
-      :class="{ 'disabled-all-selection': radio }"
+      :class="{ 'disabled-all-selection': isRadio }"
     >
       <el-table-column
-        v-if="selection && data.length"
+        v-if="isSelection && data.length"
         v-bind="$attrs"
         type="selection"
         width="50px"
         align="center"
+        :selectable="handleSelectable"
       ></el-table-column>
-      <el-table-column v-bind="$attrs" v-if="radio" width="40px" align="center">
+      <el-table-column
+        v-bind="$attrs"
+        v-if="isRadio"
+        width="40px"
+        align="center"
+      >
         <template slot-scope="{ row }">
           <el-radio v-model="radioSelected" :label="row[idKey]"
             >&nbsp;</el-radio
@@ -116,20 +95,20 @@
       </el-table-column>
       <el-table-column
         width="50px"
-        label="No."
+        label="序号"
         v-if="index && data.length"
         type="index"
       ></el-table-column>
       <slot>
-          <column
-            v-for="(item, idx) in columns"
-            :key="idx"
-            v-show="item.checked === true"
-            v-bind="item"
-          ></column>
+        <column
+          v-for="(item, idx) in columns"
+          :key="idx"
+          v-show="item.checked === true"
+          v-bind="item"
+        ></column>
       </slot>
       <template #append v-if="$slots.append">
-          <slot name="append"></slot>
+        <slot name="append"></slot>
       </template>
     </el-table>
 
@@ -168,6 +147,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    type: {
+      type: String,
+      default: "",
+    },
     stripe: Boolean,
     selection: Boolean,
     radio: Boolean,
@@ -189,6 +172,26 @@ export default {
       type: String,
       default: "id",
     },
+    disabledList: {
+      type: Array,
+      require: false,
+      default: () => {
+        return [];
+      },
+    },
+    disabledKey: {
+      type: String,
+      require: false,
+      default: "",
+    },
+    /* 筛选条件,正则 */
+    filterQuery: {
+      type: Object,
+      require: false,
+      default: () => {
+        return {};
+      },
+    },
   },
   data() {
     return {
@@ -196,15 +199,20 @@ export default {
       selectedData: [],
     };
   },
-  computed: {},
-  created() {
-
+  computed: {
+    isSelection() {
+      return this.type === "selection" || this.selection;
+    },
+    isRadio() {
+      return this.type === "radio" || this.radio;
+    },
   },
+  created() {},
   updated() {
     !this.$slots.default &&
       this.columns.length &&
       this.columns.forEach((item) => {
-        if(item.checked !== true) this.$set(item, "checked", true);
+        if (item.checked !== true) this.$set(item, "checked", true);
       });
   },
   methods: {
@@ -212,31 +220,30 @@ export default {
       this.$emit("on-page", val);
     },
     singleElection(val, column) {
-      if (!this.radio) return;
+      if (!this.isRadio) return;
       const { idKey } = this;
       this.radioSelected = val[idKey];
       const res = this.data.find(
         (item, idx) => item[idKey] === val[idKey] && idx === val.rowIndex
       );
       this.$emit("on-single", res, column);
+      this.$emit("on-radio", res, column);
     },
     handleToolsItem(row, index) {
       this.$emit("on-tools", { row, index });
     },
-    handleChangeToolshow(item) {
-      item.checked = item.checked === true ? false : true;
-      this.$refs.table.doLayout();
-    },
+
     selectionChange(val) {
       this.selectedData = val;
       this.$emit("selection-change", val);
+      this.$emit("on-selection", val);
       // this.$refs.table.get
     },
     toggleRowSelection(row, status) {
       this.$refs.table.toggleRowSelection(row, status);
     },
     clearSelection() {
-      if (this.radio) {
+      if (this.isRadio) {
         this.radioSelected = "";
         return;
       }
@@ -247,6 +254,46 @@ export default {
     },
     tableRowClassName({ row, rowIndex }) {
       row.rowIndex = rowIndex;
+    },
+    headerRowClassName() {
+      return "cus-table-header";
+    },
+    handleSelectable(row, idx) {
+      if (
+        this.isSelection &&
+        this.$attrs.selectable &&
+        typeof this.$attrs.selectable === "function"
+      ) {
+        return this.$attrs.selectable(row, idx);
+      }
+      const list = this.disabledList;
+      const filter = this.filterQuery;
+      if (
+        list &&
+        list.length &&
+        this.disabledKey &&
+        list.includes(row[this.disabledKey])
+      ) {
+        return 0;
+      } else if (Object.keys(filter).length) {
+        let step = 0;
+        Object.keys(filter).forEach((key) => {
+          if (filter[key].test(row[key])) {
+            step = step + 1;
+          }
+        });
+
+        if (step >= Object.keys(filter).length) {
+          /* if (isChange) {
+              this.key = Date.parse(new Date());
+            } */
+          return 1;
+        } else {
+          return 0;
+        }
+      } else {
+        return 1;
+      }
     },
   },
 };

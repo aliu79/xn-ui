@@ -1,6 +1,13 @@
 <template>
   <div class="xn-search">
-    <el-form ref="form" inline :model="form" :label-width="labelWidth">
+    <el-form
+      ref="form"
+      inline
+      :model="form"
+      :label-width="labelWidth"
+      @submit.native.prevent
+      @keyup.enter.native="onSearch"
+    >
       <el-row :gutter="0" class="xn-search--row">
         <template v-for="(item, idx) in form.value">
           <el-col v-bind="{ ...col }" :key="idx" v-show="item.isShow || isColl">
@@ -15,7 +22,9 @@
                 :key="item.prop"
                 :data-level="(item.options && item.options.dataLevel) || 2"
                 v-model="item.modelVal"
+                v-bind="item.options ? { ...item.options } : {}"
                 @on-city="handleChangeCity"
+                
               />
             </el-form-item>
             <el-form-item
@@ -53,6 +62,7 @@
                 :reserve-keyword="isRemote(item.remote)"
                 :default-first-option="isRemote(item.remote)"
                 :remote-method="item.remote"
+                
               >
                 <el-option
                   v-for="(itemData, idxData) in item.data"
@@ -302,12 +312,11 @@ export default {
     setValue(key, value) {
       if (Object.prototype.toString.call(key) === "[object Object]") {
         const list = this.form.value;
-        const keys = Object.keys(key)
+        const keys = Object.keys(key);
         for (let i = 0; i < list.length; i++) {
           const item = list[i];
-          if(keys.includes(item.prop)){
-            console.log(item,key[item.prop]);
-            item.modelVal = key[item.prop]
+          if (keys.includes(item.prop)) {
+            item.modelVal = key[item.prop];
           }
         }
         return;

@@ -68,6 +68,14 @@
           >
             <span class="pl-5">Tag</span>
           </router-link>
+          <router-link
+            to="/component/card"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">卡片</span>
+          </router-link>
         </ul>
       </ol>
       <ol>

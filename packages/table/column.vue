@@ -3,6 +3,7 @@
     v-bind="$attrs"
     v-on="$listeners"
     v-if="isShowColumn($attrs)"
+    :show-overflow-tooltip="showOverflowTooltip($attrs)"
   >
     <template v-if="$attrs.labelMsg">
       <template slot="header">
@@ -101,6 +102,12 @@ export default {
     },
   },
   computed: {
+    showOverflowTooltip(){
+      return (attrs)=>{
+        const showTip = (attrs['showOverflowTooltip'] != undefined && attrs['showOverflowTooltip'] !== true) || (attrs['show-overflow-tooltip'] != undefined && attrs['show-overflow-tooltip'] !== true) 
+        return attrs.more ? false : showTip ? !showTip : true
+      }
+    },
     label() {
       return (itemBtn, row) => {
         return typeof itemBtn.label === "function"

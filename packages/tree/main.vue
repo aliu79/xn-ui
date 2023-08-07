@@ -61,7 +61,7 @@ export default {
       if (
         data.parentId &&
         data.parentId !== 0 &&
-        !data[this.defaultProps.children].length
+        (data[this.defaultProps.children] && !data[this.defaultProps.children].length)
       ) {
         className = 'especially'
       }

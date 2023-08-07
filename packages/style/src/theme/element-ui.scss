@@ -1,0 +1,18 @@
+.el-descriptions {
+    .el-descriptions-item__label:not(.is-bordered-label) {
+        color: #909097;
+    }
+    &--small {
+        font-size: 14px;
+    }
+}
+.el-table {
+    tr.cus-table-header {
+        th {
+            background-color: #fafafa;
+            padding: 5px 0;
+            font-weight: 400;
+            color: #202131;
+        }
+    }
+}

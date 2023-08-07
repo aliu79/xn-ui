@@ -9,7 +9,15 @@
       </el-tab-pane>
     </el-tabs> -->
 
-    <xn-table :columns="listHeader" :data="list"></xn-table>
+    <xn-table
+      type="radio"
+      :columns="listHeader"
+      disabled-key="id"
+      :disabled-list="disabledList"
+      :data="list"
+      :page="pageConfig"
+      @on-radio="onradio"
+    ></xn-table>
   </div>
 </template>
 
@@ -31,19 +39,8 @@ export default {
         },
       ],
       listHeader: [
-        { prop: "id", label: "ID" },
-        { prop: "id", label: "ID" },
-        { prop: "id", label: "ID" },
-        { prop: "id", label: "ID" },
-        { prop: "id", label: "ID" },
-        { prop: "id", label: "ID" },
-        { prop: "id", label: "ID" },
-        { prop: "id", label: "ID" },
-        { prop: "id", label: "ID" },
-        { prop: "id", label: "ID" },
-        { prop: "id", label: "ID" },
-        { prop: "id", label: "ID" },
-        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID",showOverflowTooltip: false },
+        { prop: "id", label: "ID1",'show-overflow-tooltip':false },
         { prop: "id", label: "ID" },
         { prop: "id", label: "ID" },
         { prop: "id", label: "ID" },
@@ -57,6 +54,10 @@ export default {
           render: (h, { row }) => h("span", row.name),
         },
         { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
         { prop: "date", label: "日期", sortable: true },
         {
           label: "操作",
@@ -65,18 +66,21 @@ export default {
             options: [
               { label: "你好" },
               { label: "你好" },
-              { label: "你好" },
-              { label: "你好" },
-              { label: "你好" },
-              { label: "你好" },
             ],
           },
         },
       ],
+      disabledList: [122],
       list: [
         { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
         {
-          id: 123,
+          id: 222222222222222,
           uid: 1,
           date: "2011-01-01",
           name: "地方",
@@ -85,8 +89,8 @@ export default {
         // { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
       ],
       pageConfig: {
-        total: 100,
-        pageSize: 15,
+        total: 8,
+        pageSize: 1,
         pageNum: 1,
       },
       tools: [{ label: "导出", prop: "export", icon: "el-icon-files" }],
@@ -111,10 +115,14 @@ export default {
       console.log(v);
     },
     onradio(row, a) {
-      console.log("val: ", row, a);
+      console.log("val: ", {...row}, {...a});
     },
     onSelection(val) {
       console.log(val);
+    },
+    handleSelectable(a, b ) {
+      console.log("a,b,c: ", a, b );
+      return false
     },
   },
 };

@@ -12,21 +12,40 @@ class Math {
     constructor(type) {
         this.type = type
     }
-    result(...args) {
-        if (!args) {
+    result(..._args) {
+        if (!_args) {
             throw new Error('error arguments')
         }
+
+        let args = [..._args];
+        let isUnFixed = false; // 是否不需要fixed
+        const lastArgs = args[args.length-1];
+        if(lastArgs&&lastArgs.constructor===Object){
+         args.pop();
+         if('unFixed' in lastArgs){
+          isUnFixed = lastArgs.unFixed;
+         }
+        }
+
         if (Array.isArray(args[0]) && args[1]) {
             if (!args[0].length) return 0
             const list = args[0]
             const fieldKey = args[1]
             return list.map(item => item[fieldKey]).reduce((pre, cur) => {
                 let val = new Decimal(pre - 0)
-                return val[this.type](new Decimal(cur - 0)).toNumber()
+                let res = val[this.type](new Decimal(cur - 0))
+                if(!isUnFixed){
+                 res = res.toFixed(2)
+                }
+                return new Decimal(res).toNumber()
             })
         } else {
             return args.reduce((pre, cur) => {
-                return new Decimal(pre - 0)[this.type](new Decimal(cur - 0)).toNumber()
+                let res = new Decimal(pre - 0)[this.type](new Decimal(cur - 0))
+                if(!isUnFixed){
+                 res = res.toFixed(2)
+                }
+                return new Decimal(res).toNumber()
             })
         }
     }
