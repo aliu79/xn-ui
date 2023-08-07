@@ -9,6 +9,7 @@
     size="small"
   >
     <div class="xn-import">
+      <slot name="form"></slot>
       <el-link
         class="mb-20"
         type="success"
@@ -45,8 +46,8 @@
         </template>
         <div v-if="tip" slot="tip" class="el-upload__tip">{{ tip }}</div>
       </el-upload>
-      <slot name="desc" class="xn-import-desc mt-10 fz-12">
-        <el-alert title="注：" type="warning">
+      <slot name="desc" v-if="showDesc" class="xn-import-desc fz-12">
+        <el-alert title="注：" class=" mt-10" type="warning">
           <div>
             <p>
               1、非系统模板的文件会导入失败，请务必使用系统模板，点击上方按钮进行下载
@@ -84,8 +85,16 @@ export default {
       type: String,
       default: ".xls,.xlsx",
     },
+    showDesc: {
+      type: Boolean,
+      default: true,
+    },
     templateConfig: {
       type: Object,
+      default: () => {},
+    },
+    beforeConfirm: {
+      type: Function,
       default: () => {},
     },
   },
@@ -133,10 +142,26 @@ export default {
       this.$utils.download(this.templateConfig);
     },
     handleConfirm() {
-      if (!this.fileList.length) {
-        return this.$message.warning("请选择要上传的文件");
+      if (
+        this.beforeConfirm &&
+        typeof this.beforeConfirm === "function" &&
+        this.isPromise(this.beforeConfirm())
+      ) {
+        this.beforeConfirm().then(() => {
+          if (!this.fileList.length) {
+            return this.$message.warning("请选择要上传的文件");
+          }
+          this.submit();
+        });
+      } else {
+        if (!this.fileList.length) {
+          return this.$message.warning("请选择要上传的文件");
+        }
+        this.submit();
       }
-      this.submit();
+    },
+    isPromise(obj) {
+      return obj && Object.prototype.toString.call(obj) === "[object Promise]";
     },
   },
 };
