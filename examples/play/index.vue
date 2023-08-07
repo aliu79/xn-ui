@@ -1,44 +1,32 @@
 <template>
-  <xn-upload
-    :fileList.sync="fileList"
-    :limit="limit"
-    :accept="['zip','jpg']"
-    @on-success="onSuccess"
-    @on-uploaded="handleUoloaded"
-  ></xn-upload>
+  <div>
+    <el-button type="primary" size="default" @click="isShowImport = true">导入</el-button>
+    <xn-import
+      ref="import"
+      :show.sync="isShowImport"
+      :auto-upload="false"
+      :template-config="templateConfig"
+      :limit="1"
+      :tip="'仅支持上传xls,xlsx文件'"
+      @on-import="handleImportFile"
+    />
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      limit: 22,
-      config: {
-        accept: "image", //接受上传的文件类型：zip、pdf、excel、image，也可以是文件类型所组成的数组类型如：['image', 'pdf']，则只可以上传图片或pdf类型的文件，也可以为空，则任何类型的文件都可以上传
-        max: 100, //文件大小
+      isShowImport: false,
+      templateConfig: {
+        url: "https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/02/16/ed4d8a5eb805430f94f311490d7dfe21.xls",
+        name: "批量导入",
       },
-      fileList: [
-        {
-          url: "https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/27/d7adc4c79b2a4aa297403485739d65f1.pdf",
-        },
-      ],
     };
   },
-  methods: {
-    onSuccess(val) {
-      console.log(val);
-    },
-    beforeUpload(val) {
-      console.log("val", val);
-    },
-    handleUoloaded(val){
-      console.log('val: ', val);
-
-    },
-    onProgress() {},
-    onPreview() {},
-    onRemove() {},
-  },
+  methods:{
+    handleImportFile(){}
+  }
 };
 </script>
 
