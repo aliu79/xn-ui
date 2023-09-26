@@ -306,7 +306,7 @@ export default {
     },
     setData(key, data) {
       const row =
-        this.form.value && this.form.value.find((item) => item.label === key);
+        this.form.value && this.form.value.find((item) => item.label === key || item.prop === key);
       this.$set(row, "data", data);
     },
     setValue(key, value) {
