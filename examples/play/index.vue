@@ -37,8 +37,11 @@ export default {
     ])
   },
   methods:{
-    onSearch(val){
-        console.log('val: ', val);
+    onSearch(){
+        // console.log('val: ', val);
+        this.$utils.download({
+          url:'https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/11/15/生成结果20231115164426130.pdf',
+        })
     }
   }
 };

@@ -58,14 +58,13 @@ const deepClone = (source) => {
  * @param {object} params 
  * @param {string} name 文件名 
  * @param {string} url 文件地址
+ * @returns 
  */
 const download = (params = { name: '', url: '' }) => {
-  const defaultParams = {
-    url: '',
-    name: '下载模板'
-  }
-  const _params = Object.assign(defaultParams, params)
-  const { url, name } = _params
+  if(!params.url) return
+
+  let { url, name } = params
+  name = name ? name : getFileNameFromUrl(params.url)
   const x = new XMLHttpRequest();
   x.open("GET", url, true);
   x.responseType = "blob";
@@ -82,6 +81,23 @@ const download = (params = { name: '', url: '' }) => {
   };
   x.send();
 }
+
+/**
+ * 从url中获取文件名
+ * @param {string} url
+ * @returns {string} filename
+ * @example
+ * getFileNameFromUrl('http://www.baidu.com/abc/def/123.jpg') // 123.jpg  
+ * getFileNameFromUrl('http://www.baidu.com/abc/def/') // def
+ */
+const getFileNameFromUrl = function(url){
+  var parsedUrl = new URL(url);
+  var pathname = parsedUrl.pathname;
+  var pathComponents = pathname.split('/');
+  var filename = pathComponents[pathComponents.length - 1];
+  return decodeURIComponent(filename);
+}
+
 /**
  * 根据某个key 对数组去重合并
  * @param {array} arr 需要合并的数组
