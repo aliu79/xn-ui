@@ -203,7 +203,7 @@ export default {
     this.idCardSize()
   },
   beforeDestroy() {
-    this.$emit("update:fileList", []);
+    // this.$emit("update:fileList", []);
   },
   methods: {
     async idCardSize() {
