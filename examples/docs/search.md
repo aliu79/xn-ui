@@ -23,6 +23,13 @@
                     {label: '时间',prop:'date',type:'daterange',options:{start:'stime',end:'etime'}},
                     {label: '时间',prop:'date1',type:'date'},
                     {label: '传入数据',prop:'field3',type:'select'},
+                    {label: '级联菜单',prop:'field4',type:'cascader',data:[{label:'男',value:1},{label:'女',value:2}],options:{
+                        props:{
+                            value:'value',
+                            label:'label',
+                            children:'children'
+                        }
+                    }},
                 ]
             }
         },
@@ -60,7 +67,7 @@
 ### form-data 参数
 | 参数        | 说明                                                   | 类型   | 可选值                                                  | 默认值 |
 | ----------- | ------------------------------------------------------ | ------ | ------------------------------------------------------- | ------ |
-| type        | 表单的类型                                             | string | input/select/city/date/datetime/daterange/datetimerange | -      |
+| type        | 表单的类型                                             | string | input/select/city/date/datetime/daterange/datetimerange/cascader | -      |
 | label       | 名称                                                   | string | -                                                       | -      |
 | prop        | 查询需要的key                                          | string | -                                                       | -      |
 | placeholder | 占位符                                                 | string | -                                                       | -      |
