@@ -1,7 +1,7 @@
 <template>
-  <div class="xn-ellipsis" ref="root">
+  <div class="xn-ellipsis" ref="root" @mouseover="onMouseUp" @mouseleave="onMouseLeave">
     {{ expanded ? content : text }}
-    <span class="xn-ellipsis__action" v-if="hasAction" @click="onClickAction">{{
+    <span class="xn-ellipsis__action" v-if="hasAction"  @click="onClickAction">{{
       expanded ? collapseText : expandText
     }}</span>
   </div>
@@ -27,6 +27,10 @@ export default {
       type: String,
       default: "收起",
     },
+    trigger:{
+      type:String,
+      default:"click"
+    }
   },
   data() {
     return {
@@ -64,6 +68,7 @@ export default {
       const { root } = this.$refs;
       const cloneContainer = () => {
         if (!root) return;
+        console.log("🚀 ~ file: main.vue:71 ~ cloneContainer ~ root:", root)
         const originStyle = window.getComputedStyle(root);
         const container = document.createElement("div");
         const styleNames = Array.prototype.slice.apply(originStyle);
@@ -80,6 +85,7 @@ export default {
 
         container.innerText = this.content;
         document.body.appendChild(container);
+        console.log(container);
         return container;
       };
       const calcEllipsisText = (container, maxHeight) => {
@@ -123,9 +129,20 @@ export default {
       document.body.removeChild(container);
     },
     onClickAction(event) {
+      if(this.trigger !== 'click') return
       this.expanded = !this.expanded;
       this.$emit("clickAction", event);
     },
+    onMouseUp(event){
+      if(this.trigger!=='hover') return
+      this.expanded =!this.expanded;
+      this.$emit("hover", event);
+    },
+    onMouseLeave(event){
+      if(this.trigger!=='hover') return
+      this.expanded = false;
+      this.$emit("hover", event);
+    }
   },
   mounted() {
     this.calcEllipsised();

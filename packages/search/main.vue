@@ -24,8 +24,21 @@
                 v-model="item.modelVal"
                 v-bind="item.options ? { ...item.options } : {}"
                 @on-city="handleChangeCity"
-                
               />
+            </el-form-item>
+            <el-form-item
+              v-if="item.type === 'cascader'"
+              :key="idx"
+              :label="item.label"
+              :prop="item.prop"
+              class="xn-search--row_col"
+            >
+              <el-cascader
+                style="width:100%"
+                :options="item.data"
+                v-bind="item.options ? { ...item.options } : {}"
+                @change="onChangeCascader($event,item)"
+              ></el-cascader>
             </el-form-item>
             <el-form-item
               v-if="item.type === 'input'"
@@ -62,7 +75,6 @@
                 :reserve-keyword="isRemote(item.remote)"
                 :default-first-option="isRemote(item.remote)"
                 :remote-method="item.remote"
-                
               >
                 <el-option
                   v-for="(itemData, idxData) in item.data"
@@ -306,7 +318,8 @@ export default {
     },
     setData(key, data) {
       const row =
-        this.form.value && this.form.value.find((item) => item.label === key || item.prop === key);
+        this.form.value &&
+        this.form.value.find((item) => item.label === key || item.prop === key);
       this.$set(row, "data", data);
     },
     setValue(key, value) {
@@ -326,6 +339,13 @@ export default {
         this.form.value && this.form.value.find((item) => item.label === key);
       if (row) {
         this.$set(row, "modelVal", value);
+      }
+    },
+    onChangeCascader(val,item){
+      const newArr = [...new Set(val.flat(Infinity))]
+      item.modelVal = newArr
+      if(item.options && item.options.change && typeof item.options.change === 'function'){
+        item.options.change(newArr,val)
       }
     },
   },
