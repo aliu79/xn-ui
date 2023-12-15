@@ -5,6 +5,7 @@
       v-for="item in ['grey', 'blue', 'yellow', 'orange', 'red', 'green']"
       :default-color="item"
       effect="dark"
+      closable
       icon="el-icon-edit"
       >
       

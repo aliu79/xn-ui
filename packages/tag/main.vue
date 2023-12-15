@@ -87,7 +87,7 @@ export default {
 
     const isIcon = this.$slots.icon || (icon && <i class={icon}></i>);
     const tagEl = (
-      <span style={{ ..._color(color, effect) }} class={classes}>
+      <span {... this.$attrs } props={this.$props} style={{ ..._color(color, effect) }} class={classes}>
         {isIcon} {this.$slots.default}
       </span>
     );

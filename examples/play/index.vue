@@ -3,11 +3,12 @@
     <xn-search
       ref="formSearch"
       class="mt-18"
-      :span="4"
-      :show-coll="false"
+      label-width="0"
       :form-data="formSearch"
       @on-search="onSearch"
     ></xn-search>
+    <el-button type="primary" size="default" @click="onClear">清空</el-button>
+    
   </div>
 </template>
 
@@ -17,6 +18,13 @@ export default {
     return {
       formSearch: [
         { prop: "type", type: "input", placeholder: "商机编号" },
+        { prop: "taskNo", type: "input", placeholder: "任务编号" },
+        { prop: "taskNo", type: "input", placeholder: "任务编号" },
+        { prop: "taskNo", type: "input", placeholder: "任务编号" },
+        { prop: "taskNo", type: "input", placeholder: "任务编号" },
+        { prop: "taskNo", type: "input", placeholder: "任务编号" },
+        { prop: "taskNo", type: "input", placeholder: "任务编号" },
+        { prop: "taskNo", type: "input", placeholder: "任务编号" },
         { prop: "taskNo", type: "input", placeholder: "任务编号" },
         {
           prop: "cascaderValue",
@@ -105,6 +113,9 @@ export default {
       console.log('val: ', val);
       
     },
+    onClear(){
+      this.$refs.formSearch.resetFields()
+    }
   },
 };
 </script>

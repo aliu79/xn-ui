@@ -34,10 +34,10 @@
               class="xn-search--row_col"
             >
               <el-cascader
-                style="width:100%"
+                style="width: 100%"
                 :options="item.data"
                 v-bind="item.options ? { ...item.options } : {}"
-                @change="onChangeCascader($event,item)"
+                @change="onChangeCascader($event, item)"
               ></el-cascader>
             </el-form-item>
             <el-form-item
@@ -121,7 +121,9 @@
         <el-col v-bind="{ ...col }">
           <el-form-item
             class="xn-search-searchbtn"
-            :style="{ 'padding-left': `${lastLabelWidth || labelWidth}` }"
+            :style="{
+              'padding-left': btnLabelWidth,
+            }"
           >
             <slot name="prepend"></slot>
             <el-button type="primary" icon="el-icon-search" @click="onSearch"
@@ -147,8 +149,10 @@
 </template>
 
 <script>
+import { Form } from "element-ui";
 export default {
   name: "XnSearch",
+  extends: Form,
   props: {
     formData: {
       type: Array,
@@ -239,6 +243,16 @@ export default {
         return flag;
       };
     },
+    btnLabelWidth(){
+      const {lastLabelWidth,labelWidth} = this
+      let w = labelWidth
+      if(lastLabelWidth!=null){
+        w=lastLabelWidth
+      } else if(this.form.value.length === 1 || !this.isColl){
+        w=0
+      }
+      return w 
+    }
   },
   data() {
     return {
@@ -300,10 +314,7 @@ export default {
       this.$emit("on-search", formValue);
     },
     onReset() {
-      for (let i = 0, formData = this.form.value; i < formData.length; i++) {
-        const item = formData[i];
-        item.modelVal = "";
-      }
+      this.resetFields()
       this.$emit("on-reset");
       this.$emit("on-search", {});
     },
@@ -341,11 +352,21 @@ export default {
         this.$set(row, "modelVal", value);
       }
     },
-    onChangeCascader(val,item){
-      const newArr = [...new Set(val.flat(Infinity))]
-      item.modelVal = newArr
-      if(item.options && item.options.change && typeof item.options.change === 'function'){
-        item.options.change(newArr,val)
+    onChangeCascader(val, item) {
+      const newArr = [...new Set(val.flat(Infinity))];
+      item.modelVal = newArr;
+      if (
+        item.options &&
+        item.options.change &&
+        typeof item.options.change === "function"
+      ) {
+        item.options.change(newArr, val);
+      }
+    },
+    resetFields() {
+      for (let i = 0, formData = this.form.value; i < formData.length; i++) {
+        const item = formData[i];
+        item.modelVal = "";
       }
     },
   },
