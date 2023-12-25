@@ -34,6 +34,7 @@
               class="xn-search--row_col"
             >
               <el-cascader
+                v-model="item.modelVal"
                 style="width: 100%"
                 :options="item.data"
                 v-bind="item.options ? { ...item.options } : {}"
