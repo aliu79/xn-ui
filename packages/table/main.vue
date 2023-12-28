@@ -3,7 +3,7 @@
     <div class="xn-table-box-tools" :class="{ 'is-border': !border }">
       <div class="flex justify-content-between align-items-center">
         <div class="fz-12" :class="{ 'pb-10': isSelection }">
-          <template v-if="isSelection">
+          <template v-if="isSelection && selectedData.length>0">
             <span>已选择 {{ selectedData.length }} 项</span>
             <el-button
               type="text"
@@ -237,7 +237,6 @@ export default {
       this.selectedData = val;
       this.$emit("selection-change", val);
       this.$emit("on-selection", val);
-      // this.$refs.table.get
     },
     toggleRowSelection(row, status) {
       this.$refs.table.toggleRowSelection(row, status);

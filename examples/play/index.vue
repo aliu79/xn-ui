@@ -1,14 +1,12 @@
 <template>
   <div>
-    <xn-search
-      ref="formSearch"
-      class="mt-18"
-      label-width="0"
-      :form-data="formSearch"
-      @on-search="onSearch"
-    ></xn-search>
-    <el-button type="primary" size="default" @click="onClear">清空</el-button>
-    
+    <xn-table
+      type="selection"
+      :columns="listHeader"
+      :data="list"
+      :page="pageConfig"
+      @on-page="fnGetList"
+    ></xn-table>
   </div>
 </template>
 
@@ -16,106 +14,108 @@
 export default {
   data() {
     return {
-      formSearch: [
-        { prop: "type", type: "input", placeholder: "商机编号" },
-        { prop: "taskNo", type: "input", placeholder: "任务编号" },
-        { prop: "taskNo", type: "input", placeholder: "任务编号" },
-        { prop: "taskNo", type: "input", placeholder: "任务编号" },
-        { prop: "taskNo", type: "input", placeholder: "任务编号" },
-        { prop: "taskNo", type: "input", placeholder: "任务编号" },
-        { prop: "taskNo", type: "input", placeholder: "任务编号" },
-        { prop: "taskNo", type: "input", placeholder: "任务编号" },
-        { prop: "taskNo", type: "input", placeholder: "任务编号" },
+      show: false,
+      activeName: "1",
+      type: 2,
+      listHeader2: [
         {
-          prop: "cascaderValue",
-          type: "cascader",
-          options: {
-            change:(n,o)=>{
-                console.log('123',n,o)
-            }
+          prop: "id",
+          label: "ID",
+          show: (row) => {
+            console.log(row);
+            return false;
           },
-          data: [
-            {
-              value: 1,
-              label: "东南",
-              children: [
-                {
-                  value: 2,
-                  label: "上海",
-                  children: [
-                    { value: 3, label: "普陀" },
-                    { value: 4, label: "黄埔" },
-                    { value: 5, label: "徐汇" },
-                  ],
-                },
-                {
-                  value: 7,
-                  label: "江苏",
-                  children: [
-                    { value: 8, label: "南京" },
-                    { value: 9, label: "苏州" },
-                    { value: 10, label: "无锡" },
-                  ],
-                },
-                {
-                  value: 12,
-                  label: "浙江",
-                  children: [
-                    { value: 13, label: "杭州" },
-                    { value: 14, label: "宁波" },
-                    { value: 15, label: "嘉兴" },
-                  ],
-                },
-              ],
-            },
-            {
-              value: 17,
-              label: "西北",
-              children: [
-                {
-                  value: 18,
-                  label: "陕西",
-                  children: [
-                    { value: 19, label: "西安" },
-                    { value: 20, label: "延安" },
-                  ],
-                },
-                {
-                  value: 21,
-                  label: "新疆维吾尔族自治区",
-                  children: [
-                    { value: 22, label: "乌鲁木齐" },
-                    { value: 23, label: "克拉玛依" },
-                  ],
-                },
-              ],
-            },
-          ],
-          placeholder: "任务编号",
-        },
-        {
-          prop: "handlerId",
-          type: "select",
-          options: { labelKey: "name", valueKey: "id" },
-          placeholder: "请选择处理人",
         },
       ],
+      listHeader: [
+        { prop: "id", label: "ID",showOverflowTooltip: false },
+        { prop: "id", label: "ID1",'show-overflow-tooltip':false },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        {
+          label: "姓名",
+          sortable: true,
+          render: (h, { row }) => h("span", row.name),
+        },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "date", label: "日期", sortable: true },
+        {
+          label: "操作",
+          fixed: "right",
+          more: {
+            options: [
+              { label: "你好" },
+              { label: "你好" },
+            ],
+          },
+        },
+      ],
+      disabledList: [122],
+      list: [
+        { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // {
+        //   id: 222222222222222,
+        //   uid: 1,
+        //   date: "2011-01-01",
+        //   name: "地方",
+        //   age: 18,
+        // },
+        // { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
+      ],
+      pageConfig: {
+        total: 8,
+        pageSize: 1,
+        pageNum: 1,
+      },
+      tools: [{ label: "导出", prop: "export", icon: "el-icon-files" }],
+      // pageConfig: {},
     };
   },
+  computed: {},
   created() {},
-  mounted() {
-    this.$refs.formSearch.setData("handlerId", [
-      { id: "0330811d56e1eb150aac8d09330dd7ca", name: "平安录单1", type: 1 },
-    ]);
-  },
+  watch: {},
   methods: {
-    onSearch(val) {
-      console.log('val: ', val);
-      
+    handleSort(e) {
+      console.log(e);
     },
-    onClear(){
-      this.$refs.formSearch.resetFields()
-    }
+    handleRefresh() {
+      console.log("re");
+    },
+    handleButtons(args) {
+      console.log(args);
+      this.$refs.table.clearSelection();
+    },
+    fnGetList(v) {
+      console.log(v);
+      this.list = [
+        { id: 122, uid: 1, date: "2011-01-01", name: "阿11111松大", age: 18 },
+      ]
+    },
+    onradio(row, a) {
+      console.log("val: ", {...row}, {...a});
+    },
+    onSelection(val) {
+      console.log(val);
+    },
+    handleSelectable(a, b ) {
+      console.log("a,b,c: ", a, b );
+      return false
+    },
   },
 };
 </script>
