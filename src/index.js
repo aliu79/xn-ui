@@ -14,7 +14,7 @@ import XnExport from '../packages/export/index'
 import XnFooter from '../packages/footer/index'
 import XnEmpty from '../packages/empty/index'
 import XnTag from '../packages/tag/index'
-import XnEllipsis from '../packages/ellipsis/index'
+import XnText from '../packages/ellipsis/index'
 import XnCard from '../packages/card/index'
 import XnDescription from '../packages/description/index'
 import XnDescriptionItem from '../packages/descriptionItem/index'
@@ -37,7 +37,7 @@ const components = [
     XnFooter,
     XnEmpty,
     XnTag,
-    XnEllipsis,
+    XnText,
     XnCard,
     XnDescription,
     XnDescriptionItem
@@ -86,6 +86,6 @@ export default {
     XnFooter,
     XnEmpty,
     XnTag,
-    XnEllipsis,
+    XnText,
     XnCard
 }

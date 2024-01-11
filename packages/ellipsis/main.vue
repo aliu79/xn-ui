@@ -1,23 +1,59 @@
 <template>
-  <div class="xn-ellipsis" ref="root" @mouseover="onMouseUp" @mouseleave="onMouseLeave">
-    {{ expanded ? content : text }}
-    <span class="xn-ellipsis__action" v-if="hasAction"  @click="onClickAction">{{
-      expanded ? collapseText : expandText
-    }}</span>
+  <div style="width: 100%">
+    <div
+      class="xn-ellipsis"
+      ref="root"
+      @mouseover="onMouseUp"
+      @mouseleave="onMouseLeave"
+    >
+      <slot>
+        <template v-if="showAction"
+          ><span>{{ expanded ? content : text }}</span
+          ><span
+            class="xn-ellipsis__action"
+            v-if="hasAction"
+            @click="onClickAction"
+            >{{ expanded ? collapseText : expandText }}
+          </span>
+        </template>
+        <template v-else>
+          <template v-if="hasAction">
+            <el-tooltip
+              effect="dark"
+              :content="content"
+              popper-class="xn-ellipsis__tooltip"
+              :disabled="showAction && hasAction"
+              placement="bottom-start"
+              v-bind="$attrs"
+              ><span class="xn-ellipsis__text">{{ text }}</span></el-tooltip
+            >
+          </template>
+          <template v-else>
+            <span>{{
+              content == undefined || content === "" ? emptyText : content
+            }}</span>
+          </template>
+        </template>
+      </slot>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "XnEllipsis",
+  name: "XnText",
   props: {
     rows: {
       type: Number,
       default: 1,
     },
+    showAction: {
+      type: Boolean,
+      default: false,
+    },
     content: {
-      type: String,
-      default:"",
+      type: [String, Number],
+      default: "",
     },
     expandText: {
       type: String,
@@ -27,10 +63,14 @@ export default {
       type: String,
       default: "收起",
     },
-    trigger:{
-      type:String,
-      default:"click"
-    }
+    trigger: {
+      type: String,
+      default: "click",
+    },
+    emptyText: {
+      type: String,
+      default: "-",
+    },
   },
   data() {
     return {
@@ -68,7 +108,6 @@ export default {
       const { root } = this.$refs;
       const cloneContainer = () => {
         if (!root) return;
-        console.log("🚀 ~ file: main.vue:71 ~ cloneContainer ~ root:", root)
         const originStyle = window.getComputedStyle(root);
         const container = document.createElement("div");
         const styleNames = Array.prototype.slice.apply(originStyle);
@@ -85,11 +124,10 @@ export default {
 
         container.innerText = this.content;
         document.body.appendChild(container);
-        console.log(container);
         return container;
       };
       const calcEllipsisText = (container, maxHeight) => {
-        const { content, expandText } = this;
+        const { content, expandText, showAction } = this;
 
         const dot = "...";
         let left = 0;
@@ -98,7 +136,9 @@ export default {
 
         while (left <= right) {
           const mid = Math.floor((left + right) / 2);
-          container.innerText = content.slice(0, mid) + dot + expandText;
+          container.innerText = showAction
+            ? content.slice(0, mid) + dot + expandText
+            : content.slice(0, mid) + dot;
           if (container.offsetHeight <= maxHeight) {
             left = mid + 1;
             res = mid;
@@ -106,6 +146,7 @@ export default {
             right = mid - 1;
           }
         }
+        res = showAction ? res : res;
         return content.slice(0, res) + dot;
       };
 
@@ -124,25 +165,25 @@ export default {
         this.text = calcEllipsisText(container, maxHeight);
       } else {
         this.hasAction = false;
-        this.text = content;
+        this.text = content == null || content === "" ? this.emptyText : content;
       }
       document.body.removeChild(container);
     },
     onClickAction(event) {
-      if(this.trigger !== 'click') return
+      if (this.trigger !== "click") return;
       this.expanded = !this.expanded;
-      this.$emit("clickAction", event);
+      this.$emit("click-action", this.expanded, event);
     },
-    onMouseUp(event){
-      if(this.trigger!=='hover') return
-      this.expanded =!this.expanded;
-      this.$emit("hover", event);
+    onMouseUp(event) {
+      if (this.trigger !== "hover") return;
+      this.expanded = !this.expanded;
+      this.$emit("hover-action", this.expanded, event);
     },
-    onMouseLeave(event){
-      if(this.trigger!=='hover') return
+    onMouseLeave(event) {
+      if (this.trigger !== "hover") return;
       this.expanded = false;
-      this.$emit("hover", event);
-    }
+      this.$emit("hover-action", this.expanded, event);
+    },
   },
   mounted() {
     this.calcEllipsised();
@@ -154,5 +195,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

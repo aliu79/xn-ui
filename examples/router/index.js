@@ -25,6 +25,7 @@ const routes = [
       { path: '/component/tip', name: 'Tip', component: () => import('../docs/tip.md') },
       { path: '/component/tag', name: 'Tag', component: () => import('../docs/tag.md') },
       { path: '/component/card', name: 'Card', component: () => import('../docs/card.md') },
+      { path: '/component/ellipsis', name: 'Ellipsis', component: () => import('../docs/ellipsis.md') },
     ]
   },
   {

@@ -4,8 +4,12 @@
     word-break: break-word;
     line-height: 1.6;
     font-size: 14px;
+    color: inherit;
     &__action {
         color: $--color-primary;
         cursor: pointer;
+    }
+    &__tooltip{
+        max-width: 300px;
     }
 }

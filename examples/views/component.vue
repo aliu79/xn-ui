@@ -76,6 +76,14 @@
           >
             <span class="pl-5">卡片</span>
           </router-link>
+          <router-link
+            to="/component/ellipsis"
+            exact-active-class="active"
+            tag="li"
+            class="doc-nav-item__group-list-item"
+          >
+            <span class="pl-5">文本省略</span>
+          </router-link>
         </ul>
       </ol>
       <ol>
