@@ -4,8 +4,7 @@
       ref="city"
       v-model="city"
       filterable
-      :data-level="2"
-      :props="{ checkStrictly: true }"
+      @on-city="oncity"
     ></xn-city>
     <el-button type="primary" size="default" @click="click">btn</el-button>
   </div>
@@ -21,9 +20,12 @@ export default {
   mounted() {},
   methods: {
     click() {
-      const name = this.$refs.city.str2Code("地址：四川省'-广安市@武胜县show");
+      const name = this.$refs.city.str2Code("地址：北京市东城区东华门街道故宫快餐故宫博物院");
       this.city = name
     },
+    oncity(val){
+      console.log("🚀 ~ oncity ~ val:", val)
+    }
   },
 };
 </script>

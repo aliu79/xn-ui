@@ -113,7 +113,7 @@
                     ? ['00:00:00', '23:59:59']
                     : item.defaultTime
                 "
-                @on-change="onChangeDate"
+                @on-change="item.change && item.change($event, item.prop)"
                 @on-format="onChangeDateFormat"
               />
             </el-form-item>
@@ -244,16 +244,16 @@ export default {
         return flag;
       };
     },
-    btnLabelWidth(){
-      const {lastLabelWidth,labelWidth} = this
-      let w = labelWidth
-      if(lastLabelWidth!=null){
-        w=lastLabelWidth
-      } else if(this.form.value.length === 1 || !this.isColl){
-        w=0
+    btnLabelWidth() {
+      const { lastLabelWidth, labelWidth } = this;
+      let w = labelWidth;
+      if (lastLabelWidth != null) {
+        w = lastLabelWidth;
+      } else if (this.form.value.length === 1 || !this.isColl) {
+        w = 0;
       }
-      return w 
-    }
+      return w;
+    },
   },
   data() {
     return {
@@ -315,15 +315,15 @@ export default {
       this.$emit("on-search", formValue);
     },
     onReset() {
-      this.resetFields()
+      this.resetFields();
       this.$emit("on-reset");
       this.$emit("on-search", {});
     },
-    onChangeDate() {
-      // console.log(val);
+    onChangeDate(val) {
+      console.log(val);
     },
-    onChangeDateFormat() {
-      // console.log(val);
+    onChangeDateFormat(val) {
+      console.log(val);
     },
     handleChangeCity({ cityCodeLast: cityCode, cityNameLast: cityName }) {
       this.city = { cityCode, cityName };
