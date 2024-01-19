@@ -7,7 +7,6 @@
     <div>
         <p>根据地址设置默认值：{{address}}</p>
         <xn-city ref="city" v-model="cityCode"  @on-city="getCity" />
-
         <el-button class="mt-20" type="primary" @click="setData">设置</el-button>
 
     </div>
@@ -25,9 +24,9 @@
                 console.log('val: ', val);
             },
             setData(){
-                const code = this.$refs.city.str2Code(this.address)
-                console.log('code: ', code);
-                this.cityCode = code
+                const { cityCodeLast } = this.$refs.city.str2Code(this.address)
+                console.log('code: ', cityCodeLast);
+                this.cityCode = cityCodeLast
             }
         }
     }

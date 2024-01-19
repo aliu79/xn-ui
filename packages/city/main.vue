@@ -188,12 +188,9 @@ export default {
       return recursive(data);
     },
     // 获取选中
-    handleChange(cityCode) {
+    handleChange(code) {
       // 返回数组形式 code和label
-      const cityName = this.handleTreeLabel(cityCode, this.cityList);
-      const city = this.handleTreeLabel(cityCode, this.cityList, 2);
-      const cityCodeLast = cityCode[cityCode.length - 1];
-      const cityNameLast = cityName[cityName.length - 1];
+      const { city, cityCode, cityName, cityCodeLast, cityNameLast } = this.getRes(code);
       let value = "";
       if (this.valueKey) {
         value = city[city.length - 1];
@@ -208,6 +205,20 @@ export default {
         cityCodeLast,
         cityNameLast,
       });
+    },
+    // 获取结果
+    getRes(cityCode) {
+      const cityName = this.handleTreeLabel(cityCode, this.cityList);
+      const city = this.handleTreeLabel(cityCode, this.cityList, 2);
+      const cityCodeLast = cityCode[cityCode.length - 1];
+      const cityNameLast = cityName[cityName.length - 1];
+      return {
+        city,
+        cityCode,
+        cityName,
+        cityCodeLast,
+        cityNameLast,
+      };
     },
     /**
      * 根据城市code 获取对应的城市
@@ -253,7 +264,9 @@ export default {
       const [cityName, ...rest] = nameList;
       const item =
         data &&
-        data.find((i) => i.cityName === cityName || cityName.indexOf(i.cityName) > -1);
+        data.find(
+          (i) => i.cityName === cityName || cityName.indexOf(i.cityName) > -1
+        );
       if (item) {
         return [item.cityCode, ...this.getCity(item.subCitys, rest)];
       } else {
@@ -270,7 +283,8 @@ export default {
           return ZXCITY.includes(item) && idx === 0 ? [item, ...arr] : arr;
         })[0];
       const arr = this.getCity(this.cityList, newarr);
-      return arr[arr.length - 1];
+      const res = this.getRes(arr);
+      return { ...res };
     },
   },
 };
