@@ -12,9 +12,9 @@
       <el-form-item label="文件格式" class="mb-0">
         {{ file.ext }}
       </el-form-item>
-      <el-form-item label="文件类型" class="mb-0">
+      <!-- <el-form-item label="文件类型" class="mb-0">
         {{ file.imgFlag ? "图片" : "文件" }}
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="操作" class="mb-0">
         <el-link
           type="primary"
