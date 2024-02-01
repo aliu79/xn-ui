@@ -34,6 +34,6 @@ inquirer.prompt([
     if (answer.selected === 'cover') {
         exec(`npm run build:lib`)
     } else {
-        exec(`npm version ${answer.selected} && npm run build:lib`)
+        exec(`npm version ${answer.selected} && npm run build:lib && npm publish && npm run deploy`)
     }
 })
