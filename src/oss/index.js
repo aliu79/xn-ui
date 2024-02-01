@@ -59,7 +59,6 @@ class Client {
                 })
                 resolve(this)
             }).catch((err) => {
-                console.log("🚀 ~ Client ~ fetch ~ err:", err)
                 reject(err)
             })
 
@@ -84,7 +83,6 @@ class Client {
                 .then(({ data }) => {
                     resolve(data)
                 }).catch((err) => {
-                    console.log("🚀 ~ Client ~ .then ~ err:", err)
                     reject(err)
                 });
         })
@@ -121,7 +119,6 @@ class Client {
                 })
 
             }).catch(err => {
-                console.log("🚀 ~ Client ~ returnnewPromise ~ err:", err)
                 file.onError();
                 reject(err)
             })
