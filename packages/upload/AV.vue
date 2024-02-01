@@ -6,7 +6,7 @@
     :before-close="onClose"
   >
     <div>
-      <video ref="video" controls class="xn-upload-video">
+      <video style="width: 100%;" ref="video" controls>
         <source :src="url" type="video/mp4" />
       </video>
     </div>
@@ -44,7 +44,5 @@ export default {
 </script>
 
 <style scoped>
-.xn-upload-video {
-  width: 100%;
-}
+
 </style>
