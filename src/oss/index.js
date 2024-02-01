@@ -28,6 +28,9 @@ class Client {
     isImg(file) {
         return file.type.indexOf('image') > -1
     }
+    isAV(file){
+        return file.type.indexOf('audio') > -1 || file.type.indexOf('video') > -1
+    }
     getFileNameUUID() {
         const uuid = uuidv4()
         return uuid
@@ -56,6 +59,7 @@ class Client {
                 })
                 resolve(this)
             }).catch((err) => {
+                console.log("🚀 ~ Client ~ fetch ~ err:", err)
                 reject(err)
             })
 
@@ -80,6 +84,7 @@ class Client {
                 .then(({ data }) => {
                     resolve(data)
                 }).catch((err) => {
+                    console.log("🚀 ~ Client ~ .then ~ err:", err)
                     reject(err)
                 });
         })
@@ -103,6 +108,7 @@ class Client {
                     size: currentFile.size,
                     ext: this.getExt(currentFile),
                     imgFlag: ~~this.isImg(currentFile),
+                    isAV: ~~this.isAV(currentFile),
                     url: this.uploadHost + res.name,
                     accessoryName: fileName,
                     accessorySize: currentFile.size
@@ -115,6 +121,7 @@ class Client {
                 })
 
             }).catch(err => {
+                console.log("🚀 ~ Client ~ returnnewPromise ~ err:", err)
                 file.onError();
                 reject(err)
             })

@@ -34,6 +34,39 @@ const isImg = (file) => {
   return false
 }
 /**
+ * 判断文件类型
+ * @param {*} file 
+ * @returns 
+ */
+const isAV = (file) => {
+  const { url } = file
+  if (typeof url !== 'string' || !url) return
+  var strFilter = '.mp4|.avi|.wmv|.MP4|.AVI|.WMV'
+  if (file.imgFlag) return true
+  if (url.indexOf('.') > -1) {
+    var p = url.lastIndexOf('.')
+    var strPostfix = url.substring(p, url.length) + '|'
+    strPostfix = strPostfix.toLowerCase()
+    if (strFilter.indexOf(strPostfix) > -1) {
+      return true
+    }
+  }
+  return false
+}
+const checkFile = (fileValue) =>{
+  var index = fileValue.lastIndexOf("."); //（考虑严谨用lastIndexOf(".")得到）得到"."在第几位
+  const fileValueSuffix = fileValue.substring(index); //截断"."之前的，得到后缀
+      if (/(.*)\.(mp4|avi|wmv|MP4|AVI|WMV)$/.test(fileValueSuffix)) { //根据后缀，判断是否符合视频格式
+          return 'video';
+      }else  if(/(.*)\.(jpg|JPG|bmp|BMP|mpg|MPG|mpeg|MPEG|tis|TIS)$/.test(fileValueSuffix)) { //根据后缀，判断是否符合图片格式
+          return 'image';
+      }else if (/(.*)\.(xls|XLS|xlsx|XLSX|doc|DOC|docx|DOCX|pdf|PDF|PPT|PPTX|ppt|pptx)$/.test(fileValueSuffix)) { //根据后缀，判断是否符合OFFICE格式
+          return 'office';
+      }
+  return false;
+}
+
+/**
  * 深拷贝
  * @param {*} source 
  * @returns 
@@ -152,8 +185,6 @@ const reset = (obj) => {
   return obj
 }
 
-
-
 export const toCamelCase = (string)=> {
   var words = string.split('-'); // 步1
   var camelCaseWords = [words[0]];
@@ -177,5 +208,7 @@ export default {
   arrMerge,
   reset,
   isBlank,
-  toCamelCase
+  toCamelCase,
+  checkFile,
+  isAV
 }

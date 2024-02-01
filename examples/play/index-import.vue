@@ -63,8 +63,8 @@ export default {
     };
   },
   methods: {
-    handleImportFile(file) {
-        console.log(file,{...this.form});
+    handleImportFile() {
+       this.$refs.import.clearFiles()
     },
     handleBeforeConfirm() {
       return new Promise((resolve, reject) => {

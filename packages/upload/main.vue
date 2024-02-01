@@ -51,6 +51,13 @@
           fit="cover"
         />
       </template>
+      <template v-else-if="$utils.isAV(file)">
+        <el-image
+          class="el-upload-list__item-thumbnail"
+          :src="file.url + '?x-oss-process=video/snapshot,t_0,f_jpg,w_0,h_0,m_fast,ar_auto'"
+          fit="cover"
+        />
+      </template>
       <template v-else>
         <div class="xn-upload-list__item-file">
           <div class="annex">
@@ -76,6 +83,13 @@
         >
           <i class="fz-16 el-icon-zoom-in" />
         </span>
+         <span
+          v-if="$utils.isAV(file)"
+          class="el-upload-list__item-preview"
+          @click="handleAVPreview(file)"
+        >
+          <i class="fz-16 el-icon-video-play" />
+        </span>
         <span
           class="el-upload-list__item-delete icon ml-5"
           @click="handleDownload(file, fileList)"
@@ -98,6 +112,7 @@
       :z-index="999999"
       :url-list="[imageView]"
     />
+    <AV :show.sync="isShowAV" :url="avUrl"></AV>
   </el-upload>
 </template>
 
@@ -106,6 +121,7 @@ import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import Client from "@/oss";
 import uploadPop from "./upload-pop.vue";
 import idCard from "./idCard.vue";
+import AV from './AV'
 // const MAX_WARNING = 1024 * 10 * 1024;
 export default {
   name: "XnUpload",
@@ -114,6 +130,7 @@ export default {
     uploadPop,
     ElImageViewer,
     idCard,
+    AV
   },
   props: {
     listType: {
@@ -174,6 +191,8 @@ export default {
       oss: null,
       client: null,
       idCardSizeData: {},
+      isShowAV:false,
+      avUrl:''
     };
   },
   computed: {
@@ -301,6 +320,12 @@ export default {
       this.isShowImageView = true;
       this.$nextTick(() => {
         this.imageView = file.url;
+      });
+    },
+    handleAVPreview(file){
+      this.isShowAV = true
+      this.$nextTick(() => {
+        this.avUrl = file.url;
       });
     },
     async handleDownload(file) {
