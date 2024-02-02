@@ -42,7 +42,6 @@ const isAV = (file) => {
   const { url } = file
   if (typeof url !== 'string' || !url) return
   var strFilter = '.mp4|.avi|.wmv|.MP4|.AVI|.WMV'
-  if (file.imgFlag) return true
   if (url.indexOf('.') > -1) {
     var p = url.lastIndexOf('.')
     var strPostfix = url.substring(p, url.length) + '|'
