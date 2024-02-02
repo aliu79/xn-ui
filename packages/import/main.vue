@@ -114,6 +114,7 @@ export default {
       oss: null,
       client: null,
       successFiles: [],
+      count: 0,
     };
   },
   created() {
@@ -130,6 +131,7 @@ export default {
         this.abort();
         this.fileList = [];
         this.successFiles = [];
+        this.count = 0;
       }
       this.$emit("update:show", false);
     },
@@ -172,10 +174,9 @@ export default {
             .upload(file)
             .then((res) => {
               this.successFiles.push(res);
-              this.$emit("on-success", this.successFiles);
+              this.$emit("on-success", res);
             })
-            .catch(() => {
-            });
+            .catch(() => {});
         }
       } catch (error) {
         file.onError();
@@ -211,13 +212,18 @@ export default {
           if (!this.fileList.length) {
             return this.$message.warning("请选择要上传的文件");
           }
-          this.submit();
+          if (this.autoUpload) {
+            this.submit();
+          }
         });
       } else {
         if (!this.fileList.length) {
           return this.$message.warning("请选择要上传的文件");
         }
-        this.submit();
+        if (this.autoUpload) {
+          this.submit();
+        }
+        this.$emit("on-confirm", this.successFiles);
       }
     },
     isPromise(obj) {

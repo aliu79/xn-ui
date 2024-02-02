@@ -1,25 +1,45 @@
 <template>
   <div>
-    <el-button type="primary" size="default" @click="isShowImport = true"
-      >导入</el-button
-    >
-    <xn-import
-      ref="import"
-      title="备件信息"
-      :show.sync="isShowImport"
-      :auto-upload="false"
-      :limit="10"
-      accept=""
-      is-drag-upload
-      confirm-text="上传"
-      multiple
-      :show-desc="false"
-      :tip="'请上传：电子测报、备件实物照片和包装视频等信息'"
-      @on-import="handleImportFile"
+    <!-- <xn-upload
+      ref="upload"
+      :fileList.sync="fileList"
+      :limit="limit"
+      list-type="idcard"
       @on-success="onSuccess"
+      @on-uploaded="handleUoloaded"
+    ></xn-upload> -->
+    <xn-upload
+      ref="upload"
+      :fileList.sync="fileList"
+      :limit="limit"
+      @on-success="onSuccess"
+      @on-uploaded="handleUoloaded"
+      drag
+      multiple
+      listType="list"
     >
-      
-    </xn-import>
+    
+    <div style="height:200px">
+      <i class="el-icon-upload"></i>
+      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+    </div>
+    
+    </xn-upload>
+    <el-button type="primary" size="default" @click="stopUpload"
+      >stop upload</el-button
+    >
+
+    <el-button
+      type="primary"
+      size="default"
+      @click="
+        onDownload({
+          url: 'https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/11/20b365d38e5646f2896e1f2e6c010f93.png',
+          name: '123123',
+        })
+      "
+      >download</el-button
+    >
   </div>
 </template>
 
@@ -27,45 +47,37 @@
 export default {
   data() {
     return {
-      items: [
-        { title: "是", label: 0 },
-        { title: "否", label: 1 },
+      limit: 9,
+      config: {
+        accept: "image", //接受上传的文件类型：zip、pdf、excel、image，也可以是文件类型所组成的数组类型如：['image', 'pdf']，则只可以上传图片或pdf类型的文件，也可以为空，则任何类型的文件都可以上传
+        max: 100, //文件大小
+      },
+      fileList: [
+        {
+          url: "https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/11/20b365d38e5646f2896e1f2e6c010f93.png",
+        },
+        { url: 'https://xianniu-image.oss-cn-beijing.aliyuncs.com/indexImage/guanw/by.mp4' }
       ],
-      form: {
-        value: "",
-      },
-      isShowImport: false,
-      templateConfig: {
-        url: "https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/02/16/ed4d8a5eb805430f94f311490d7dfe21.xls",
-        name: "批量导入",
-      },
-      rules: {
-        value: [{ required: true }],
-      },
     };
   },
-  
   methods: {
-    handleImportFile() {
-
-      
-      //  this.$refs.import.clearFiles()
+    onSuccess(val) {
+      console.log(val);
     },
-onSuccess(val){
-console.log("🚀 ~ onSuccess ~ val:", val)
-
-},
-    handleBeforeConfirm() {
-      return new Promise((resolve, reject) => {
-        this.$refs.form.validate(async (valid) => {
-          if (valid) {
-            resolve();
-          } else {
-            reject();
-            return false;
-          }
-        });
-      });
+    beforeUpload() {
+      // console.log("val", val);
+    },
+    handleUoloaded() {
+      // console.log('val: ', val);
+    },
+    onProgress() {},
+    onPreview() {},
+    onRemove() {},
+    stopUpload() {
+      this.$refs.upload.abortUpload();
+    },
+    onDownload({ url, name }) {
+      this.$utils.download({ url, name });
     },
   },
 };

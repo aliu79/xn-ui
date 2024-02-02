@@ -18,6 +18,7 @@
     :style="{ ...styles,...idCardSizeData }"
     :on-exceed="onExceed"
     :on-change="onChange"
+    :on-preview="onPreviewFile"
   >
     <template v-if="listType === 'idcard'">
       <template slot="trigger">
@@ -297,18 +298,17 @@ export default {
         .then((res) => {
           this.successFiles.push(res);
           this.$emit("update:fileList", this.successFiles);
+          this.$emit("on-file", this.res);
           this.$emit("on-success", this.successFiles);
           this.$emit("on-uploaded", true);
           this.isUploading = false;
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           this.$emit("update:fileList", this.successFiles);
         });
     },
 
-    onError(err) {
-      console.log(err);
+    onError() {
       this.$message.error("上传失败，请重试");
     },
     onSubmitUpload() {
@@ -357,6 +357,15 @@ export default {
     abortUpload() {
       return this.oss.oss.cancel();
     },
+    onPreviewFile(file){
+      if(file.isAV === 1){
+        this.handleAVPreview(file)
+      }else if(file.imgFlag === 1){
+        this.handlePictureCardPreview(file)
+      }else{
+        this.handleDownload(file)
+      }
+    }
   },
 };
 </script>
