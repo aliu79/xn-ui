@@ -8,7 +8,12 @@
       title="备件信息"
       :show.sync="isShowImport"
       :auto-upload="false"
-      :limit="2"
+      :limit="10"
+      accept=""
+      is-drag-upload
+      confirm-text="上传"
+      multiple
+      :show-desc="false"
       :tip="'请上传：电子测报、备件实物照片和包装视频等信息'"
       @on-import="handleImportFile"
       @on-success="onSuccess"
@@ -46,10 +51,10 @@ export default {
       
       //  this.$refs.import.clearFiles()
     },
-    onSuccess(val){
-      console.log("🚀 ~ onSuccess ~ val:", val)
-      
-    },
+onSuccess(val){
+console.log("🚀 ~ onSuccess ~ val:", val)
+
+},
     handleBeforeConfirm() {
       return new Promise((resolve, reject) => {
         this.$refs.form.validate(async (valid) => {

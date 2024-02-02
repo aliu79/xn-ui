@@ -113,7 +113,7 @@ export default {
       fileList: [],
       oss: null,
       client: null,
-      successFiles:[]
+      successFiles: [],
     };
   },
   created() {
@@ -126,10 +126,10 @@ export default {
   },
   methods: {
     onClose() {
-      if(this.isDragUpload){
-        this.abort()
-        this.fileList = []
-        this.successFiles = []
+      if (this.isDragUpload) {
+        this.abort();
+        this.fileList = [];
+        this.successFiles = [];
       }
       this.$emit("update:show", false);
     },
@@ -142,7 +142,7 @@ export default {
           .catch((err) => {
             return Promise.reject(err);
           });
-      }else{
+      } else {
         return Promise.resolve();
       }
     },
@@ -167,7 +167,7 @@ export default {
       try {
         const _file = file.file;
         this.$emit("on-import", _file, this.fileList);
-        if(this.isDragUpload){
+        if (this.isDragUpload) {
           this.oss
             .upload(file)
             .then((res) => {
@@ -175,11 +175,9 @@ export default {
               this.$emit("on-success", this.successFiles);
             })
             .catch(() => {
-              this.$emit("update:fileList", this.successFiles);
             });
         }
       } catch (error) {
-        console.log("🚀 ~ onSubmitUpload ~ error:", error)
         file.onError();
       }
     },

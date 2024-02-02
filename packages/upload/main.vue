@@ -97,7 +97,7 @@
           <i class="fz-16 el-icon-download" />
         </span>
         <span
-          v-if="(!$attrs.disabled && !preview) || hideUpload"
+          v-if="allowDelete || (!$attrs.disabled && !preview) || hideUpload"
           class="el-upload-list__item-delete icon ml-5"
           @click="handleRemove(file, fileList)"
         >
@@ -136,6 +136,10 @@ export default {
     listType: {
       type: String,
       default: "picture-card",
+    },
+    allowDelete:{
+      type: Boolean,
+      default: false,
     },
     preview: {
       type: Boolean,

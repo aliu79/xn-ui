@@ -14,6 +14,8 @@
       :limit="limit"
       @on-success="onSuccess"
       @on-uploaded="handleUoloaded"
+      preview
+      allow-delete
     ></xn-upload>
     <el-button type="primary" size="default" @click="stopUpload"
       >stop upload</el-button
