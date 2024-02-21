@@ -261,6 +261,7 @@ export default {
       form: {
         value: [],
       },
+      formValues:{},
       isColl: false,
     };
   },
@@ -312,10 +313,15 @@ export default {
           }
         }
       }
+      this.formValues = formValue;
       this.$emit("on-search", formValue);
+    },
+    getFormValue(){
+      return this.formValues;
     },
     onReset() {
       this.resetFields();
+      this.formValues = {}
       this.$emit("on-reset");
       this.$emit("on-search", {});
     },

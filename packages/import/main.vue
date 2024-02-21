@@ -212,17 +212,15 @@ export default {
           if (!this.fileList.length) {
             return this.$message.warning("请选择要上传的文件");
           }
-          if (this.autoUpload) {
-            this.submit();
-          }
+          this.submit();
+          this.$emit("on-confirm", this.successFiles);
         });
       } else {
         if (!this.fileList.length) {
           return this.$message.warning("请选择要上传的文件");
         }
-        if (this.autoUpload) {
-          this.submit();
-        }
+     
+        this.submit();
         this.$emit("on-confirm", this.successFiles);
       }
     },
