@@ -15,7 +15,7 @@
     :http-request="onHttpUpload"
     :on-error="onError"
     :before-upload="onBeforeUpload"
-    :style="{ ...styles,...idCardSizeData }"
+    :style="{ ...styles, ...idCardSizeData }"
     :on-exceed="onExceed"
     :on-change="onChange"
     :on-preview="onPreviewFile"
@@ -38,11 +38,55 @@
       </slot>
     </template>
 
+    <template
+      slot="file"
+      slot-scope="{ file }"
+      v-if="['list'].includes(listType)"
+    >
+      <a
+        class="el-upload-list__item-name"
+        @click="handlePictureCardPreview(file)"
+        v-if="$utils.isImg(file)"
+        ><i class="el-icon-document"></i>{{ file.name }}
+      </a>
+      <a
+        class="el-upload-list__item-name"
+        @click="handleAVPreview(file)"
+        v-if="$utils.isAV(file)"
+        ><i class="el-icon-document"></i>{{ file.name }}
+      </a>
+      <a class="el-upload-list__item-name" v-if="file.status === 'uploading'"
+        ><i class="el-icon-document"></i>{{ file.name }}
+      </a>
+      <el-progress
+        v-if="file.status === 'uploading'"
+        type="line"
+        :stroke-width="2"
+        :percentage="process(file.percentage || 0)"
+      >
+      </el-progress>
+      <label
+        v-if="file.status === 'success'"
+        class="el-upload-list__item-status-label"
+        >
+        <i
+          :class="{
+            'el-icon-upload-success': true,
+            'el-icon-circle-check': true
+          }"
+        ></i>
+      </label>
+      <i
+        class="el-icon-close"
+        @click="handleRemove(file, fileList)"
+        v-if="allowDelete || ($attrs.disabled==null && !preview) || hideUpload"
+      ></i>
+    </template>
     <div
       slot="file"
       slot-scope="{ file }"
       class="xn-upload--slot"
-      v-if="['picture-card', 'idcard'].includes(listType)"
+      v-else-if="['picture-card', 'idcard'].includes(listType)"
     >
       <uploadPop :file="file" @on-download="handleDownload(file)"></uploadPop>
       <template v-if="$utils.isImg(file)">
@@ -55,7 +99,10 @@
       <template v-else-if="$utils.isAV(file)">
         <el-image
           class="el-upload-list__item-thumbnail"
-          :src="file.url + '?x-oss-process=video/snapshot,t_0,f_jpg,w_0,h_0,m_fast,ar_auto'"
+          :src="
+            file.url +
+            '?x-oss-process=video/snapshot,t_0,f_jpg,w_0,h_0,m_fast,ar_auto'
+          "
           fit="cover"
         />
       </template>
@@ -84,7 +131,7 @@
         >
           <i class="fz-16 el-icon-zoom-in" />
         </span>
-         <span
+        <span
           v-if="$utils.isAV(file)"
           class="el-upload-list__item-preview"
           @click="handleAVPreview(file)"
@@ -122,7 +169,7 @@ import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import Client from "@/oss";
 import uploadPop from "./upload-pop.vue";
 import idCard from "./idCard.vue";
-import AV from './AV'
+import AV from "./AV";
 // const MAX_WARNING = 1024 * 10 * 1024;
 export default {
   name: "XnUpload",
@@ -131,14 +178,14 @@ export default {
     uploadPop,
     ElImageViewer,
     idCard,
-    AV
+    AV,
   },
   props: {
     listType: {
       type: String,
       default: "picture-card",
     },
-    allowDelete:{
+    allowDelete: {
       type: Boolean,
       default: false,
     },
@@ -196,8 +243,8 @@ export default {
       oss: null,
       client: null,
       idCardSizeData: {},
-      isShowAV:false,
-      avUrl:''
+      isShowAV: false,
+      avUrl: "",
     };
   },
   computed: {
@@ -224,7 +271,7 @@ export default {
       stsUrl: this.$XN.stsUrl || "",
       setFileIdUrl: this.$XN.setFileIdUrl || "",
     });
-    this.idCardSize()
+    this.idCardSize();
   },
   beforeDestroy() {
     // this.$emit("update:fileList", []);
@@ -326,8 +373,8 @@ export default {
         this.imageView = file.url;
       });
     },
-    handleAVPreview(file){
-      this.isShowAV = true
+    handleAVPreview(file) {
+      this.isShowAV = true;
       this.$nextTick(() => {
         this.avUrl = file.url;
       });
@@ -357,15 +404,15 @@ export default {
     abortUpload() {
       return this.oss.oss.cancel();
     },
-    onPreviewFile(file){
-      if(file.isAV === 1){
-        this.handleAVPreview(file)
-      }else if(file.imgFlag === 1){
-        this.handlePictureCardPreview(file)
-      }else{
-        this.handleDownload(file)
+    onPreviewFile(file) {
+      if (file.isAV === 1) {
+        this.handleAVPreview(file);
+      } else if (file.imgFlag === 1) {
+        this.handlePictureCardPreview(file);
+      } else {
+        this.handleDownload(file);
       }
-    }
+    },
   },
 };
 </script>
