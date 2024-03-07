@@ -52,7 +52,13 @@
       <a
         class="el-upload-list__item-name"
         @click="handleAVPreview(file)"
-        v-if="$utils.isAV(file)"
+        v-else-if="$utils.isAV(file)"
+        ><i class="el-icon-document"></i>{{ file.name }}
+      </a>
+      <a
+        class="el-upload-list__item-name"
+        @click="handleDownload(file)"
+        v-else
         ><i class="el-icon-document"></i>{{ file.name }}
       </a>
       <a class="el-upload-list__item-name" v-if="file.status === 'uploading'"
