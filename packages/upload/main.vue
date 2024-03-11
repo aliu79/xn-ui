@@ -139,7 +139,7 @@
         </span>
         <span
           v-if="$utils.isAV(file)"
-          class="el-upload-list__item-preview"
+          class="el-upload-list__item-preview ml-5"
           @click="handleAVPreview(file)"
         >
           <i class="fz-16 el-icon-video-play" />
