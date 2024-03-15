@@ -198,7 +198,32 @@ export const toCamelCase = (string)=> {
   return camelCaseString;
 }
 
+export function assignValues(form, apiResponse) {
+  function isEmpty(value) {
+    return (
+      (Array.isArray(value) && value.length === 0) ||
+      (typeof value === 'object' && Object.keys(value).length === 0)
+    )
+  }
 
+  const updatedForm = Array.isArray(form) ? [...form] : { ...form }
+
+  for (const key in form) {
+    if (Object.hasOwnProperty.call(form, key)) {
+      const apiValue = apiResponse[key]
+
+      // 检查 apiValue 是否是一个对象，如果是，则递归
+      if (typeof apiValue === 'object' && apiValue !== null && !Array.isArray(apiValue)) {
+        updatedForm[key] = assignValues(form[key], apiValue)
+      } else if (apiValue !== null && apiValue !== undefined && apiValue !== '' && !isEmpty(apiValue)) {
+        // 如果 apiValue 不是空值及不是空的对象或数组，更新 updatedForm
+        updatedForm[key] = apiValue
+      }
+    }
+  }
+
+  return updatedForm
+}
 export default {
   isEmpty,
   isImg,
@@ -209,5 +234,6 @@ export default {
   isBlank,
   toCamelCase,
   checkFile,
-  isAV
+  isAV,
+  assignValues
 }
