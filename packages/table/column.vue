@@ -46,7 +46,7 @@
               :key="idxBtn"
               :confirm-button-text="itemBtn.options.confirmButtonText"
               class="ml-10"
-              @confirm="handleClick(itemBtn.method, row, $index)"
+              @confirm="handleClick(itemBtn.method, row, $index, $event)"
             >
               <el-button
                 :type="itemBtn.type || 'text'"
@@ -66,7 +66,9 @@
                 :size="itemBtn.size || 'mini'"
                 :icon="itemBtn.icon"
                 :plain="itemBtn.plain"
-                @click.native.stop="handleClick(itemBtn.method, row, $index)"
+                @click.native.stop="
+                  handleClick(itemBtn.method, row, $index, $event)
+                "
                 >{{ label(itemBtn, row) }}</el-button
               >
             </template>
@@ -102,11 +104,15 @@ export default {
     },
   },
   computed: {
-    showOverflowTooltip(){
-      return (attrs)=>{
-        const showTip = (attrs['showOverflowTooltip'] != undefined && attrs['showOverflowTooltip'] !== true) || (attrs['show-overflow-tooltip'] != undefined && attrs['show-overflow-tooltip'] !== true) 
-        return attrs.more ? false : showTip ? !showTip : true
-      }
+    showOverflowTooltip() {
+      return (attrs) => {
+        const showTip =
+          (attrs["showOverflowTooltip"] != undefined &&
+            attrs["showOverflowTooltip"] !== true) ||
+          (attrs["show-overflow-tooltip"] != undefined &&
+            attrs["show-overflow-tooltip"] !== true);
+        return attrs.more ? false : showTip ? !showTip : true;
+      };
     },
     label() {
       return (itemBtn, row) => {
@@ -127,12 +133,13 @@ export default {
 
   watch: {},
   methods: {
-    handleClick(method, row, index) {
+    handleClick(method, row, index, ev) {
       if (this.$parent) {
         this.$parent.$emit("handle-buttons", {
           method,
           row,
           index,
+          ev,
         });
       }
     },

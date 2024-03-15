@@ -1,44 +1,13 @@
 <template>
   <div>
-    <!-- <xn-upload
-      ref="upload"
-      :fileList.sync="fileList"
-      :limit="limit"
-      list-type="idcard"
-      @on-success="onSuccess"
-      @on-uploaded="handleUoloaded"
-    ></xn-upload> -->
-    <xn-upload
-      ref="upload"
-      :fileList.sync="fileList"
-      :limit="limit"
-      @on-success="onSuccess"
-      @on-uploaded="handleUoloaded"
-      drag
-      listType="list"
-    >
-    
-    <div style="height:200px">
-      <i class="el-icon-upload"></i>
-      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-    </div>
-    
-    </xn-upload>
-    <!-- <el-button type="primary" size="default" @click="stopUpload"
-      >stop upload</el-button
-    >
-
-    <el-button
-      type="primary"
-      size="default"
-      @click="
-        onDownload({
-          url: 'https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/11/20b365d38e5646f2896e1f2e6c010f93.png',
-          name: '123123',
-        })
-      "
-      >download</el-button
-    > -->
+    <xn-table
+      type="selection"
+      :columns="listHeader"
+      :data="list"
+      :page="pageConfig"
+      @on-page="fnGetList"
+      @handle-buttons="handleButtons"
+    ></xn-table>
   </div>
 </template>
 
@@ -46,38 +15,107 @@
 export default {
   data() {
     return {
-      limit: 9,
-      config: {
-        accept: "image", //接受上传的文件类型：zip、pdf、excel、image，也可以是文件类型所组成的数组类型如：['image', 'pdf']，则只可以上传图片或pdf类型的文件，也可以为空，则任何类型的文件都可以上传
-        max: 100, //文件大小
-      },
-      fileList: [
+      show: false,
+      activeName: "1",
+      type: 2,
+      listHeader2: [
         {
-          url: "https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/11/20b365d38e5646f2896e1f2e6c010f93.png",
-          name:'123'
+          prop: "id",
+          label: "ID",
+          show: (row) => {
+            console.log(row);
+            return false;
+          },
         },
-        { url: 'https://xianniu-image.oss-cn-beijing.aliyuncs.com/indexImage/guanw/by.mp4',name:'视频' }
       ],
+      listHeader: [
+        { prop: "id", label: "ID",showOverflowTooltip: false },
+        { prop: "id", label: "ID1",'show-overflow-tooltip':false },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        { prop: "id", label: "ID" },
+        {
+          label: "姓名",
+          sortable: true,
+          render: (h, { row }) => h("span", row.name),
+        },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "age", label: "年龄", labelMsg: "表头字段说明" },
+        { prop: "date", label: "日期", sortable: true },
+        {
+          label: "操作",
+          fixed: "right",
+          more: {
+            options: [
+              { label: "你好" },
+              { label: "你好" },
+            ],
+          },
+        },
+      ],
+      disabledList: [122],
+      list: [
+        { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // { id: 122, uid: 1, date: "2011-01-01", name: "阿松大", age: 18 },
+        // {
+        //   id: 222222222222222,
+        //   uid: 1,
+        //   date: "2011-01-01",
+        //   name: "地方",
+        //   age: 18,
+        // },
+        // { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
+      ],
+      pageConfig: {
+        total: 8,
+        pageSize: 1,
+        pageNum: 1,
+      },
+      tools: [{ label: "导出", prop: "export", icon: "el-icon-files" }],
+      // pageConfig: {},
     };
   },
+  computed: {},
+  created() {},
+  watch: {},
   methods: {
-    onSuccess(val) {
+    handleSort(e) {
+      console.log(e);
+    },
+    handleRefresh() {
+      console.log("re");
+    },
+    handleButtons(args) {
+      console.log(args);
+      this.$refs.table.clearSelection();
+    },
+    fnGetList(v) {
+      console.log(v);
+      this.list = [
+        { id: 122, uid: 1, date: "2011-01-01", name: "阿11111松大", age: 18 },
+      ]
+    },
+    onradio(row, a) {
+      console.log("val: ", {...row}, {...a});
+    },
+    onSelection(val) {
       console.log(val);
     },
-    beforeUpload() {
-      // console.log("val", val);
-    },
-    handleUoloaded() {
-      // console.log('val: ', val);
-    },
-    onProgress() {},
-    onPreview() {},
-    onRemove() {},
-    stopUpload() {
-      this.$refs.upload.abortUpload();
-    },
-    onDownload({ url, name }) {
-      this.$utils.download({ url, name });
+    handleSelectable(a, b ) {
+      console.log("a,b,c: ", a, b );
+      return false
     },
   },
 };
