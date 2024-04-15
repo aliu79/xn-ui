@@ -3677,6 +3677,10 @@ export default [{
             'cityCode': '330112'
         },
         {
+            'cityName': '临平区',
+            'cityCode': '330113'
+        },
+        {
             'cityName': '桐庐县',
             'cityCode': '330122'
         },
