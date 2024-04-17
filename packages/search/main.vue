@@ -52,7 +52,7 @@
                 :key="item.prop"
                 style="width: 100%"
                 v-bind="item.options ? { ...item.options } : {}"
-                v-model="item.modelVal"
+                v-model.trim="item.modelVal"
                 :clearable="item.clearable || true"
                 :placeholder="item.placeholder || '请填写' + item.label"
               />

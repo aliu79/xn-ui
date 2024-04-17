@@ -3681,6 +3681,10 @@ export default [{
             'cityCode': '330113'
         },
         {
+            'cityName': '钱塘区',
+            'cityCode': '330114'
+        },
+        {
             'cityName': '桐庐县',
             'cityCode': '330122'
         },
