@@ -38,127 +38,130 @@
       </slot>
     </template>
 
-    <template
-      slot="file"
-      slot-scope="{ file }"
-      v-if="['list'].includes(listType)"
-    >
-      <a
-        class="el-upload-list__item-name"
-        @click="handlePictureCardPreview(file)"
-        v-if="$utils.isImg(file)"
-        ><i class="el-icon-document"></i>{{ file.name }}
-      </a>
-      <a
-        class="el-upload-list__item-name"
-        @click="handleAVPreview(file)"
-        v-else-if="$utils.isAV(file)"
-        ><i class="el-icon-document"></i>{{ file.name }}
-      </a>
-      <a
-        class="el-upload-list__item-name"
-        @click="handleDownload(file)"
-        v-else
-        ><i class="el-icon-document"></i>{{ file.name }}
-      </a>
-      <a class="el-upload-list__item-name" v-if="file.status === 'uploading'"
-        ><i class="el-icon-document"></i>{{ file.name }}
-      </a>
-      <el-progress
-        v-if="file.status === 'uploading'"
-        type="line"
-        :stroke-width="2"
-        :percentage="process(file.percentage || 0)"
-      >
-      </el-progress>
-      <label
-        v-if="file.status === 'success'"
-        class="el-upload-list__item-status-label"
+    <div slot="file" slot-scope="{ file }" :class="{'xn-upload--slot':['picture-card', 'idcard'].includes(listType)}">
+      <template v-if="['list'].includes(listType)">
+        <a
+          class="el-upload-list__item-name"
+          @click="handlePictureCardPreview(file)"
+          v-if="$utils.isImg(file)"
+          ><i class="el-icon-document"></i>{{ file.name }}
+        </a>
+        <a
+          class="el-upload-list__item-name"
+          @click="handleAVPreview(file)"
+          v-else-if="$utils.isAV(file)"
+          ><i class="el-icon-document"></i>{{ file.name }}
+        </a>
+        <a
+          class="el-upload-list__item-name"
+          @click="handleDownload(file)"
+          v-else
+          ><i class="el-icon-document"></i>{{ file.name }}
+        </a>
+        <a class="el-upload-list__item-name" v-if="file.status === 'uploading'"
+          ><i class="el-icon-document"></i>{{ file.name }}
+        </a>
+        <el-progress
+          v-if="file.status === 'uploading'"
+          type="line"
+          :stroke-width="2"
+          :percentage="process(file.percentage || 0)"
         >
+        </el-progress>
+        <label
+          v-if="file.status === 'success'"
+          class="el-upload-list__item-status-label"
+        >
+          <i
+            :class="{
+              'el-icon-upload-success': true,
+              'el-icon-circle-check': true,
+            }"
+          ></i>
+        </label>
         <i
-          :class="{
-            'el-icon-upload-success': true,
-            'el-icon-circle-check': true
-          }"
+          class="el-icon-close"
+          @click="handleRemove(file, fileList)"
+          v-if="
+            allowDelete || ($attrs.disabled == null && !preview) || hideUpload
+          "
         ></i>
-      </label>
-      <i
-        class="el-icon-close"
-        @click="handleRemove(file, fileList)"
-        v-if="allowDelete || ($attrs.disabled==null && !preview) || hideUpload"
-      ></i>
-    </template>
-    <div
+      </template>
+      <template v-if="['picture-card', 'idcard'].includes(listType)">
+        <uploadPop :file="file" @on-download="handleDownload(file)"></uploadPop>
+        <template v-if="$utils.isImg(file)">
+          <el-image
+            class="el-upload-list__item-thumbnail"
+            :src="file.url"
+            fit="cover"
+          />
+        </template>
+        <template v-else-if="$utils.isAV(file)">
+          <el-image
+            class="el-upload-list__item-thumbnail"
+            :src="
+              file.url +
+              '?x-oss-process=video/snapshot,t_0,f_jpg,w_0,h_0,m_fast,ar_auto'
+            "
+            fit="cover"
+          />
+        </template>
+        <template v-else>
+          <div class="xn-upload-list__item-file">
+            <div class="annex">
+              <i class="el-icon el-icon-folder" />
+              <span class="label">附件</span>
+            </div>
+            <div class="file-name">{{ file.name }}</div>
+          </div>
+        </template>
+        <div v-if="file.status === 'uploading'" class="process">
+          <el-progress
+            :status="file.percentage === 100 && !isUploading ? 'success' : null"
+            type="circle"
+            :percentage="process(file.percentage || 0)"
+            :stroke-width="6"
+          />
+        </div>
+        <span class="el-upload-list__item-actions">
+          <span
+            v-if="$utils.isImg(file)"
+            class="el-upload-list__item-preview"
+            @click="handlePictureCardPreview(file)"
+          >
+            <i class="fz-16 el-icon-zoom-in" />
+          </span>
+          <span
+            v-if="$utils.isAV(file)"
+            class="el-upload-list__item-preview ml-5"
+            @click="handleAVPreview(file)"
+          >
+            <i class="fz-16 el-icon-video-play" />
+          </span>
+          <span
+            class="el-upload-list__item-delete icon ml-5"
+            @click="handleDownload(file, fileList)"
+          >
+            <i class="fz-16 el-icon-download" />
+          </span>
+          <span
+            v-if="allowDelete || (!$attrs.disabled && !preview) || hideUpload"
+            class="el-upload-list__item-delete icon ml-5"
+            @click="handleRemove(file, fileList)"
+          >
+            <i class="fz-16 el-icon-delete" />
+          </span>
+        </span>
+      </template>
+    </div>
+    <!-- <div
       slot="file"
       slot-scope="{ file }"
       class="xn-upload--slot"
-      v-else-if="['picture-card', 'idcard'].includes(listType)"
+      
     >
-      <uploadPop :file="file" @on-download="handleDownload(file)"></uploadPop>
-      <template v-if="$utils.isImg(file)">
-        <el-image
-          class="el-upload-list__item-thumbnail"
-          :src="file.url"
-          fit="cover"
-        />
-      </template>
-      <template v-else-if="$utils.isAV(file)">
-        <el-image
-          class="el-upload-list__item-thumbnail"
-          :src="
-            file.url +
-            '?x-oss-process=video/snapshot,t_0,f_jpg,w_0,h_0,m_fast,ar_auto'
-          "
-          fit="cover"
-        />
-      </template>
-      <template v-else>
-        <div class="xn-upload-list__item-file">
-          <div class="annex">
-            <i class="el-icon el-icon-folder" />
-            <span class="label">附件</span>
-          </div>
-          <div class="file-name">{{ file.name }}</div>
-        </div>
-      </template>
-      <div v-if="file.status === 'uploading'" class="process">
-        <el-progress
-          :status="file.percentage === 100 && !isUploading ? 'success' : null"
-          type="circle"
-          :percentage="process(file.percentage || 0)"
-          :stroke-width="6"
-        />
-      </div>
-      <span class="el-upload-list__item-actions">
-        <span
-          v-if="$utils.isImg(file)"
-          class="el-upload-list__item-preview"
-          @click="handlePictureCardPreview(file)"
-        >
-          <i class="fz-16 el-icon-zoom-in" />
-        </span>
-        <span
-          v-if="$utils.isAV(file)"
-          class="el-upload-list__item-preview ml-5"
-          @click="handleAVPreview(file)"
-        >
-          <i class="fz-16 el-icon-video-play" />
-        </span>
-        <span
-          class="el-upload-list__item-delete icon ml-5"
-          @click="handleDownload(file, fileList)"
-        >
-          <i class="fz-16 el-icon-download" />
-        </span>
-        <span
-          v-if="allowDelete || (!$attrs.disabled && !preview) || hideUpload"
-          class="el-upload-list__item-delete icon ml-5"
-          @click="handleRemove(file, fileList)"
-        >
-          <i class="fz-16 el-icon-delete" />
-        </span>
-      </span>
-    </div>
+      
+    </div> -->
     <div v-if="tip !== ''" slot="tip" class="el-upload__tip">{{ tip }}</div>
     <el-image-viewer
       v-if="isShowImageView"
