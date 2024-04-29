@@ -1,6 +1,6 @@
 <template>
   <div>
-    <xn-city ref="city" v-model="city" filterable @on-city="oncity"></xn-city>
+    <xn-city ref="city" is-all v-model="city" filterable @on-city="oncity"></xn-city>
     <el-button type="primary" size="default" @click="click">btn</el-button>
   </div>
 </template>
@@ -9,7 +9,7 @@
 export default {
   data() {
     return {
-      city: "810000",
+      city: "000000",
     };
   },
   mounted() {},

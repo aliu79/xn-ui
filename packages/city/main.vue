@@ -64,6 +64,13 @@ export default {
         return {};
       },
     },
+    /**
+     * 是否全国
+     */
+    isAll:{
+      type:Boolean,
+      default:false
+    }
   },
   data() {
     return {
@@ -160,7 +167,14 @@ export default {
     },
     // 接口获取城市联动数据
     fnGetCitys() {
-      const _citys = this.$utils.deepClone(citys);
+      const cityArr = citys;
+      if(this.isAll){
+        cityArr.unshift({
+          cityName: '全国',
+          cityCode: '000000'
+        })
+      }
+      const _citys = this.$utils.deepClone(cityArr);
       this.cityList = this.toTreeDataLevel(_citys);
       this.flattenResult = this.flattenTreeData(
         this.addParentKey(this.cityList)
