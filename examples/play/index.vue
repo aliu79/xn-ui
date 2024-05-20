@@ -16,7 +16,7 @@ export default {
   methods: {
     click() {
       const res = this.$refs.city.str2Code(
-        "天津市红桥区"
+        "北京市北京市通州区"
       );
       console.log(res)
       // this.city = cityCodeLast;

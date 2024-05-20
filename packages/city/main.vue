@@ -291,11 +291,14 @@ export default {
       if (!val) return;
       val = val.replace(/[^\u4e00-\u9fa5]/g, "");
       const cityArr = val.match(this.$reg.getCity) || [];
+      console.log("🚀 ~ str2Code ~ this.$reg.getCity:", this.$reg.getCity)
+      console.log("🚀 ~ str2Code ~ cityArr:", cityArr)
       const newarr =
         cityArr.length &&
         cityArr.map((item, idx, arr) => {
-          return ZXCITY.includes(item) && idx === 0 ? [item, ...arr] : arr;
+          return ZXCITY.includes(item) && idx === 0 && arr.length == 2 ? [item, ...arr] : arr;
         })[0];
+        console.log(newarr)
       const arr = this.getCity(this.cityList, newarr);
       const res = this.getRes(arr);
       return { ...res };
