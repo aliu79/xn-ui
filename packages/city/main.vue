@@ -33,7 +33,7 @@ export default {
      * 省级 ->  省
      */
     value: {
-      type: [String, Number, Object],
+      type: [String, Number, Object, Array],
       default: "",
     },
     valueKey: {
@@ -67,10 +67,10 @@ export default {
     /**
      * 是否全国
      */
-    isAll:{
-      type:Boolean,
-      default:false
-    }
+    isAll: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -88,17 +88,41 @@ export default {
     };
   },
   computed: {
+    // cityValue: {
+    //   set: function (n) {
+    //     this.val = n;
+    //   },
+    //   get: function () {
+    //     const { value, valueKey } = this;
+    //     const _value = valueKey ? value[valueKey] : value;
+    //     const res = this.findParent(_value, this.flattenResult).map(
+    //       (item) => item.cityCode
+    //     );
+    //     return res;
+    //   },
+    // },
     cityValue: {
       set: function (n) {
         this.val = n;
       },
       get: function () {
         const { value, valueKey } = this;
-        const _value = valueKey ? value[valueKey] : value;
-        const res = this.findParent(_value, this.flattenResult).map(
-          (item) => item.cityCode
-        );
-        return res;
+        if (Array.isArray(value)) {
+          return value.map((v) => {
+            const _value = valueKey ? v[valueKey] : v;
+            const res = this.findParent(_value, this.flattenResult).map(
+              (item) => item.cityCode
+            );
+            return res;
+          });
+        } else {
+          const _value = valueKey ? value[valueKey] : value;
+          const res = this.findParent(_value, this.flattenResult).map(
+            (item) => item.cityCode
+          );
+          console.log('123',res);
+          return res;
+        }
       },
     },
   },
@@ -168,11 +192,11 @@ export default {
     // 接口获取城市联动数据
     fnGetCitys() {
       const cityArr = citys;
-      if(this.isAll){
+      if (this.isAll) {
         cityArr.unshift({
-          cityName: '全国',
-          cityCode: '000000'
-        })
+          cityName: "全国",
+          cityCode: "000000",
+        });
       }
       const _citys = this.$utils.deepClone(cityArr);
       this.cityList = this.toTreeDataLevel(_citys);
@@ -202,23 +226,47 @@ export default {
       return recursive(data);
     },
     // 获取选中
+    // handleChange(code) {
+    //   // 返回数组形式 code和label
+    //   const { city, cityCode, cityName, cityCodeLast, cityNameLast } = this.getRes(code);
+    //   let value = "";
+    //   if (this.valueKey) {
+    //     value = city[city.length - 1];
+    //   } else {
+    //     value = cityCodeLast;
+    //   }
+    //   this.$emit("on-change", value);
+    //   this.$emit("on-city", {
+    //     city,
+    //     cityCode,
+    //     cityName,
+    //     cityCodeLast,
+    //     cityNameLast,
+    //   });
+    // },
     handleChange(code) {
-      // 返回数组形式 code和label
-      const { city, cityCode, cityName, cityCodeLast, cityNameLast } = this.getRes(code);
-      let value = "";
-      if (this.valueKey) {
-        value = city[city.length - 1];
-      } else {
-        value = cityCodeLast;
-      }
+      const changeResults = Array.isArray(code)
+        ? code.map((c) => this.getRes(c))
+        : this.getRes(code);
+
+      const value = changeResults.map(({ cityCodeLast }) =>
+        this.valueKey ? code : cityCodeLast
+      );
+
       this.$emit("on-change", value);
-      this.$emit("on-city", {
-        city,
-        cityCode,
-        cityName,
-        cityCodeLast,
-        cityNameLast,
+
+      const cityResults = changeResults.map((res) => {
+        const { city, cityCode, cityName, cityCodeLast, cityNameLast } = res;
+        return {
+          city,
+          cityCode,
+          cityName,
+          cityCodeLast,
+          cityNameLast,
+        };
       });
+
+      this.$emit("on-city", cityResults);
     },
     // 获取结果
     getRes(cityCode) {
@@ -291,14 +339,13 @@ export default {
       if (!val) return;
       val = val.replace(/[^\u4e00-\u9fa5]/g, "");
       const cityArr = val.match(this.$reg.getCity) || [];
-      console.log("🚀 ~ str2Code ~ this.$reg.getCity:", this.$reg.getCity)
-      console.log("🚀 ~ str2Code ~ cityArr:", cityArr)
       const newarr =
         cityArr.length &&
         cityArr.map((item, idx, arr) => {
-          return ZXCITY.includes(item) && idx === 0 && arr.length == 2 ? [item, ...arr] : arr;
+          return ZXCITY.includes(item) && idx === 0 && arr.length == 2
+            ? [item, ...arr]
+            : arr;
         })[0];
-        console.log(newarr)
       const arr = this.getCity(this.cityList, newarr);
       const res = this.getRes(arr);
       return { ...res };
