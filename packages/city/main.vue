@@ -120,7 +120,7 @@ export default {
           const res = this.findParent(_value, this.flattenResult).map(
             (item) => item.cityCode
           );
-          console.log('123',res);
+          console.log("123", res);
           return res;
         }
       },
@@ -212,14 +212,15 @@ export default {
         return data.map((item) => {
           item.level = level;
           const child = item.subCitys;
-          if (level >= 2 && this.dataLevel === 2) {
+
+          // 根据dataLevel判断是否删除subCitys
+          if (level >= this.dataLevel) {
             delete item.subCitys;
-          }
-          if (child && child.length) {
+          } else if (child && child.length) {
+            // 递归调用子节点
             recursive(child, level);
-          } else {
-            delete item.subCitys;
           }
+
           return item;
         });
       };

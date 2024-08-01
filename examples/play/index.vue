@@ -5,6 +5,7 @@
       :props="{ multiple: true, checkStrictly: true }"
       v-model="city"
       filterable
+      :data-level="3"
       @on-city="oncity"
     ></xn-city>
 
