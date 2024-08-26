@@ -13,7 +13,6 @@
     v-bind="$attrs"
     :file-list.sync="fileList"
     :http-request="onHttpUpload"
-    :on-error="onError"
     :before-upload="onBeforeUpload"
     :style="{ ...styles, ...idCardSizeData }"
     :on-exceed="onExceed"
@@ -38,7 +37,13 @@
       </slot>
     </template>
 
-    <div slot="file" slot-scope="{ file }" :class="{'xn-upload--slot':['picture-card', 'idcard'].includes(listType)}">
+    <div
+      slot="file"
+      slot-scope="{ file }"
+      :class="{
+        'xn-upload--slot': ['picture-card', 'idcard'].includes(listType),
+      }"
+    >
       <template v-if="['list'].includes(listType)">
         <a
           class="el-upload-list__item-name"
@@ -245,7 +250,6 @@ export default {
       imageView: "",
       isHidden: false,
       viewList: [],
-      files: [],
       successFiles: [],
       isUploading: false,
       file: {},
@@ -254,6 +258,8 @@ export default {
       idCardSizeData: {},
       isShowAV: false,
       avUrl: "",
+      realFileList: [],
+      reUploadFile: {},
     };
   },
   computed: {
@@ -265,11 +271,14 @@ export default {
     fileSize() {
       return this.$format.bytesToSize(this.file.size);
     },
+    isMultiple() {
+      return this.$attrs.multiple;
+    },
   },
   watch: {
     fileList: {
       handler(n) {
-        this.successFiles = n;
+        // this.successFiles = n;
         this.isHidden = this.limit === n.length;
       },
       immediate: true,
@@ -344,29 +353,45 @@ export default {
       });
     },
     onChange(file, fileList) {
-      this.files = fileList;
+      this.realFileList = fileList;
     },
     async onHttpUpload(file) {
+      this.handleUpload(file);
+    },
+    handleUpload(file) {
       this.isUploading = true;
       this.$emit("on-uploaded", false);
       this.oss
         .upload(file)
         .then((res) => {
           this.successFiles.push(res);
-          this.$emit("update:fileList", this.successFiles);
+
+          this.realFileList.forEach((item) => {
+            if (item.uid === res.file.uid) {
+              const obj = JSON.parse(JSON.stringify(res));
+              const _item = JSON.parse(JSON.stringify(item));
+              delete _item.raw;
+              item = Object.assign(obj,_item);
+            }
+          });
+
+          this.$emit("update:fileList", this.realFileList);
           this.$emit("on-file", this.res);
           this.$emit("on-success", this.successFiles);
           this.$emit("on-uploaded", true);
           this.isUploading = false;
         })
-        .catch(() => {
-          this.$emit("update:fileList", this.successFiles);
+        .catch(({fileName}) => {
+          this.$notify.error({
+            title: "上传失败",
+            dangerouslyUseHTMLString: true,
+            message:`<div><p>文件名：</p>${fileName}</div>`,
+          });
         });
     },
-
-    onError() {
-      this.$message.error("上传失败，请重试");
-    },
+    // onError() {
+    //   this.$message.error("上传失败，请重试");
+    // },
     onSubmitUpload() {
       this.$refs.upload.submit();
     },

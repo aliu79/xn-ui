@@ -6,7 +6,7 @@
 this.$reg.checkPhone // 校验手机号
 this.$reg.checkPwd // 8-20位的字母和数字
 this.$reg.checkNumber // 校验数字类型
-this.$reg.checkTel //座机号码
+this.$reg.checkTel //校验有效联系方式，手机号或座机号（包括港澳台，国际号码）
 this.$reg.checkEmail // 邮箱
 this.$reg.checkFullName //中文、英文、数字包括下划线
 this.$reg.positiveInteger // 正整数

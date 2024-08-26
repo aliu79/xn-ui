@@ -1,22 +1,40 @@
 <template>
   <div>
-    <xn-city
-      ref="city"
-      :props="{ multiple: true, checkStrictly: true }"
-      v-model="city"
-      filterable
-      :data-level="3"
-      @on-city="oncity"
-    ></xn-city>
+    <!-- <xn-upload
+      ref="upload"
+      :fileList.sync="fileList"
+      :limit="limit"
+      list-type="idcard"
+      @on-success="onSuccess"
+      @on-uploaded="handleUoloaded"
+    ></xn-upload> -->
+    <xn-upload
+      ref="upload"
+      :fileList.sync="fileList"
+      :limit="limit"
+      multiple
+      @on-success="onSuccess"
+      @on-uploaded="handleUoloaded"
+    >
+    
+   
+    
+    </xn-upload>
+    <!-- <el-button type="primary" size="default" @click="stopUpload"
+      >stop upload</el-button
+    >
 
-    <xn-search
-      ref="formSearch"
-      class="mt-18"
-      label-width="0"
-      :form-data="formSearch"
-      @on-search="onSearch"
-    ></xn-search>
-    <el-button type="primary" size="default" @click="click">btn</el-button>
+    <el-button
+      type="primary"
+      size="default"
+      @click="
+        onDownload({
+          url: 'https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/11/20b365d38e5646f2896e1f2e6c010f93.png',
+          name: '123123',
+        })
+      "
+      >download</el-button
+    > -->
   </div>
 </template>
 
@@ -24,33 +42,46 @@
 export default {
   data() {
     return {
-      city: "000000",
-      formSearch: [
+      limit: 9,
+      config: {
+        accept: "image", //接受上传的文件类型：zip、pdf、excel、image，也可以是文件类型所组成的数组类型如：['image', 'pdf']，则只可以上传图片或pdf类型的文件，也可以为空，则任何类型的文件都可以上传
+        max: 100, //文件大小
+      },
+      fileList: [
         {
-          type: "city",
-          prop: "city",
-          options: {
-            props: {
-              multiple: true,
-              checkStrictly: true,
-            },
-          },
+          url: "https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/11/20b365d38e5646f2896e1f2e6c010f93.png",
+          name:'123'
         },
+        { url: 'https://xianniu-image.oss-cn-beijing.aliyuncs.com/indexImage/guanw/by.mp4',name:'视频' }
       ],
     };
   },
-  mounted() {},
+  watch: {
+    fileList: {
+      handler(val) {
+        console.log("fileList: ", val);
+      },
+      deep: true,
+    },
+  },
   methods: {
-    click() {
-      const res = this.$refs.city.str2Code("北京市北京市通州区");
-      console.log(res);
-      this.city = ["110100","140400"];
+    onSuccess(val) {
+      console.log(val);
     },
-    oncity(val) {
-      console.log("🚀 ~ oncity ~ val:", val);
+    beforeUpload() {
+      // console.log("val", val);
     },
-    onSearch(val) {
-      console.log("🚀 ~ onSearch ~ val:", val);
+    handleUoloaded() {
+      // console.log('val: ', val);
+    },
+    onProgress() {},
+    onPreview() {},
+    onRemove() {},
+    stopUpload() {
+      this.$refs.upload.abortUpload();
+    },
+    onDownload({ url, name }) {
+      this.$utils.download({ url, name });
     },
   },
 };

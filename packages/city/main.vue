@@ -120,7 +120,6 @@ export default {
           const res = this.findParent(_value, this.flattenResult).map(
             (item) => item.cityCode
           );
-          console.log("123", res);
           return res;
         }
       },
@@ -246,28 +245,26 @@ export default {
     //   });
     // },
     handleChange(code) {
-      const changeResults = Array.isArray(code)
-        ? code.map((c) => this.getRes(c))
-        : this.getRes(code);
+      // 判断是否是多选
+      const isMultiple = Array.isArray(code) && Array.isArray(code[0]);
 
-      const value = changeResults.map(({ cityCodeLast }) =>
-        this.valueKey ? code : cityCodeLast
+      // 获取变更结果
+      const changeResults = (isMultiple ? code : [code]).map(this.getRes);
+
+      // 生成 value 和 cityResults
+      const [value, cityResults] = changeResults.reduce(
+        (acc, res) => {
+          const { city, cityCode, cityName, cityCodeLast, cityNameLast } = res;
+          acc[0].push(this.valueKey ? code : cityCodeLast);
+          acc[1].push({ city, cityCode, cityName, cityCodeLast, cityNameLast });
+          return acc;
+        },
+        [[], []]
       );
 
-      this.$emit("on-change", value);
-
-      const cityResults = changeResults.map((res) => {
-        const { city, cityCode, cityName, cityCodeLast, cityNameLast } = res;
-        return {
-          city,
-          cityCode,
-          cityName,
-          cityCodeLast,
-          cityNameLast,
-        };
-      });
-
-      this.$emit("on-city", cityResults);
+      // 触发事件
+      this.$emit("on-change", isMultiple ? value : value[0]);
+      this.$emit("on-city", isMultiple ? cityResults : cityResults[0]);
     },
     // 获取结果
     getRes(cityCode) {
