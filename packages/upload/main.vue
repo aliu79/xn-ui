@@ -2,7 +2,9 @@
   <el-upload
     ref="upload"
     :class="{
-      'is-disabled': $attrs.disabled != undefined,
+      'is-disabled':
+        ($attrs.disabled != undefined && $attrs.disabled == true) ||
+        $attrs.disabled === '',
       'is-hidden': preview || hideUpload || isHidden,
       'is-idcard': listType === 'idcard',
     }"
@@ -159,14 +161,6 @@
         </span>
       </template>
     </div>
-    <!-- <div
-      slot="file"
-      slot-scope="{ file }"
-      class="xn-upload--slot"
-      
-    >
-      
-    </div> -->
     <div v-if="tip !== ''" slot="tip" class="el-upload__tip">{{ tip }}</div>
     <el-image-viewer
       v-if="isShowImageView"
@@ -233,7 +227,7 @@ export default {
       default: () => {},
     },
     hideUpload: {
-      type: Boolean,
+    type: Boolean,
       default: false,
     },
     type: {
@@ -285,6 +279,8 @@ export default {
     },
   },
   created() {
+    console.log(this.$attrs);
+
     this.client = new Client({
       stsUrl: this.$XN.stsUrl || "",
       setFileIdUrl: this.$XN.setFileIdUrl || "",
@@ -366,26 +362,24 @@ export default {
         .then((res) => {
           this.successFiles.push(res);
 
-          this.realFileList.forEach((item) => {
+          this.realFileList.forEach((item,idx,arr) => {
             if (item.uid === res.file.uid) {
               const obj = JSON.parse(JSON.stringify(res));
-              const _item = JSON.parse(JSON.stringify(item));
-              delete _item.raw;
-              item = Object.assign(obj,_item);
+              delete obj.file;
+              this.$set(arr, idx, obj);
             }
           });
-
           this.$emit("update:fileList", this.realFileList);
           this.$emit("on-file", this.res);
           this.$emit("on-success", this.successFiles);
           this.$emit("on-uploaded", true);
           this.isUploading = false;
         })
-        .catch(({fileName}) => {
+        .catch(({ fileName }) => {
           this.$notify.error({
             title: "上传失败",
             dangerouslyUseHTMLString: true,
-            message:`<div><p>文件名：</p>${fileName}</div>`,
+            message: `<div><p>文件名：</p>${fileName}</div>`,
           });
         });
     },

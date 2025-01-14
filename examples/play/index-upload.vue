@@ -12,17 +12,13 @@
       ref="upload"
       :fileList.sync="fileList"
       :limit="limit"
-      list-type="list"
       @on-success="onSuccess"
       @on-uploaded="handleUoloaded"
-      drag
     >
-    
-    <div style="height:200px">
-      <i class="el-icon-upload"></i>
-      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-    </div>
-    
+      <div style="height: 160px">
+        <i class="el-icon-upload" />
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+      </div>
     </xn-upload>
     <!-- <el-button type="primary" size="default" @click="stopUpload"
       >stop upload</el-button
@@ -51,14 +47,30 @@ export default {
         accept: "image", //接受上传的文件类型：zip、pdf、excel、image，也可以是文件类型所组成的数组类型如：['image', 'pdf']，则只可以上传图片或pdf类型的文件，也可以为空，则任何类型的文件都可以上传
         max: 100, //文件大小
       },
+      isDisabled: [1, 2, 3],
       fileList: [
         {
           url: "https://xianniu-file.oss-cn-beijing.aliyuncs.com/accessory/2023/05/11/20b365d38e5646f2896e1f2e6c010f93.png",
-          name:'123'
+          name: "123",
         },
-        { url: 'https://xianniu-image.oss-cn-beijing.aliyuncs.com/indexImage/guanw/by.mp4',name:'视频' }
+        {
+          url: "https://xianniu-image.oss-cn-beijing.aliyuncs.com/indexImage/guanw/by.mp4",
+          name: "视频",
+        },
       ],
     };
+  },
+  watch: {
+    fileList: {
+      handler(val) {
+        console.log("fileList: ", val);
+      },
+      deep: true,
+    },
+  },
+  created(){
+    console.log(this.$dayjs(1729064308000).format());
+    
   },
   methods: {
     onSuccess(val) {

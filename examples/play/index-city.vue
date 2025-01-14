@@ -2,10 +2,10 @@
   <div>
     <xn-city
       ref="city"
-      v-model="city"
+      v-model="form.city"
       filterable
       clearable
-      :data-level="3"
+      :data-level="2"
       @on-city="oncity"
       @on-change="onChange"
     ></xn-city>
@@ -25,7 +25,9 @@
 export default {
   data() {
     return {
-      city: "000000",
+     form:{
+      city: "",
+     },
       formSearch: [
         {
           type: "city",

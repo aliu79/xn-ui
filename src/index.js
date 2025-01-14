@@ -18,6 +18,7 @@ import XnText from '../packages/ellipsis/index'
 import XnCard from '../packages/card/index'
 import XnDescription from '../packages/description/index'
 import XnDescriptionItem from '../packages/descriptionItem/index'
+import XnAmount from '../packages/amount/index'
 
 import Utils from 'xn-ui/src/utils/index'
 const doc = 'http://lzwr.gitee.io/xn-ui/#/'
@@ -40,7 +41,8 @@ const components = [
     XnText,
     XnCard,
     XnDescription,
-    XnDescriptionItem
+    XnDescriptionItem,
+    XnAmount
 ]
 const version = require('../package.json').version
 const install = function (Vue) {
@@ -87,5 +89,6 @@ export default {
     XnEmpty,
     XnTag,
     XnText,
-    XnCard
+    XnCard,
+    XnAmount
 }

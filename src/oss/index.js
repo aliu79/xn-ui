@@ -14,17 +14,15 @@ class Client {
         const _token = localStorage.getItem('xnToken');
         if (!_token) return '';
 
-        const isQuotedString = /^".*"$/.test(_token);
-        try {
-            if (isQuotedString) {
-                return _token.slice(1, -1);
-            } else {
-                return JSON.parse(_token);
+        let token = ''
+        if (_token) {
+            try {
+                token = JSON.parse(_token)
+            } catch (error) {
+                token = _token
             }
-        } catch (error) {
-            console.error('Failed to parse token:', error);
-            return _token;
         }
+        return token
     }
 
     getExt(file) {
