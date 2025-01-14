@@ -65,6 +65,7 @@ export default {
     },
   },
   filters: {
+    // 处理精度
     doPrecision(value, precision, isRoundUp) {
       const exponentialForm = Number(`${value}e${precision}`);
       const rounded = isRoundUp
@@ -72,6 +73,7 @@ export default {
         : Math.floor(exponentialForm);
       return Number(`${rounded}e-${precision}`).toFixed(precision);
     },
+    // 处理格式
     doFormat(value, hasSeparator, separator) {
       if (!hasSeparator) {
         return value;
@@ -99,6 +101,7 @@ export default {
         ? `${sign}${formateValue.value}.${decimalValue}`
         : `${sign}${formateValue.value}`;
     },
+    // 转换为大写
     doCapital(value) {
       return numberCapital(value);
     },
@@ -121,6 +124,7 @@ export default {
     },
   },
   computed: {
+    // 计算合法精度
     legalPrecision() {
       return this.precision > 0 ? this.precision : 0;
     },
@@ -135,7 +139,7 @@ export default {
     this.isMounted = true;
   },
   methods: {
-    // MARK: private methods
+    // 动画显示数值变化
     $_doAnimateDisplay(fromValue = 0, toValue = 0) {
       /* istanbul ignore next  */
       const step = (percent) => {
