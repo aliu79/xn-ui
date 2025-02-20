@@ -133,34 +133,39 @@ const getFileNameFromUrl = function(url){
 /**
  * 根据某个key 对数组去重合并
  * @param {array} arr 需要合并的数组
- * @param {string} key 传入要合并的key
+ * @param {string} key 传入要合并的key ，如果是多个key，传入数组
  * @return {array} result
  */
 const arrMerge = (arr = [], key = '') => {
-  if (!key) {
-    throw new Error('error arguments: key is required')
-  }
-  if (!arr.length) return
-  var map = {}; var result = []
+  // 处理单个字符串的key，转换为数组形式
+  const keys = Array.isArray(key) ? key : [key]
 
-  for (var i = 0; i < arr.length; i++) {
-    var ai = arr[i]
-    if (!map[ai[key]]) {
-      result.push({
-        [key]: ai[key],
-        children: [ai]
+  if (!keys.length || (keys.length === 1 && keys[0] === '')) {
+    throw new Error('错误参数: key是必需的')
+  }
+  if (!arr.length) return []
+
+  // 生成复合键的工具函数
+  const getKey = (item) => keys.map(k => item[k]).join('|')
+  const result = []
+  const map = {}
+
+  for (const item of arr) {
+    const compositeKey = getKey(item)
+
+    if (!map[compositeKey]) {
+      const resultItem = { children: [item] }
+      keys.forEach(k => {
+        resultItem[k] = item[k]
       })
-      map[ai[key]] = ai
+
+      result.push(resultItem)
+      map[compositeKey] = resultItem
     } else {
-      for (var j = 0; j < result.length; j++) {
-        var dj = result[j]
-        if (dj[key] === ai[key]) {
-          dj.children.push(ai)
-          break
-        }
-      }
+      map[compositeKey].children.push(item)
     }
   }
+
   return result
 }
 // 判空
