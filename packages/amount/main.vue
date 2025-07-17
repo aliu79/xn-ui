@@ -158,11 +158,3 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.xn-amount{
-    &-prefix{
-        font-style: normal;
-        font-size: inherit;
-    }
-}
-</style>

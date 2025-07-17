@@ -1,17 +1,17 @@
 /**
  * 判断各种值是否为空
- * @param {*} val 
+ * @param {*} val
  * @returns Boolean
  */
-const isEmpty = function (val) {
+const isEmpty = function(val) {
   if (val) {
     if (val instanceof Array) {
-      return val.length == 0;
+      return val.length == 0
     }
     if (val instanceof Object) {
-      return Object.keys(val).length == 0;
+      return Object.keys(val).length == 0
     }
-    return false;
+    return false
   }
   return true
 }
@@ -35,8 +35,8 @@ const isImg = (file) => {
 }
 /**
  * 判断文件类型
- * @param {*} file 
- * @returns 
+ * @param {*} file
+ * @returns
  */
 const isAV = (file) => {
   const { url } = file
@@ -52,23 +52,23 @@ const isAV = (file) => {
   }
   return false
 }
-const checkFile = (fileValue) =>{
-  var index = fileValue.lastIndexOf("."); //（考虑严谨用lastIndexOf(".")得到）得到"."在第几位
-  const fileValueSuffix = fileValue.substring(index); //截断"."之前的，得到后缀
-      if (/(.*)\.(mp4|avi|wmv|MP4|AVI|WMV)$/.test(fileValueSuffix)) { //根据后缀，判断是否符合视频格式
-          return 'video';
-      }else  if(/(.*)\.(jpg|JPG|bmp|BMP|mpg|MPG|mpeg|MPEG|tis|TIS)$/.test(fileValueSuffix)) { //根据后缀，判断是否符合图片格式
-          return 'image';
-      }else if (/(.*)\.(xls|XLS|xlsx|XLSX|doc|DOC|docx|DOCX|pdf|PDF|PPT|PPTX|ppt|pptx)$/.test(fileValueSuffix)) { //根据后缀，判断是否符合OFFICE格式
-          return 'office';
-      }
-  return false;
+const checkFile = (fileValue) => {
+  var index = fileValue.lastIndexOf('.') // （考虑严谨用lastIndexOf(".")得到）得到"."在第几位
+  const fileValueSuffix = fileValue.substring(index) // 截断"."之前的，得到后缀
+  if (/(.*)\.(mp4|avi|wmv|MP4|AVI|WMV)$/.test(fileValueSuffix)) { // 根据后缀，判断是否符合视频格式
+    return 'video'
+  } else if (/(.*)\.(jpg|JPG|bmp|BMP|mpg|MPG|mpeg|MPEG|tis|TIS)$/.test(fileValueSuffix)) { // 根据后缀，判断是否符合图片格式
+    return 'image'
+  } else if (/(.*)\.(xls|XLS|xlsx|XLSX|doc|DOC|docx|DOCX|pdf|PDF|PPT|PPTX|ppt|pptx)$/.test(fileValueSuffix)) { // 根据后缀，判断是否符合OFFICE格式
+    return 'office'
+  }
+  return false
 }
 
 /**
  * 深拷贝
- * @param {*} source 
- * @returns 
+ * @param {*} source
+ * @returns
  */
 const deepClone = (source) => {
   if (!source && typeof source !== 'object') {
@@ -86,32 +86,32 @@ const deepClone = (source) => {
 }
 
 /**
- * 
- * @param {object} params 
- * @param {string} name 文件名 
+ *
+ * @param {object} params
+ * @param {string} name 文件名
  * @param {string} url 文件地址
- * @returns 
+ * @returns
  */
 const download = (params = { name: '', url: '' }) => {
-  if(!params.url) return
+  if (!params.url) return
 
   let { url, name } = params
-  name = name ? name : getFileNameFromUrl(params.url)
-  const x = new XMLHttpRequest();
-  x.open("GET", url, true);
-  x.responseType = "blob";
-  x.onload = function () {
-    const _url = window.URL.createObjectURL(x.response);
-    const elt = document.createElement("a");
-    elt.setAttribute("href", _url);
-    elt.setAttribute("download", name);
-    elt.style.display = "none";
-    elt.target = "_blank";
-    document.body.appendChild(elt);
-    elt.click();
-    document.body.removeChild(elt);
-  };
-  x.send();
+  name = name || getFileNameFromUrl(params.url)
+  const x = new XMLHttpRequest()
+  x.open('GET', url, true)
+  x.responseType = 'blob'
+  x.onload = function() {
+    const _url = window.URL.createObjectURL(x.response)
+    const elt = document.createElement('a')
+    elt.setAttribute('href', _url)
+    elt.setAttribute('download', name)
+    elt.style.display = 'none'
+    elt.target = '_blank'
+    document.body.appendChild(elt)
+    elt.click()
+    document.body.removeChild(elt)
+  }
+  x.send()
 }
 
 /**
@@ -119,19 +119,19 @@ const download = (params = { name: '', url: '' }) => {
  * @param {string} url
  * @returns {string} filename
  * @example
- * getFileNameFromUrl('http://www.baidu.com/abc/def/123.jpg') // 123.jpg  
+ * getFileNameFromUrl('http://www.baidu.com/abc/def/123.jpg') // 123.jpg
  * getFileNameFromUrl('http://www.baidu.com/abc/def/') // def
  */
-const getFileNameFromUrl = function(url){
-  var parsedUrl = new URL(url);
-  var pathname = parsedUrl.pathname;
-  var pathComponents = pathname.split('/');
-  var filename = pathComponents[pathComponents.length - 1];
-  return decodeURIComponent(filename);
+const getFileNameFromUrl = function(url) {
+  var parsedUrl = new URL(url)
+  var pathname = parsedUrl.pathname
+  var pathComponents = pathname.split('/')
+  var filename = pathComponents[pathComponents.length - 1]
+  return decodeURIComponent(filename)
 }
 
 /**
- * 根据某个key 对数组去重合并
+ * 根据某个key 对数组去重合并，忽略空值属性
  * @param {array} arr 需要合并的数组
  * @param {string} key 传入要合并的key ，如果是多个key，传入数组
  * @return {array} result
@@ -145,18 +145,31 @@ const arrMerge = (arr = [], key = '') => {
   }
   if (!arr.length) return []
 
-  // 生成复合键的工具函数
-  const getKey = (item) => keys.map(k => item[k]).join('|')
+  // 生成复合键的工具函数，跳过空值属性
+  const getKey = (item) => {
+    return keys
+      .filter(k => item[k] !== null && item[k] !== undefined && item[k] !== '') // 过滤掉空值属性
+      .map(k => item[k])
+      .join('|')
+  }
+
   const result = []
   const map = {}
 
   for (const item of arr) {
     const compositeKey = getKey(item)
 
+    // 如果所有指定属性都为空，则跳过该项
+    if (!compositeKey) continue
+
     if (!map[compositeKey]) {
       const resultItem = { children: [item] }
+
+      // 只添加非空属性到结果对象
       keys.forEach(k => {
-        resultItem[k] = item[k]
+        if (item[k] !== undefined && item[k] !== null && item[k] !== '') {
+          resultItem[k] = item[k]
+        }
       })
 
       result.push(resultItem)
@@ -168,39 +181,40 @@ const arrMerge = (arr = [], key = '') => {
 
   return result
 }
+
 // 判空
 const isBlank = (str) => {
   if (str === null || (!str && str !== 0)) {
-      return true
+    return true
   }
   return false
 }
 /* 重置方法 */
 const reset = (obj) => {
   for (const key in obj) {
-      if (Array.isArray(obj[key])) {
-          obj[key] = []
-      } else if (typeof obj[key] === 'object') {
-          obj[key] = reset(obj[key])
-      } else {
-          obj[key] = ''
-      }
+    if (Array.isArray(obj[key])) {
+      obj[key] = []
+    } else if (typeof obj[key] === 'object') {
+      obj[key] = reset(obj[key])
+    } else {
+      obj[key] = ''
+    }
   }
   return obj
 }
 
-export const toCamelCase = (string)=> {
-  var words = string.split('-'); // 步1
-  var camelCaseWords = [words[0]];
-  
+export const toCamelCase = (string) => {
+  var words = string.split('-') // 步1
+  var camelCaseWords = [words[0]]
+
   for (var i = 1; i < words.length; i++) {
-    var word = words[i];
-    var capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1); // 步骤2
-    camelCaseWords.push(capitalizedWord);
+    var word = words[i]
+    var capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1) // 步骤2
+    camelCaseWords.push(capitalizedWord)
   }
-  
-  var camelCaseString = camelCaseWords.join(''); // 步骤3
-  return camelCaseString;
+
+  var camelCaseString = camelCaseWords.join('') // 步骤3
+  return camelCaseString
 }
 
 export function assignValues(form, apiResponse) {
