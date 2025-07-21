@@ -1,9 +1,6 @@
 <template>
   <div>
-    <xn-amount :value="value" :prefix-style="{color:'#f00'}" prefix="LLL" suffix="美元" :suffix-style="{color:'#00f'}">
-      <template #prefix>
-        <span style="color: #f00;">&</span>
-      </template>
+    <xn-amount :value="value" :prefix-style="{color:'#f00'}" prefix="￥" suffix="美元" :suffix-style="{color:'#00f'}">
       <template #suffix>
         <span style="color: #00f;">元</span>
       </template>

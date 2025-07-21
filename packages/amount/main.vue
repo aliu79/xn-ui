@@ -6,23 +6,19 @@
         :style="prefixStyle"
         v-if="showPrefix && ($slots.prefix || prefix)"
       >
-        <slot name="prefix">
-          {{ prefix }}
-        </slot>
-      </i>
-      <slot>{{
+        <slot name="prefix">{{ prefix }}</slot>
+      </i><!--
+      --><slot>{{
         formatValue
           | doPrecision(legalPrecision, isRoundUp)
           | doFormat(hasSeparator, separator)
-      }}</slot
-      ><i
+      }}</slot><!--
+      --><i
         class="xn-amount-suffix"
         :style="suffixStyle"
         v-if="$slots.suffix || suffix"
       >
-        <slot name="suffix">
-          {{ suffix }}
-        </slot>
+        <slot name="suffix">{{ suffix }}</slot>
       </i>
     </template>
     <template v-else>
