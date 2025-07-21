@@ -1,5 +1,14 @@
 .xn-amount{
+    font-style: normal;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    text-decoration: inherit;
     &-prefix{
+        font-style: normal;
+        font-size: inherit;
+    }
+    &-suffix{
         font-style: normal;
         font-size: inherit;
     }

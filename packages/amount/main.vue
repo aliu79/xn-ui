@@ -1,7 +1,29 @@
 <template>
   <span class="xn-amount" :class="{ numerical: !isCapital }">
     <template v-if="!isCapital">
-      <i class="xn-amount-prefix" :style="prefixStyle">{{ prefix }}</i>{{ formatValue | doPrecision(legalPrecision, isRoundUp) | doFormat(hasSeparator, separator) }}
+      <i
+        class="xn-amount-prefix"
+        :style="prefixStyle"
+        v-if="showPrefix && ($slots.prefix || prefix)"
+      >
+        <slot name="prefix">
+          {{ prefix }}
+        </slot>
+      </i>
+      <slot>{{
+        formatValue
+          | doPrecision(legalPrecision, isRoundUp)
+          | doFormat(hasSeparator, separator)
+      }}</slot
+      ><i
+        class="xn-amount-suffix"
+        :style="suffixStyle"
+        v-if="$slots.suffix || suffix"
+      >
+        <slot name="suffix">
+          {{ suffix }}
+        </slot>
+      </i>
     </template>
     <template v-else>
       {{ formatValue | doPrecision(4, isRoundUp) | doCapital }}
@@ -59,7 +81,19 @@ export default {
       type: String,
       default: "￥",
     },
+    showPrefix: {
+      type: Boolean,
+      default: true,
+    },
     prefixStyle: {
+      type: Object,
+      default: () => ({}),
+    },
+    suffix: {
+      type: String,
+      default: "",
+    },
+    suffixStyle: {
       type: Object,
       default: () => ({}),
     },
