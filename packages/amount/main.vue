@@ -97,6 +97,11 @@ export default {
   filters: {
     // 处理精度
     doPrecision(value, precision, isRoundUp) {
+      // 处理空值情况
+      if (value == null || isNaN(value)) {
+        return '--';
+      }
+      
       const exponentialForm = Number(`${value}e${precision}`);
       const rounded = isRoundUp
         ? Math.round(exponentialForm)

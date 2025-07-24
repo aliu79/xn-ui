@@ -12,7 +12,7 @@
 export default {
   data() {
     return {
-      value: 9999999.982,
+      value: null,
     };
   },
   mounted() {
