@@ -93,13 +93,17 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    emptyValue: {
+      type: String,
+      default: "--",
+    },
   },
   filters: {
     // 处理精度
     doPrecision(value, precision, isRoundUp) {
       // 处理空值情况
       if (value == null || isNaN(value)) {
-        return '--';
+        return this.emptyValue;
       }
       
       const exponentialForm = Number(`${value}e${precision}`);
