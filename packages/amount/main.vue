@@ -10,7 +10,7 @@
       </i><!--
       --><slot>{{
         formatValue
-          | doPrecision(legalPrecision, isRoundUp)
+          | doPrecision(legalPrecision, isRoundUp, emptyValue)
           | doFormat(hasSeparator, separator)
       }}</slot><!--
       --><i
@@ -22,7 +22,7 @@
       </i>
     </template>
     <template v-else>
-      {{ formatValue | doPrecision(4, isRoundUp) | doCapital }}
+      {{ formatValue | doPrecision(4, isRoundUp, emptyValue) | doCapital }}
     </template>
   </span>
 </template>
@@ -100,10 +100,10 @@ export default {
   },
   filters: {
     // 处理精度
-    doPrecision(value, precision, isRoundUp) {
+    doPrecision(value, precision, isRoundUp, emptyValue = '--') {
       // 处理空值情况
       if (value == null || isNaN(value)) {
-        return this.emptyValue;
+        return emptyValue;
       }
       
       const exponentialForm = Number(`${value}e${precision}`);
