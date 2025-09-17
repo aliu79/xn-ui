@@ -206,6 +206,9 @@ export default {
     isRadio() {
       return this.type === "radio" || this.radio;
     },
+    currentTable() {
+      return this.$refs.table;
+    },
   },
   created() {},
   updated() {
@@ -293,6 +296,9 @@ export default {
       } else {
         return 1;
       }
+    },
+    toggleRowExpansion(row, expanded) {
+      this.$refs.table.toggleRowExpansion(row, expanded);
     },
   },
 };
