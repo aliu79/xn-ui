@@ -98,6 +98,7 @@
         label="序号"
         v-if="index && data.length"
         type="index"
+        :index="indexMethod"
       ></el-table-column>
       <slot>
         <column
@@ -219,6 +220,12 @@ export default {
       });
   },
   methods: {
+    indexMethod(index) {
+      if (this.page && this.page.pageNum && this.page.pageSize) {
+        return (this.page.pageNum - 1) * this.page.pageSize + index + 1;
+      }
+      return index + 1;
+    },
     getList(val) {
       this.$emit("on-page", val);
     },
