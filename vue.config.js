@@ -37,6 +37,7 @@ module.exports = {
             .set('packages', resolve('./packages'))
             .set('examples', resolve('./examples'))
             .set('lib', resolve('./lib'))
+            .set('element-ui', resolve('./node_modules/@liuzengwei/element-ui'))
             .end()
         config.module
             .rule('eslint')

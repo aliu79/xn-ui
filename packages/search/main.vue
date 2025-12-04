@@ -150,7 +150,7 @@
 </template>
 
 <script>
-import { Form } from "element-ui";
+import { Form } from "@liuzengwei/element-ui";
 export default {
   name: "XnSearch",
   extends: Form,

@@ -173,7 +173,7 @@
 </template>
 
 <script>
-import ElImageViewer from "element-ui/packages/image/src/image-viewer";
+import ElImageViewer from "@liuzengwei/element-ui/packages/image/src/image-viewer";
 import Client from "@/oss";
 import uploadPop from "./upload-pop.vue";
 import idCard from "./idCard.vue";

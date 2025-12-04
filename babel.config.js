@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'production') {
 plugins.push([
   "component",
   {
-    "libraryName": "element-ui",
+    "libraryName": "@liuzengwei/element-ui",
     "styleLibraryName": "theme-chalk"
   }
 ])

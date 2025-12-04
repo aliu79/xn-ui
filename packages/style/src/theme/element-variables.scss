@@ -16,9 +16,11 @@ $--fade-transition:none;
 $--table-border:1px solid #f0f0f0;
 // $--table-header-background-color: #fafafa;
 
-$--font-path: "~element-ui/lib/theme-chalk/fonts";
+// 修复路径一致性问题：统一使用源码路径
+$--font-path: "~@liuzengwei/element-ui/packages/theme-chalk/src/fonts";
 
-@import "element-ui/packages/theme-chalk/src/index";
+// 导入 Element UI 源码样式以支持主题变量覆盖
+@import "~@liuzengwei/element-ui/packages/theme-chalk/src/index";
 
 
 :export {

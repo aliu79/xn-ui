@@ -1,5 +1,5 @@
 <script>
-import { Tag } from "element-ui";
+import { Tag } from "@liuzengwei/element-ui";
 export default {
   name: "XnTag",
   extends: Tag,
