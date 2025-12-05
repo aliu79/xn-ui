@@ -61,5 +61,8 @@
     "shelljs": "^0.8.5",
     "transliteration": "^1.1.11",
     "vue-template-compiler": "^2.7.14"
+  },
+  "volta": {
+    "node": "16.13.0"
   }
 }
