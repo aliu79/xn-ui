@@ -1,3 +1,6 @@
+// 先导入主题变量，确保所有变量都已定义
+@import './theme/index.scss';
+
 @import './search.scss';
 @import './table.scss';
 @import './page.scss';
@@ -15,8 +18,3 @@
 @import './card.scss';
 @import './description.scss';
 @import './amount.scss';
-
-
-
-
-@import './theme/index.scss';

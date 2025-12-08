@@ -1,5 +1,7 @@
 
 /* theme color */
+// 使用 Element UI 默认主题变量，不进行任何覆盖
+// 导入自定义主题变量（已注释掉所有变量定义）
 @import './theme.scss';
 
 $--button-font-weight: 400;
@@ -21,8 +23,9 @@ $--font-path: "~@liuzengwei/element-ui/packages/theme-chalk/src/fonts";
 
 // 导入 Element UI 源码样式以支持主题变量覆盖
 @import "~@liuzengwei/element-ui/packages/theme-chalk/src/index";
+// @import "~@liuzengwei/element-ui/packages/theme-chalk/src/common/var";
 
 
-:export {
-  theme: $--color-primary;
-}
+// :export {
+//   theme: $--color-primary;
+// }

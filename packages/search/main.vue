@@ -326,9 +326,11 @@ export default {
       this.$emit("on-search", {});
     },
     onChangeDate(val) {
+      // eslint-disable-next-line no-console
       console.log(val);
     },
     onChangeDateFormat(val) {
+      // eslint-disable-next-line no-console
       console.log(val);
     },
     handleChangeCity({ cityCodeLast: cityCode, cityNameLast: cityName }) {

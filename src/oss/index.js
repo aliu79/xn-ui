@@ -43,6 +43,7 @@ class Client {
 
     async getStsToken(file) {
         if (!this.stsUrl) {
+            // eslint-disable-next-line no-console
             console.error('获取临时凭证地址不能为空');
             file.onError();
             return Promise.reject('获取临时凭证地址不能为空');
@@ -62,6 +63,7 @@ class Client {
             });
             return this;
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error('获取临时凭证失败:', err);
             file.onError();
             return Promise.reject(err);
@@ -86,6 +88,7 @@ class Client {
             const { data } = await response.json();
             return data;
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error('设置文件ID失败:', err);
             return Promise.reject(err);
         }
@@ -124,6 +127,7 @@ class Client {
                 file.onSuccess();
                 resolve({ ...fileObj, fileId: fileIdResponse.fileId, file: currentFile });
             } catch (err) {
+                // eslint-disable-next-line no-console
                 console.error('上传文件失败:', err);
                 file.onError();
                 reject({ file, fileName, err });

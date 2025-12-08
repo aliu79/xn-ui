@@ -96,14 +96,15 @@ module.exports = {
             
           }
           
-        config.plugins.push(
-            new CopyWebpackPlugin([
-                {
-                    from: '/packages/style/lib',
-                    to: '/lib/style'
-                }
-            ])
-        )
+        // 不在这里复制样式文件，而是在 build:lib 命令中使用 cp-cli
+        // config.plugins.push(
+        //     new CopyWebpackPlugin([
+        //         {
+        //             from: '/packages/style/lib',
+        //             to: '/lib/style'
+        //         }
+        //     ])
+        // )
 
         config.module.rules.push({
             test: /\.md$/,
