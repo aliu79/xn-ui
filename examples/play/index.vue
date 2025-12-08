@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button size="default">123112</el-button>
-    <el-button size="default" type="primary">123112</el-button>
+    <el-button size="default" type="primary" icon="el-icon-edit">123112</el-button>
 
     <el-input v-model="value" placeholder="" size="normal" clearable></el-input>
     
