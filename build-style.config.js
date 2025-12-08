@@ -8,7 +8,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'packages/style/lib'),
-    filename: '[name].js' // 这个文件会被忽略，我们只需要 CSS
+    filename: '[name].js'
   },
   module: {
     rules: [

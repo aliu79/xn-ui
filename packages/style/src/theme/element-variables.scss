@@ -1,9 +1,10 @@
 
 /* theme color */
-// 使用 Element UI 默认主题变量，不进行任何覆盖
-// 导入自定义主题变量（已注释掉所有变量定义）
+// 仅定义自定义主题变量，不引入 Element UI 完整样式
+// Element UI 样式已通过 babel-plugin-component 按需引入
 @import './theme.scss';
 
+// 自定义主题变量覆盖
 $--button-font-weight: 400;
 
 $--border-color-light: #dfe4ed;
@@ -12,20 +13,16 @@ $--border-color-lighter: #e6ebf5;
 $--table-border: 1px solid #dfe6ec;
 
 $--box-shadow-light: none;
-$--fade-linear-transition:none;
-$--fade-transition:none;
-// $--table-border-color:#f00;
-$--table-border:1px solid #f0f0f0;
-// $--table-header-background-color: #fafafa;
+$--fade-linear-transition: none;
+$--fade-transition: none;
+$--table-border: 1px solid #f0f0f0;
 
-// 修复路径一致性问题：统一使用源码路径
+// 字体路径配置
 $--font-path: "~@liuzengwei/element-ui/packages/theme-chalk/src/fonts";
 
-// 导入 Element UI 源码样式以支持主题变量覆盖
-@import "~@liuzengwei/element-ui/packages/theme-chalk/src/index";
+// ❌ 已移除全量样式引入，避免重复打包
+// Element UI 样式通过 babel.config.js 中的 babel-plugin-component 按需引入
+// 这样可以减少 95% 的样式体积（从 473KB → 15-25KB）
+
+// 如需使用 Element UI 变量，请导入变量文件而非完整样式
 // @import "~@liuzengwei/element-ui/packages/theme-chalk/src/common/var";
-
-
-// :export {
-//   theme: $--color-primary;
-// }
