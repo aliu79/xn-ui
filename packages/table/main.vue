@@ -2,26 +2,11 @@
   <div class="xn-table-box">
     <div class="xn-table-box-tools" :class="{ 'is-border': !border }">
       <div class="flex justify-content-between align-items-center">
-        <div class="fz-12" :class="{ 'pb-10': isSelection }">
-          <template v-if="isSelection && selectedData.length>0">
-            <span>已选择 {{ selectedData.length }} 项</span>
-            <el-button
-              type="text"
-              v-show="selectedData.length"
-              class="ml-5 pt-0 pb-0"
-              size="mini"
-              @click="clearSelection"
-              >取消</el-button
-            >
-          </template>
-        </div>
         <div
-          :class="{ 'pb-10': $slots.tools || tools.length }"
-          class="flex justify-content-between align-items-center"
+          :class="{ 'pb-10': $slots.tools || tools.length || showRefresh || showColumn }"
         >
           <slot name="tools">
-            <!-- <el-button-group> -->
-            <div>
+            <div v-if="tools.length">
               <el-tooltip
                 v-for="(item, idx) in tools"
                 :key="idx"
@@ -40,16 +25,20 @@
                 </el-button>
               </el-tooltip>
             </div>
-            <!-- </el-button-group> -->
           </slot>
+        </div>
+        <div
+          :class="{ 'pb-10': $slots.tools || tools.length || showRefresh || showColumn }"
+          class="flex align-items-center"
+        >
           <el-tooltip
+            v-if="showRefresh"
             class="ml-10"
             content="刷新"
             placement="bottom"
             effect="dark"
           >
             <el-button
-              v-if="showRefresh"
               size="mini"
               type="primary"
               @click="$emit('on-refresh')"
@@ -57,6 +46,36 @@
               plain
             ></el-button>
           </el-tooltip>
+          <el-popover
+            v-if="showColumn"
+            placement="bottom"
+            width="150"
+            trigger="click"
+          >
+            <div class="xn-table-box-tools__coll">
+              <el-checkbox
+                v-for="(item, idx) in columns"
+                :key="idx"
+                v-model="item.checked"
+                style="display: block; margin-right: 0"
+                >{{ item.label }}</el-checkbox
+              >
+            </div>
+            <el-tooltip
+              class="ml-10"
+              content="列设置"
+              placement="bottom"
+              effect="dark"
+              slot="reference"
+            >
+              <el-button
+                size="mini"
+                type="primary"
+                icon="el-icon-setting"
+                plain
+              ></el-button>
+            </el-tooltip>
+          </el-popover>
         </div>
       </div>
     </div>
@@ -68,7 +87,7 @@
       :border="border"
       :stripe="stripe"
       :header-row-class-name="headerRowClassName"
-      @row-click="singleElection"
+      @row-click="singleSelection"
       @selection-change="selectionChange"
       :row-class-name="tableRowClassName"
       :class="{ 'disabled-all-selection': isRadio }"
@@ -102,9 +121,8 @@
       ></el-table-column>
       <slot>
         <column
-          v-for="(item, idx) in columns"
+          v-for="(item, idx) in visibleColumns"
           :key="idx"
-          v-show="item.checked === true"
           v-bind="item"
         ></column>
       </slot>
@@ -175,20 +193,20 @@ export default {
     },
     disabledList: {
       type: Array,
-      require: false,
+      required: false,
       default: () => {
         return [];
       },
     },
     disabledKey: {
       type: String,
-      require: false,
+      required: false,
       default: "",
     },
     /* 筛选条件,正则 */
     filterQuery: {
       type: Object,
-      require: false,
+      required: false,
       default: () => {
         return {};
       },
@@ -210,15 +228,41 @@ export default {
     currentTable() {
       return this.$refs.table;
     },
+    visibleColumns() {
+      return this.columns.filter(item => item.checked !== false);
+    },
+  },
+  watch: {
+    columns: {
+      handler(val, oldVal) {
+        if (val && val.length) {
+          let needLayout = false;
+          val.forEach((item) => {
+            if (item.checked === undefined) {
+              this.$set(item, "checked", true);
+            }
+          });
+          
+          // 检测是否有列的 checked 状态发生变化
+          if (oldVal && oldVal.length) {
+            needLayout = val.some((item, index) => {
+              return oldVal[index] && item.checked !== oldVal[index].checked;
+            });
+          }
+          
+          // 如果列状态变化，下一帧重新计算布局
+          if (needLayout) {
+            this.$nextTick(() => {
+              this.doLayout();
+            });
+          }
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
   },
   created() {},
-  updated() {
-    !this.$slots.default &&
-      this.columns.length &&
-      this.columns.forEach((item) => {
-        if (item.checked !== true) this.$set(item, "checked", true);
-      });
-  },
   methods: {
     indexMethod(index) {
       if (this.page && this.page.pageNum && this.page.pageSize) {
@@ -229,7 +273,7 @@ export default {
     getList(val) {
       this.$emit("on-page", val);
     },
-    singleElection(val, column) {
+    singleSelection(val, column) {
       if (!this.isRadio) return;
       const { idKey } = this;
       this.radioSelected = val[idKey];

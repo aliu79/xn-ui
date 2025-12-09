@@ -4,7 +4,7 @@ const path = require('path');//引入path模块
 function resolve(dir) {
     return path.resolve(__dirname, dir)//path.join(__dirname)设置绝对路径
 }
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 
@@ -38,6 +38,8 @@ module.exports = {
             .set('examples', resolve('./examples'))
             .set('lib', resolve('./lib'))
             .set('element-ui', resolve('./node_modules/@liuzengwei/element-ui'))
+            .set('element-ui/src', '@liuzengwei/element-ui/lib')
+            .set('@liuzengwei/element-ui/src', '@liuzengwei/element-ui/lib')
             .end()
         config.module
             .rule('eslint')
