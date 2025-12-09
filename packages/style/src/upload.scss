@@ -86,8 +86,8 @@
     &:not(.is-idcard) .el-upload-list {
         &.el-upload-list--picture-card {
             .el-upload-list__item {
-                width: 80px;
-                height: 80px;
+                width: 72px;
+                height: 72px;
                 img.el-upload-list__item-thumbnail {
                     object-fit: cover;
                 }
@@ -97,14 +97,14 @@
     &:not(.is-idcard) {
         .el-upload {
             &.el-upload--picture-card {
-                width: 80px;
-                height: 80px;
-                line-height: 80px;
+                width: 72px;
+                height: 72px;
+                line-height: 72px;
                 font-size: 14px;
                 position: relative;
                 .el-upload-list__item {
-                    width: 80px;
-                    height: 80px;
+                    width: 72px;
+                    height: 72px;
                     img.el-upload-list__item-thumbnail {
                         object-fit: cover;
                     }
@@ -112,6 +112,14 @@
                 .upload-limit {
                     width: inherit;
                     height: inherit;
+                    display: flex;
+                    justify-content: center;
+                    flex-direction: column;
+                    line-height: normal;
+                    font-size: 10px;
+                    .text{
+                        color: #86909C;
+                    }
                     i {
                         font-size: 20px;
                     }
@@ -139,6 +147,34 @@
                 }
             }
         }
+        .upload-error {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10; // 确保在 actions 蒙层之上
+            .error-mask {
+                width: 100%;
+                height: 100%;
+                background: rgba($color: #000000, $alpha: 0.7);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+                .error-text {
+                    color: #f56c6c;
+                    font-size: 14px;
+                    margin: 0;
+                }
+                .error-actions {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+            }
+        }
         &__ext {
             position: absolute;
             bottom: 0;
@@ -150,12 +186,22 @@
             color: #fff;
             font-size: 12px;
             padding: 0 5px;
-            border-radius: 0 0 0 0;
+            border-radius: 0;
         }
     }
     .el-upload-list__item {
         .el-progress {
             width: 50%;
+        }
+        .el-upload-list__item-name {
+            &.is-error {
+                color: #f56c6c;
+                .error-tip {
+                    font-size: 12px;
+                    margin-left: 5px;
+                    opacity: 0.8;
+                }
+            }
         }
     }
     .el-upload--list{

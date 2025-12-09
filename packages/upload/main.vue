@@ -29,6 +29,7 @@
     <template v-else-if="listType === 'picture-card'">
       <div slot="trigger" class="upload-limit">
         <i class="el-icon el-icon-plus" />
+        <span class="text">{{ uploadText }}</span>
       </div>
     </template>
     <template v-else>
@@ -49,24 +50,35 @@
       <template v-if="['list'].includes(listType)">
         <a
           class="el-upload-list__item-name"
+          :class="{ 'is-error': file.status === 'fail' }"
           @click="handlePictureCardPreview(file)"
-          v-if="$utils.isImg(file)"
+          v-if="$utils.isImg(file) && file.status !== 'fail'"
           ><i class="el-icon-document"></i>{{ file.name }}
         </a>
         <a
           class="el-upload-list__item-name"
+          :class="{ 'is-error': file.status === 'fail' }"
           @click="handleAVPreview(file)"
-          v-else-if="$utils.isAV(file)"
+          v-else-if="$utils.isAV(file) && file.status !== 'fail'"
           ><i class="el-icon-document"></i>{{ file.name }}
         </a>
         <a
           class="el-upload-list__item-name"
+          :class="{ 'is-error': file.status === 'fail' }"
           @click="handleDownload(file)"
-          v-else
+          v-else-if="file.status !== 'uploading' && file.status !== 'fail'"
           ><i class="el-icon-document"></i>{{ file.name }}
         </a>
         <a class="el-upload-list__item-name" v-if="file.status === 'uploading'"
           ><i class="el-icon-document"></i>{{ file.name }}
+        </a>
+        <a 
+          class="el-upload-list__item-name is-error" 
+          v-if="file.status === 'fail'"
+          @click="retryUpload(file)"
+        >
+          <i class="el-icon-document"></i>{{ file.name }}
+          <span class="error-tip">({{ file.errorMessage }})</span>
         </a>
         <el-progress
           v-if="file.status === 'uploading'"
@@ -86,6 +98,13 @@
             }"
           ></i>
         </label>
+        <i
+          v-if="file.status === 'fail'"
+          class="el-icon-refresh-right"
+          title="重新上传"
+          @click="retryUpload(file)"
+          style="cursor: pointer; color: #f56c6c; margin-right: 5px;"
+        ></i>
         <i
           class="el-icon-close"
           @click="handleRemove(file, fileList)"
@@ -130,7 +149,23 @@
             :stroke-width="6"
           />
         </div>
-        <span class="el-upload-list__item-actions">
+        <div v-if="file.status === 'fail'" class="upload-error">
+          <div class="error-mask">
+            <p class="error-text">上传失败</p>
+            <div class="error-actions">
+              <el-link type="danger" :underline="false" icon="el-icon-refresh" @click.stop="retryUpload(file)"></el-link>
+              <el-link 
+                v-if="!$attrs.disabled && !preview"
+                type="info" 
+                :underline="false" 
+                icon="el-icon-delete" 
+                @click.stop="handleRemove(file, fileList)"
+                style="margin-left: 10px;"
+              ></el-link>
+            </div>
+          </div>
+        </div>
+        <span class="el-upload-list__item-actions" v-if="file.status !== 'fail'">
           <span
             v-if="$utils.isImg(file)"
             class="el-upload-list__item-preview"
@@ -227,7 +262,7 @@ export default {
       default: () => {},
     },
     hideUpload: {
-    type: Boolean,
+      type: Boolean,
       default: false,
     },
     type: {
@@ -253,7 +288,7 @@ export default {
       isShowAV: false,
       avUrl: "",
       realFileList: [],
-      reUploadFile: {},
+      failedFiles: {}, // 记录失败的文件 { uid: { file, error } }
     };
   },
   computed: {
@@ -265,9 +300,14 @@ export default {
     fileSize() {
       return this.$format.bytesToSize(this.file.size);
     },
-    isMultiple() {
-      return this.$attrs.multiple;
+    // 获取成功上传的文件列表（过滤掉失败的文件）
+    successFileList() {
+      return this.fileList.filter(file => file.status !== 'fail');
     },
+    // 上传按钮文字
+    uploadText(){
+      return this.$attrs.drag != undefined || this.drag === true ? '点击或拖拽上传' : '上传文件';
+    }
   },
   watch: {
     fileList: {
@@ -279,9 +319,6 @@ export default {
     },
   },
   created() {
-    // eslint-disable-next-line no-console
-    console.log(this.$attrs);
-
     this.client = new Client({
       stsUrl: this.$XN.stsUrl || "",
       setFileIdUrl: this.$XN.setFileIdUrl || "",
@@ -304,7 +341,6 @@ export default {
       return Promise.all([
         this.checkFileExt(file),
         this.onExceedSize(file.size),
-        this.getStsToken(file),
       ])
         .then(() => {
           return Promise.resolve();
@@ -350,43 +386,115 @@ export default {
       });
     },
     onChange(file, fileList) {
-      this.realFileList = fileList;
+      // 保持realFileList的引用稳定性
+      this.realFileList = [...fileList];
     },
     async onHttpUpload(file) {
       this.handleUpload(file);
     },
-    handleUpload(file) {
+    async handleUpload(file, isRetry = false) {
       this.isUploading = true;
       this.$emit("on-uploaded", false);
+      
+      // file 可能是 Element UI 的包装对象或原始文件对象
+      const fileUid = file.uid || file.file?.uid;
+      
+      // 如果是重试，从失败列表中移除并重置状态
+      if (isRetry) {
+        if (this.failedFiles[fileUid]) {
+          delete this.failedFiles[fileUid];
+        }
+        const index = this.realFileList.findIndex(item => item.uid === fileUid);
+        if (index !== -1) {
+          this.$set(this.realFileList[index], 'status', 'uploading');
+          this.$set(this.realFileList[index], 'percentage', 0);
+          delete this.realFileList[index].errorMessage;
+        }
+      }
+      
+      // 确保已获取 STS Token
+      if (!this.oss) {
+        try {
+          await this.getStsToken();
+        } catch (err) {
+          this.$notify.error({
+            title: '获取上传凭证失败',
+            message: err.message || '请稍后重试'
+          });
+          return;
+        }
+      }
+      
       this.oss
         .upload(file)
         .then((res) => {
           this.successFiles.push(res);
 
-          this.realFileList.forEach((item,idx,arr) => {
-            if (item.uid === res.file.uid) {
-              const obj = JSON.parse(JSON.stringify(res));
-              delete obj.file;
-              this.$set(arr, idx, obj);
-            }
-          });
+          // 更新文件列表，用上传成功的信息替换原文件
+          const index = this.realFileList.findIndex(item => item.uid === res.file.uid);
+          if (index !== -1) {
+            const obj = { ...res };
+            delete obj.file;
+            this.$set(this.realFileList, index, obj);
+          }
+          
+          // 从失败列表中移除（如果存在）
+          if (this.failedFiles[fileUid]) {
+            delete this.failedFiles[fileUid];
+          }
+          
           this.$emit("update:fileList", this.realFileList);
-          this.$emit("on-file", this.res);
+          this.$emit("on-file", res);
           this.$emit("on-success", this.successFiles);
           this.$emit("on-uploaded", true);
           this.isUploading = false;
         })
-        .catch(({ fileName }) => {
+        .catch((error) => {
+          // 上传失败，标记文件状态但保留在列表中
+          // 处理不同的错误格式
+          const fileName = error?.fileName || file.file?.name || file.name || '未知文件';
+          const message = error?.message || error?.err?.message || '网络错误，请检查网络连接后重试';
+          // const failedFile = error?.file || file;
+          
+          const index = this.realFileList.findIndex(item => item.uid === fileUid);
+          if (index !== -1) {
+            // 标记为失败状态
+            this.$set(this.realFileList[index], 'status', 'fail');
+            this.$set(this.realFileList[index], 'errorMessage', message);
+            
+            // 记录失败文件信息（包含原始file对象），用于重试
+            this.$set(this.failedFiles, fileUid, {
+              file: this.realFileList[index],
+              rawFile: file,  // 保存原始file对象用于重试
+              error: message
+            });
+            
+            // 触发更新事件
+            this.$emit("update:fileList", [...this.realFileList]);
+          }
+          
           this.$notify.error({
             title: "上传失败",
             dangerouslyUseHTMLString: true,
-            message: `<div><p>文件名：</p>${fileName}</div>`,
+            message: `<div><p>文件名：${fileName}</p><p>错误：${message}</p><p>点击重试按钮可重新上传</p></div>`,
+            duration: 5000
           });
+          this.$emit("on-uploaded", true);
+          this.isUploading = false;
         });
     },
     // onError() {
     //   this.$message.error("上传失败，请重试");
     // },
+    retryUpload(file) {
+      // 重新上传失败的文件
+      if (this.failedFiles[file.uid]) {
+        const failedFileInfo = this.failedFiles[file.uid];
+        // 使用保存的原始 file 对象进行重试
+        const uploadFile = failedFileInfo.rawFile || failedFileInfo.file;
+        this.handleUpload(uploadFile, true);
+      }
+    },
     onSubmitUpload() {
       this.$refs.upload.submit();
     },
@@ -413,19 +521,16 @@ export default {
       return this.$utils.download({ url, name });
     },
     handleRemove(file, fileList) {
-      fileList.forEach((item, idx) => {
-        if (file.uid === item.uid) {
-          fileList.splice(idx, 1);
-        }
-      });
+      // 使用filter避免遍历中删除的索引问题
+      const newFileList = fileList.filter(item => item.uid !== file.uid);
+      
       if (this.viewList.length) {
-        this.viewList.forEach((item, idx) => {
-          if (item.url === file.url) {
-            this.viewList.splice(idx, 1);
-          }
-        });
+        this.viewList = this.viewList.filter(item => item.url !== file.url);
       }
-      this.$emit("update:fileList", fileList);
+      
+      // 更新realFileList
+      this.realFileList = newFileList;
+      this.$emit("update:fileList", newFileList);
     },
     closeViewer() {
       this.isShowImageView = false;
@@ -433,7 +538,31 @@ export default {
     abortUpload() {
       return this.oss.oss.cancel();
     },
+    // 获取成功上传的文件列表（不包含失败的文件）
+    getSuccessFiles() {
+      return this.fileList.filter(file => file.status !== 'fail');
+    },
+    // 获取失败的文件列表
+    getFailedFiles() {
+      return this.fileList.filter(file => file.status === 'fail');
+    },
+    // 检查是否有失败的文件
+    hasFailedFiles() {
+      return this.fileList.some(file => file.status === 'fail');
+    },
     onPreviewFile(file) {
+      // 如果是失败的文件，点击重试
+      if (file.status === 'fail' && this.failedFiles[file.uid]) {
+        this.$confirm('上传失败，是否重新上传？', '提示', {
+          confirmButtonText: '重新上传',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.retryUpload(file);
+        }).catch(() => {});
+        return;
+      }
+      
       if (file.isAV === 1) {
         this.handleAVPreview(file);
       } else if (file.imgFlag === 1) {
