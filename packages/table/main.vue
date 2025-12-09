@@ -138,7 +138,6 @@
         :pageSize.sync="page.pageSize"
         @pagination="getList"
         v-bind="$attrs"
-        layout="total, prev, pager, next, jumper"
       ></xn-page>
     </template>
   </div>

@@ -86,8 +86,8 @@ export default {
         // { id: 2, date: "2011-01-03", name: "lzw", age: 22 },
       ],
       pageConfig: {
-        total: 8,
-        pageSize: 1,
+        total: 400,
+        pageSize: 15,
         pageNum: 1,
       },
       tools: [{ label: "导出", prop: "export", icon: "el-icon-files" }],
@@ -109,10 +109,10 @@ export default {
       this.$refs.table.clearSelection();
     },
     fnGetList(v) {
-      console.log(v);
-      this.list = [
-        { id: 122, uid: 1, date: "2011-01-01", name: "阿11111松大", age: 18 },
-      ]
+      console.log("🚀 ~ v:", v)
+      // this.list = [
+      //   { id: 122, uid: 1, date: "2011-01-01", name: "阿11111松大", age: 18 },
+      // ]
     },
     onradio(row, a) {
       console.log("val: ", {...row}, {...a});
