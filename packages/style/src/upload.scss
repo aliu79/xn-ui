@@ -86,8 +86,6 @@
     &:not(.is-idcard) .el-upload-list {
         &.el-upload-list--picture-card {
             .el-upload-list__item {
-                width: 72px;
-                height: 72px;
                 img.el-upload-list__item-thumbnail {
                     object-fit: cover;
                 }
@@ -97,14 +95,9 @@
     &:not(.is-idcard) {
         .el-upload {
             &.el-upload--picture-card {
-                width: 72px;
-                height: 72px;
-                line-height: 72px;
                 font-size: 14px;
                 position: relative;
                 .el-upload-list__item {
-                    width: 72px;
-                    height: 72px;
                     img.el-upload-list__item-thumbnail {
                         object-fit: cover;
                     }

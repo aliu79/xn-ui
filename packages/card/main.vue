@@ -26,7 +26,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          padding: "18px",
+          padding: "16px 0",
         };
       },
     },

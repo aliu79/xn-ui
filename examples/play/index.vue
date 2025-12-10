@@ -1,13 +1,12 @@
 <template>
   <div>
-    <!-- <xn-upload
-      ref="upload"
-      :fileList.sync="fileList"
-      :limit="limit"
-      list-type="idcard"
-      @on-success="onSuccess"
-      @on-uploaded="handleUoloaded"
-    ></xn-upload> -->
+    <xn-card>
+      <template #header>12312</template>
+      <template #more>
+        <el-button type="primary" size="default">计划</el-button>
+        
+      </template>
+    </xn-card>
     <xn-upload
       ref="upload"
       :fileList.sync="fileList"
