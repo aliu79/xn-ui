@@ -4,8 +4,8 @@
 set -e
 
 
-# 构建
-npm run build
+# 构建（使用 DEPLOY_ENV 环境变量设置正确的 publicPath）
+npm run build:deploy
 
 
 # cd 到构建输出的目录下 

@@ -10,7 +10,6 @@ import '@/plugins/index'
 import 'packages/style/src/index.scss'
 
 import demoBlock from './components/demo-block';
-Vue.use(router)
 Vue.config.productionTip = false
 Vue.use(XN)
 Vue.component('demo-block', demoBlock);

@@ -10,10 +10,12 @@ function resolve(dir) {
 
 
 const IS_PLAY = !!process.env.PLAY_ENV
+const IS_DEPLOY = !!process.env.DEPLOY_ENV
+const IS_LIB = process.argv.includes('--target') && process.argv.includes('lib')
 
 
 module.exports = {
-    publicPath: process.env.NODE_ENV === "production" ? "/xn-ui/" : "./",
+    publicPath: IS_DEPLOY ? "/xn-ui/" : "./",
     outputDir: 'dist',
     assetsDir: 'static',
     indexPath: 'index.html',
@@ -96,35 +98,36 @@ module.exports = {
               "maxAssetSize": 30000000
             }
             
-            // 库构建时排除核心框架依赖（Vue、Element UI、VueRouter、Vuex）
-            // lodash 等工具库仍然打包进组件库，确保用户可以直接使用 this.$lodash
-            config.externals = {
-              vue: {
-                commonjs: 'vue',
-                commonjs2: 'vue',
-                amd: 'vue',
-                root: 'Vue'
-              },
-              '@liuzengwei/element-ui': {
-                commonjs: '@liuzengwei/element-ui',
-                commonjs2: '@liuzengwei/element-ui',
-                amd: '@liuzengwei/element-ui',
-                root: 'ELEMENT'
-              },
-              'vue-router': {
-                commonjs: 'vue-router',
-                commonjs2: 'vue-router',
-                amd: 'vue-router',
-                root: 'VueRouter'
-              },
-              'vuex': {
-                commonjs: 'vuex',
-                commonjs2: 'vuex',
-                amd: 'vuex',
-                root: 'Vuex'
+            // 库构建或 GitHub Pages 部署时排除核心框架依赖，通过 CDN 加载
+            // 本地构建（npm run build）时不使用 externals，直接打包所有依赖
+            if (IS_LIB || IS_DEPLOY) {
+              config.externals = {
+                vue: {
+                  commonjs: 'vue',
+                  commonjs2: 'vue',
+                  amd: 'vue',
+                  root: 'Vue'
+                },
+                '@liuzengwei/element-ui': {
+                  commonjs: '@liuzengwei/element-ui',
+                  commonjs2: '@liuzengwei/element-ui',
+                  amd: '@liuzengwei/element-ui',
+                  root: 'ELEMENT'
+                },
+                'vue-router': {
+                  commonjs: 'vue-router',
+                  commonjs2: 'vue-router',
+                  amd: 'vue-router',
+                  root: 'VueRouter'
+                },
+                'vuex': {
+                  commonjs: 'vuex',
+                  commonjs2: 'vuex',
+                  amd: 'vuex',
+                  root: 'Vuex'
+                }
               }
             }
-            
           }
           
         // 不在这里复制样式文件，而是在 build:lib 命令中使用 cp-cli

@@ -7,6 +7,14 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
     <link rel="stylesheet" href="//shadow.elemecdn.com/npm/highlight.js@9.3.0/styles/color-brewer.css">
+    <!-- 部署到 GitHub Pages 时通过 CDN 加载 Vue 和 Element UI -->
+    <% if (process.env.DEPLOY_ENV) { %>
+    <link rel="stylesheet" href="//unpkg.com/@liuzengwei/element-ui@latest/lib/theme-chalk/index.css">
+    <script src="//unpkg.com/vue@2.7.14/dist/vue.runtime.min.js"></script>
+    <script src="//unpkg.com/vue-router@3.6.5/dist/vue-router.min.js"></script>
+    <script src="//unpkg.com/vuex@3.6.2/dist/vuex.min.js"></script>
+    <script src="//unpkg.com/@liuzengwei/element-ui@latest/lib/index.js"></script>
+    <% } %>
   </head>
   <body>
     <noscript>
