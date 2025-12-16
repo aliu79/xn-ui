@@ -2,10 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 
-// 避免重复注册（生产环境通过 CDN 加载时已自动注册）
-if (!Vue.prototype.$router) {
-  Vue.use(VueRouter)
-}
+Vue.use(VueRouter)
 
 const routes = [
   {

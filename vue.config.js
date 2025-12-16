@@ -98,34 +98,17 @@ module.exports = {
               "maxAssetSize": 30000000
             }
             
-            // 库构建或 GitHub Pages 部署时排除核心框架依赖，通过 CDN 加载
-            // 本地构建（npm run build）时不使用 externals，直接打包所有依赖
-            if (IS_LIB || IS_DEPLOY) {
+            // 仅在库构建时排除核心框架和常用工具库
+            // 应用构建（npm run build 和 npm run build:deploy）时打包所有依赖
+            if (IS_LIB) {
               config.externals = {
-                vue: {
-                  commonjs: 'vue',
-                  commonjs2: 'vue',
-                  amd: 'vue',
-                  root: 'Vue'
-                },
-                '@liuzengwei/element-ui': {
-                  commonjs: '@liuzengwei/element-ui',
-                  commonjs2: '@liuzengwei/element-ui',
-                  amd: '@liuzengwei/element-ui',
-                  root: 'ELEMENT'
-                },
-                'vue-router': {
-                  commonjs: 'vue-router',
-                  commonjs2: 'vue-router',
-                  amd: 'vue-router',
-                  root: 'VueRouter'
-                },
-                'vuex': {
-                  commonjs: 'vuex',
-                  commonjs2: 'vuex',
-                  amd: 'vuex',
-                  root: 'Vuex'
-                }
+                vue: 'vue',
+                '@liuzengwei/element-ui': '@liuzengwei/element-ui',
+                'lodash': 'lodash',
+                'dayjs': 'dayjs',
+                // 可选依赖，使用者按需安装
+                'ali-oss': 'ali-oss',
+                'vue-lottie': 'vue-lottie'
               }
             }
           }
