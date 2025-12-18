@@ -1,5 +1,6 @@
 <template>
   <div>
+    <xn-city v-model="city" @on-city="onCity"></xn-city>
     <xn-card>
       <template #header>12312</template>
       <template #more>
@@ -43,6 +44,7 @@
 export default {
   data() {
     return {
+      city: "",
       limit: 9,
       config: {
         accept: "image", //接受上传的文件类型：zip、pdf、excel、image，也可以是文件类型所组成的数组类型如：['image', 'pdf']，则只可以上传图片或pdf类型的文件，也可以为空，则任何类型的文件都可以上传
@@ -74,6 +76,9 @@ export default {
     
   },
   methods: {
+    onCity(val) {
+      console.log("city: ", val);
+    },
     onSuccess(val) {
       console.log(val);
     },
