@@ -43,7 +43,7 @@ export default {
     },
     layout: {
       type: String,
-      default: "sizes, total, prev, pager, next, jumper",
+      default: "total, prev, pager, next, jumper, sizes",
     },
     background: {
       type: Boolean,
