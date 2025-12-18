@@ -18,7 +18,7 @@ $--fade-transition: none;
 $--table-border: 1px solid #f0f0f0;
 
 // 字体路径配置
-$--font-path: "~@liuzengwei/element-ui/packages/theme-chalk/src/fonts";
+// $--font-path: "~@liuzengwei/element-ui/packages/theme-chalk/src/fonts";
 
 // ❌ 已移除全量样式引入，避免重复打包
 // Element UI 样式通过 babel.config.js 中的 babel-plugin-component 按需引入

@@ -12,7 +12,7 @@
     "play": "cross-env NODE_ENV=development PLAY_ENV=true vue-cli-service serve",
     "deploy": "powershell -ExecutionPolicy Bypass -File ./deploy.ps1",
     "deploy:bash": "bash deploy.sh",
-    "lint": "vue-cli-service lint",
+    "lint": "eslint src/**/* packages/**/* examples/**/* --quiet --fix",
     "release": "node ./build/release.js"
   },
   "license": "MIT",

@@ -61,7 +61,7 @@ const install = function (Vue) {
     Vue.prototype.$format = Utils.$format
     Vue.prototype.$dayjs = Utils.$dayjs
     Vue.prototype.$storage = Utils.$storage
-    Vue.prototype.$lodash = Utils.$lodash
+    // Vue.prototype.$lodash = Utils.$lodash
     Vue.prototype.$math = Utils.$math
 
 }

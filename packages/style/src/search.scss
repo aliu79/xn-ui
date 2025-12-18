@@ -1,19 +1,131 @@
 .xn-search {
-    &--row.el-row {
-        .el-form-item {
-            display: flex;
-            .el-form-item__content {
-                width: 100%;
-                height: 32px;
-            }
-            .el-form-item__label {
-                flex: none;
-            }
-            &.xn-search-searchbtn{
-                .el-form-item__content{
-                    white-space: nowrap;
-                }
-            }
+  &-flex {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  &--row.el-row {
+    flex: 1;
+    
+    .el-form-item {
+      display: flex;
+      margin-bottom: 18px;
+      
+      .el-form-item__content {
+        width: 100%;
+        min-height: 32px;
+        display: flex;
+        align-items: center;
+        > div {
+          width: 100%;
         }
+      }
+      
+      .el-form-item__label {
+        flex: none;
+        line-height: 32px;
+        padding-right: 12px;
+      }
     }
+  }
+  
+  &-searchbtn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex: none;
+    width: 100px;
+    margin-left: 16px;
+    
+    .el-button {
+      width: 80px;
+      
+      &:not(:first-child) {
+        margin-top: 18px;
+        margin-left: 0;
+      }
+    }
+    
+    // 查询项<=4个时，按钮横向排列
+    &.is-horizontal {
+      flex-direction: row;
+      width: auto;
+      align-items: center;
+      
+      .el-button {
+        width: auto;
+        
+        &:not(:first-child) {
+          margin-top: 0;
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+  
+  // 展开/收起按钮样式
+  .coll-box {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-height: 32px;
+    
+    .el-link {
+      font-size: 14px;
+      
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+// 响应式优化
+@media (max-width: 768px) {
+  .xn-search {
+    &-flex {
+      flex-direction: column;
+    }
+    
+    &-searchbtn {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 16px;
+      flex-direction: row;
+      justify-content: center;
+      
+      .el-button {
+        width: auto;
+        margin: 0 8px;
+        
+        &:not(:first-child) {
+          margin-top: 0;
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+}
+
+// 表单项控件样式优化
+::v-deep {
+  .el-input,
+  .el-select,
+  .el-cascader {
+    width: 100%;
+  }
+  
+  .el-date-editor {
+    width: 100%;
+    
+    &.el-date-editor--datetimerange,
+    &.el-date-editor--daterange {
+      width: 100%;
+    }
+  }
+  
+  // 确保城市选择器宽度正确
+  .xn-city {
+    width: 100%;
+  }
 }
