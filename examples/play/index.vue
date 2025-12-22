@@ -1,36 +1,42 @@
 <template>
   <div>
-    <h3>Amount 组件 null 值测试</h3>
+    <h3>Amount 组件默认插槽测试</h3>
     
-    <h4>1. 值为 null（应该显示缺省值 "--"）</h4>
+    <h4>1. 使用默认插槽（自动格式化数字）</h4>
+    <xn-amount :precision="2" :hasSeparator="true" separator=",">
+      <span>222222222222</span>
+    </xn-amount>
+    
+    <h4>2. 使用 value 属性</h4>
     <p>值: {{ value }}</p>
     <xn-amount :value="value" :precision="2" :hasSeparator="true" separator=","></xn-amount>
     
-    <h4>2. 值为 0（应该显示 "0.00"）</h4>
+    <h4>3. 值为 null（应该显示缺省值 "--"）</h4>
+    <p>值: {{ nullValue }}</p>
+    <xn-amount :value="nullValue" :precision="2" :hasSeparator="true" separator=","></xn-amount>
+    
+    <h4>4. 值为 0（应该显示 "0.00"）</h4>
     <p>值: {{ zeroValue }}</p>
     <xn-amount :value="zeroValue" :precision="2" :hasSeparator="true" separator=","></xn-amount>
     
-    <h4>3. 值为 undefined（应该显示缺省值 "--"）</h4>
-    <p>值: {{ undefinedValue }}</p>
-    <xn-amount :value="undefinedValue" :precision="2" :hasSeparator="true" separator=","></xn-amount>
-    
-    <h4>4. 值为 NaN（应该显示缺省值 "--"）</h4>
-    <p>值: {{ nanValue }}</p>
-    <xn-amount :value="nanValue" :precision="2" :hasSeparator="true" separator=","></xn-amount>
-    
-    <h4>5. 自定义空值显示</h4>
-    <p>值: {{ value }}</p>
-    <xn-amount :value="value" :precision="2" :hasSeparator="true" separator="," empty-value="N/A"></xn-amount>
-    
-    <h4>6. 插槽中提供 null 值（应该显示缺省值 "--"）</h4>
+    <h4>5. 插槽中的数字（自动格式化）</h4>
     <xn-amount :precision="2" :hasSeparator="true" separator=",">
-      {{ null }}
+      1234567.89
     </xn-amount>
     
-    <h4>7. 插槽中提供 0 值（应该显示 "0.00"）</h4>
+    <h4>6. 插槽中的大数字（自动格式化）</h4>
     <xn-amount :precision="2" :hasSeparator="true" separator=",">
-      {{ 0 }}
+      {{ 9876543210.12345 }}
     </xn-amount>
+    
+    <h4>7. 插槽中的非数字内容（保持原样）</h4>
+    <xn-amount :precision="2" :hasSeparator="true" separator=",">
+      <span style="color: red;">自定义内容</span>
+    </xn-amount>
+    
+    <h4>8. 自定义空值显示</h4>
+    <p>值: {{ nullValue }}</p>
+    <xn-amount :value="nullValue" :precision="2" :hasSeparator="true" separator="," empty-value="N/A"></xn-amount>
     
     <div style="margin-top: 20px;">
       <el-button @click="setNull">设置为 null</el-button>
@@ -45,10 +51,9 @@
 export default {
   data() {
     return {
-      value: null,
+      value: 1234567.89,
+      nullValue: null,
       zeroValue: 0,
-      undefinedValue: undefined,
-      nanValue: NaN,
     };
   },
   methods: {

@@ -9,14 +9,10 @@
         <slot name="prefix">{{ prefix }}</slot>
       </i><!--
       --><template v-if="$slots.default">
-        <slot :format-value="formatUserValue">
-          <!-- 如果插槽内容只是简单文本，尝试格式化 -->
-          <span v-if="slotTextContent !== null && !isNaN(slotTextContent)">
-            {{ formatUserValue(parseFloat(slotTextContent)) }}
-          </span>
-          <!-- 否则显示原始插槽内容 -->
-          <slot v-else></slot>
-        </slot>
+        <template v-if="slotTextContent !== null && !isNaN(Number(slotTextContent))">
+          {{ formatUserValue(Number(slotTextContent)) }}
+        </template>
+        <slot v-else></slot>
       </template>
       <template v-else>
         {{ formattedValue }}
