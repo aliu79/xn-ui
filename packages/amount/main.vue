@@ -8,11 +8,19 @@
       >
         <slot name="prefix">{{ prefix }}</slot>
       </i><!--
-      --><slot>{{
-        formatValue
-          | doPrecision(legalPrecision, isRoundUp, emptyValue)
-          | doFormat(hasSeparator, separator)
-      }}</slot><!--
+      --><template v-if="$slots.default">
+        <slot :format-value="formatUserValue">
+          <!-- 如果插槽内容只是简单文本，尝试格式化 -->
+          <span v-if="slotTextContent !== null && !isNaN(slotTextContent)">
+            {{ formatUserValue(parseFloat(slotTextContent)) }}
+          </span>
+          <!-- 否则显示原始插槽内容 -->
+          <slot v-else></slot>
+        </slot>
+      </template>
+      <template v-else>
+        {{ formattedValue }}
+      </template><!--
       --><i
         class="xn-amount-suffix"
         :style="suffixStyle"
@@ -114,6 +122,11 @@ export default {
     },
     // 处理格式
     doFormat(value, hasSeparator, separator) {
+      // 如果值为空或者是非数字字符串（如空值显示），直接返回
+      if (!value || isNaN(parseFloat(value))) {
+        return value;
+      }
+      
       if (!hasSeparator) {
         return value;
       }
@@ -167,10 +180,52 @@ export default {
     legalPrecision() {
       return this.precision > 0 ? this.precision : 0;
     },
+    // 计算格式化后的值
+    formattedValue() {
+      // 如果有默认插槽内容，则不对插槽内容进行格式化
+      if (this.$slots.default) {
+        return;
+      }
+      
+      // 应用精度和分隔符格式化
+      const value = this.formatValue;
+      const precisionValue = this.$options.filters.doPrecision(
+        value, 
+        this.legalPrecision, 
+        this.isRoundUp, 
+        this.emptyValue
+      );
+      return this.$options.filters.doFormat(
+        precisionValue, 
+        this.hasSeparator, 
+        this.separator
+      );
+    },
+    // 获取默认插槽的文本内容
+    slotTextContent() {
+      if (!this.$slots.default || !this.$slots.default.length) {
+        return null;
+      }
+      
+      // 获取插槽内容
+      const slot = this.$slots.default[0];
+      
+      // 如果是文本节点
+      if (slot.text) {
+        return slot.text.trim();
+      }
+      
+      // 如果是简单的VNode且包含文本
+      if (slot.children && slot.children.length > 0 && slot.children[0].text) {
+        return slot.children[0].text.trim();
+      }
+      
+      return null;
+    },
   },
   data() {
     return {
-      formatValue: 0,
+      formatValue: null,
       isMounted: false,
     };
   },
@@ -180,6 +235,17 @@ export default {
   methods: {
     // 动画显示数值变化
     $_doAnimateDisplay(fromValue = 0, toValue = 0) {
+      // 如果目标值为null，直接设置为null
+      if (toValue == null) {
+        this.formatValue = null;
+        return;
+      }
+      
+      // 如果起始值为null，设置为0
+      if (fromValue == null) {
+        fromValue = 0;
+      }
+      
       /* istanbul ignore next  */
       const step = (percent) => {
         if (percent === 1) {
@@ -192,6 +258,25 @@ export default {
       /* istanbul ignore next  */
       const verify = (id) => id;
       Animate.start(step, verify, noop, this.duration);
+    },
+    // 格式化用户提供的值
+    formatUserValue(value) {
+      if (value == null || isNaN(value)) {
+        return this.emptyValue;
+      }
+      
+      // 应用精度和分隔符格式化
+      const precisionValue = this.$options.filters.doPrecision(
+        value, 
+        this.legalPrecision, 
+        this.isRoundUp, 
+        this.emptyValue
+      );
+      return this.$options.filters.doFormat(
+        precisionValue, 
+        this.hasSeparator, 
+        this.separator
+      );
     },
   },
 };
