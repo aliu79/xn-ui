@@ -8,8 +8,13 @@ const cssmin = require('gulp-cssmin');
 
 
 function compile() {
+
+    console.log('打包css');
+    
     return src('./src/*.scss')
-    .pipe(sass.sync().on('error', sass.logError))
+    .pipe(sass.sync({
+      includePaths: ['../../node_modules']
+    }).on('error', sass.logError))
     .pipe(autoprefixer({
       browsers: ['ie > 9', 'last 2 versions'],
       cascade: false
